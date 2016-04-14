@@ -20,6 +20,9 @@ gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
+# Use ActiveModel has_secure_password
+gem 'bcrypt', '~> 3.1.7'
+
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
