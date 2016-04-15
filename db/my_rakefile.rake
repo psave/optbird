@@ -7,7 +7,7 @@ namespace :csv do
     CSV.foreach(csv_file_path) do |row|
       if row.length > 2
 #ignore some straggling data and blank spaces in the file
-        Occupants.create!({
+        Occupant.create!({
           :date => row[0],
           :time => row[1],
           :number_occupants => row[2]
