@@ -21,7 +21,7 @@ gem 'coffee-rails', '~> 4.0.0'
 # gem 'therubyracer', platforms: :ruby
 
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt-ruby', '~> 3.0.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
