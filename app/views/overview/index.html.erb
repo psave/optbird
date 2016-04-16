@@ -1,0 +1,26 @@
+<h1>Here is the overview</h1>
+
+<script type="text/javascript" charset="utf-8">
+$(function() {
+  new Highcharts.Chart({
+    chart: {
+      renderTo: "line_chart"
+    },
+    title: {
+      text: "Orders by Day"
+    },
+    xAxis: {
+      type: "datetime"
+    },
+    yAxis: {
+      title: {
+        text: "# Occupants"
+      }
+    }
+  });
+});
+</script>
+
+<div id="line_chart" style="width:560px; height:300px;">
+  
+</div>
