@@ -3,11 +3,13 @@ require 'json'
 class OverviewController < ApplicationController
 
   def index
+    #choosing range of data to obtain
     @occupants = Occupant.first(20)
-    #puts @occupants.count
+    #creating arrays to use in json
     data = [] 
     date_or_time = []
 
+    #looping through the occupants
     @occupants.each do |occupant|
       data << occupant.number_occupants
       date_or_time << occupant.time

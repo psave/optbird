@@ -1,19 +1,20 @@
 
 
 $(function() {
-
-  var x = $('#seriesdata').text();
-  var y = $.parseJSON(x);
-  console.log(y.date_or_time);
+  // console.log($('#seriesdata').text())
+  var data = $.parseJSON($('#seriesdata').text());
+  
+  
+  // console.log(y.date_or_time);
   
   $('#overview_line_chart').highcharts({
 
     title: {
-      // text: "Occupancy of Irving Room 182"
-      text: y.name
+      text: "Occupancy of Irving Room 182"
+      // text: y.name
     },
     xAxis: {
-      time: y.date_or_time,
+      categories: data.date_or_time.map(function(time){ return moment(time).format("MMM Do YY")}),
       type: 'units'
       //type: "datetime"
     },
@@ -28,7 +29,7 @@ $(function() {
     // }],
     series: [{
       name: 'Occupants',
-      data: y.data
+      data: data.data
     }],
   });
 });
