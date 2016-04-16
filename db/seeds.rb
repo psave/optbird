@@ -10,6 +10,8 @@ User.create(name: "UBC", password: "operation_tbird")
 
 
 class Dummy
+# time-date
+# number of occupants
 
   def self.populate(n)
     timer = Time.now
@@ -26,3 +28,4 @@ class Dummy
 end
 
 Dummy.populate(50)
+
