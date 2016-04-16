@@ -1,7 +1,7 @@
 
 
 $(function() {
-  // console.log($('#seriesdata').text())
+  // obtaining element by id and parsing to JSON to check out what it is.
   var data = $.parseJSON($('#seriesdata').text());
   
   
@@ -14,7 +14,7 @@ $(function() {
       // text: y.name
     },
     xAxis: {
-      categories: data.date_or_time.map(function(time){ return moment(time).format("MMM Do YY")}),
+      categories: data.date_or_time.map(function(time){ return moment(time).format("H mm")}),
       type: 'units'
       //type: "datetime"
     },
