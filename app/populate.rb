@@ -14,4 +14,4 @@ def self.populate(n)
 
 end
 
-Occupant.populate(50)
+Occupant.populate(50);
