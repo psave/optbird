@@ -1,4 +1,8 @@
 Optbird::Application.routes.draw do
+
+  resources :sessions, only: [:new, :create]
+
+  resources :charts
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -7,7 +11,7 @@ Optbird::Application.routes.draw do
 
   resources :room
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  # root '#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
