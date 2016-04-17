@@ -11,13 +11,13 @@ $(document).ready(function() {
       dataType: 'json',
       contentType: 'application/json',
       success: function(data) {
-        console.log(data[0].date_time);
-        // data.forEach(function() {
-        //   $('.chart').append('<p>' + data.date_time + '</p>');
-        //   $('.chart').append('<p>' + data.occupants + '</p>');
-        // });
+        data.forEach(function(){
+          for (var i = 0; i < data.length; i++) {
+            $('.chart').append('<p>' + data[i].date_time + '</p>');
+            $('.chart').append('<p>' + data[i].occupants + '</p>');
+          }
+        });
       }
-
     });
   
   });
