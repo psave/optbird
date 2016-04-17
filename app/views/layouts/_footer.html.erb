@@ -1,0 +1,8 @@
+<footer>
+  <small>
+    <% if current_user %>
+      Signed in.
+    <%= link_to "Log out", session_path("current"), method: :delete %>
+    <% end %>
+  </small>
+</footer>
