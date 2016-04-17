@@ -1,6 +1,7 @@
 //= require jquery
 //= require jquery_ujs
 
+
 $(document).ready(function() {
 
   $('#button').on('click', function(e) {
@@ -22,3 +23,9 @@ $(document).ready(function() {
   });
 
 })
+
+//= require highcharts
+//= require highstock
+//= require highstock/modules/exporting
+//= require_tree .
+

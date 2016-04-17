@@ -11,6 +11,7 @@ gem 'pry'
 gem 'pg'
 
 gem 'highcharts-rails'
+gem 'highstock-rails'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
