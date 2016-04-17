@@ -14,7 +14,7 @@ $(function() {
       // text: y.name
     },
     xAxis: {
-      categories: data.date_or_time.map(function(time){ return moment(time).format("H mm")}),
+      categories: data.xaxis.map(function(time){ return moment(time).format("H:mm")}),
       type: 'units'
       //type: "datetime"
     },
