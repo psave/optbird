@@ -4,8 +4,7 @@ Optbird::Application.routes.draw do
 
   resources :charts
   # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
+  # See how all your routes lay out with "rake routes".s
 
   resources :overview
 

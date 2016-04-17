@@ -20,6 +20,12 @@ end #namespace end
 
 require 'csv'
 
+# incomingDate = dec;
+# newDate = parse(incomingDate); # Decmber
+# normalisedTime = parse(incomingTime);
+# template = "#{newDate} - #{normalisedTime}"
+# Date.new(template)
+
 # namespace :csv do
 #   desc "Import CSV Data  occupant data"
 #   task :taskname => :environment do
