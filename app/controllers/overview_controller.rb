@@ -15,8 +15,7 @@ class OverviewController < ApplicationController
       date_or_time << occupant.time
     end
     puts date_or_time
-    @series = 
-    {
+    @series = {
       'data' => data,
       'date_or_time' => date_or_time
     }
