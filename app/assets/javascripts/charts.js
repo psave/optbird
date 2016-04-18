@@ -1,45 +1,10 @@
-
-// $(function() {
-// //   // obtaining element by id and parsing to JSON to check out what it is.
-//   var alldata = $.parseJSON($('#seriesdata').text());
-  
-  
-//   $('#overview_line_chart').highcharts('StockChart',{
-
-//     title: {
-//       text: "Occupancy of Irving Room 182"
-//       // text: y.name
-//     },
-//     rangeSelector: {
-//       allButtonsEnabled: true,
-//       selected: 1
-//     },
-//     xAxis: {
-//       categories: alldata.xaxis.map(function(time){ return moment(time).format("H:mm")}),
-//       type: 'units'
-//       //type: "datetime"
-//     },
-//     yAxis: {
-//       title: {
-//         text: "# Occupants"
-//       }
-//     },
-//     series: [{
-//       name: 'Occupants',
-//       data: alldata.data
-//     }],
-//   });
-
-
-// });
-
 $(document).ready(function() {
 
   $('#button').on('click', function(e) {
     e.preventDefault();
     $.ajax({
       method: 'GET',
-      url: '/overview/show',
+      url: '/charts/show',
       dataType: 'json',
       contentType: 'application/json',
       success: dataToArray
@@ -66,13 +31,13 @@ $(document).ready(function() {
   }
 
   function dataToChart() {
-    $('#overview_line_chart').highcharts({
+    $('#container').highcharts({
       title: {
           text: 'Dummy Data',
           x: -20 //center
       },
       subtitle: {
-          text: 'Awesome subtitle',
+          text: 'Dummy Data',
           x: -20
       },
       xAxis: {
