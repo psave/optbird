@@ -44,7 +44,12 @@ $(document).ready(function() {
         x: -20
       },
       xAxis: {
+<<<<<<< HEAD
+          type: 'datetime',
+          categories: series.x_axis.map(function(time){ return moment(time).format("H:mm")}),
+=======
         categories: series.x_axis.map(function(time){ return moment(time).format('H:mm')}),
+>>>>>>> a88c6d29cc42907a4113144c88a1940113afe9d6
       },
       yAxis: {
         title: {
