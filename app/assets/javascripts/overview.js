@@ -1,19 +1,21 @@
 
-
 // $(function() {
-//   // obtaining element by id and parsing to JSON to check out what it is.
-//   var data = $.parseJSON($('#seriesdata').text());
+// //   // obtaining element by id and parsing to JSON to check out what it is.
+//   var alldata = $.parseJSON($('#seriesdata').text());
   
-//   // console.log(y.date_or_time);
   
-//   $('#overview_line_chart').highcharts({
+//   $('#overview_line_chart').highcharts('StockChart',{
 
 //     title: {
 //       text: "Occupancy of Irving Room 182"
 //       // text: y.name
 //     },
+//     rangeSelector: {
+//       allButtonsEnabled: true,
+//       selected: 1
+//     },
 //     xAxis: {
-//       categories: data.xaxis.map(function(time){ return moment(time).format("H:mm")}),
+//       categories: alldata.xaxis.map(function(time){ return moment(time).format("H:mm")}),
 //       type: 'units'
 //       //type: "datetime"
 //     },
@@ -22,76 +24,84 @@
 //         text: "# Occupants"
 //       }
 //     },
-//     // series: [{
-//     //         name: 'Occupants',
-//     //         data: [7, 6, 9, 14, 18, 21, 25, 26, 23, 18, 13, 9]
-//     // }],
 //     series: [{
 //       name: 'Occupants',
-//       data: data.data
+//       data: alldata.data
 //     }],
 //   });
 
+
 // });
 
-// $(function () {
-//   var data = $.parseJSON($('#seriesdata').text()); 
-//   // $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=new-intraday.json&callback=?', function (data) {
-//       // create the chart
-//     $('#overview-highstock').highcharts('StockChart', {
+$(document).ready(function() {
 
+  $('#button').on('click', function(e) {
+    e.preventDefault();
+    $.ajax({
+      method: 'GET',
+      url: '/overview/show',
+      dataType: 'json',
+      contentType: 'application/json',
+      success: dataToArray
+    }); 
+  });
 
-//       title: {
-//         text: 'AAPL stock price by minute'
-//       },
+  var series = {};
 
-//       subtitle: {
-//         text: 'Using ordinal X axis'
-//       },
+  function dataToArray(response) {
+    var y_axis = [];
+    var x_axis = [];
 
-//       xAxis: {
-//         gapGridLineWidth: 0
-//       },
+    for (var i = 0; i < response.length; i++) {
+      y_axis.push(response[i].occupants);
+      x_axis.push(response[i].date_time);
+    }
 
-//       rangeSelector : {
-//         buttons : [{
-//             type : 'hour',
-//             count : 1,
-//             text : '1h'
-//         }, {
-//             type : 'day',
-//             count : 1,
-//             text : '1D'
-//         }, {
-//             type : 'all',
-//             count : 1,
-//             text : 'All'
-//         }],
-//         selected : 1,
-//         inputEnabled : false
-//     },
+    series = {
+      y_axis: y_axis,
+      x_axis: x_axis
+    };
 
-//     series : [{
-//       name : 'AAPL',
-//       type: 'area',
-//       data : data,
-//       gapSize: 5,
-//       tooltip: {
-//         valueDecimals: 2
-//       },
-//       fillColor : {
-//         linearGradient : {
-//           x1: 0,
-//           y1: 0,
-//           x2: 0,
-//           y2: 1
-//         },
-//         stops : [
-//           [0, Highcharts.getOptions().colors[0]],
-//           [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-//         ]
-//         },
-//         threshold: null
-//       }]
-//     });
-// });
+    dataToChart();
+  }
+
+  function dataToChart() {
+    $('#overview_line_chart').highcharts({
+      title: {
+          text: 'Dummy Data',
+          x: -20 //center
+      },
+      subtitle: {
+          text: 'Awesome subtitle',
+          x: -20
+      },
+      xAxis: {
+          categories: series.x_axis.map(function(time){ return moment(time).format("H:mm")}),
+      },
+      yAxis: {
+          title: {
+              text: 'Number of Occupants'
+          },
+          plotLines: [{
+              value: 0,
+              width: 1,
+              color: '#808080'
+          }]
+      },
+      tooltip: {
+          valueSuffix: ''
+      },
+      legend: {
+          layout: 'vertical',
+          align: 'right',
+          verticalAlign: 'middle',
+          borderWidth: 0
+      },
+      series: [{
+        name: 'Occupants',
+        data: series.y_axis
+      }]
+    });
+  }
+
+});
