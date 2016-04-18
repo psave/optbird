@@ -8,9 +8,11 @@ namespace :csv do
       next if row == ["Date", "Time", "Room 182"]
 #ignore some straggling data and blank spaces in the file
         Occupant.create!({
-          :date => row[0],
-          :time => row[1],
-          :number_occupants => row[2]
+          sampletime: (row[0] + ' ' + row[1]).to_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
+          number_occupants: row[2],
+          building_number: "403",
+          building_name: "LSBC",
+          room_number: "182"
         })
     end #end fo CSV.foreach loop
   end #end for task

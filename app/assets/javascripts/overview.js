@@ -1,19 +1,21 @@
 
-
 // $(function() {
-//   // obtaining element by id and parsing to JSON to check out what it is.
-//   var data = $.parseJSON($('#seriesdata').text());
+// //   // obtaining element by id and parsing to JSON to check out what it is.
+//   var alldata = $.parseJSON($('#seriesdata').text());
   
-//   // console.log(y.date_or_time);
   
-//   $('#overview_line_chart').highcharts({
+//   $('#overview_line_chart').highcharts('StockChart',{
 
 //     title: {
 //       text: "Occupancy of Irving Room 182"
 //       // text: y.name
 //     },
+//     rangeSelector: {
+//       allButtonsEnabled: true,
+//       selected: 1
+//     },
 //     xAxis: {
-//       categories: data.xaxis.map(function(time){ return moment(time).format("H:mm")}),
+//       categories: alldata.xaxis.map(function(time){ return moment(time).format("H:mm")}),
 //       type: 'units'
 //       //type: "datetime"
 //     },
@@ -22,14 +24,84 @@
 //         text: "# Occupants"
 //       }
 //     },
-//     // series: [{
-//     //         name: 'Occupants',
-//     //         data: [7, 6, 9, 14, 18, 21, 25, 26, 23, 18, 13, 9]
-//     // }],
 //     series: [{
 //       name: 'Occupants',
-//       data: data.data
+//       data: alldata.data
 //     }],
 //   });
 
+
 // });
+
+$(document).ready(function() {
+
+  $('#button').on('click', function(e) {
+    e.preventDefault();
+    $.ajax({
+      method: 'GET',
+      url: '/overview/show',
+      dataType: 'json',
+      contentType: 'application/json',
+      success: dataToArray
+    }); 
+  });
+
+  var series = {};
+
+  function dataToArray(response) {
+    var y_axis = [];
+    var x_axis = [];
+
+    for (var i = 0; i < response.length; i++) {
+      y_axis.push(response[i].occupants);
+      x_axis.push(response[i].date_time);
+    }
+
+    series = {
+      y_axis: y_axis,
+      x_axis: x_axis
+    };
+
+    dataToChart();
+  }
+
+  function dataToChart() {
+    $('#overview_line_chart').highcharts({
+      title: {
+          text: 'Dummy Data',
+          x: -20 //center
+      },
+      subtitle: {
+          text: 'Awesome subtitle',
+          x: -20
+      },
+      xAxis: {
+          categories: series.x_axis.map(function(time){ return moment(time).format("H:mm")}),
+      },
+      yAxis: {
+          title: {
+              text: 'Number of Occupants'
+          },
+          plotLines: [{
+              value: 0,
+              width: 1,
+              color: '#808080'
+          }]
+      },
+      tooltip: {
+          valueSuffix: ''
+      },
+      legend: {
+          layout: 'vertical',
+          align: 'right',
+          verticalAlign: 'middle',
+          borderWidth: 0
+      },
+      series: [{
+        name: 'Occupants',
+        data: series.y_axis
+      }]
+    });
+  }
+
+});
