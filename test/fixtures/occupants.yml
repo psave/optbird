@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  sample_time: MyString
+  number_occupants: 1
+  room_id: 
+
+two:
+  sample_time: MyString
+  number_occupants: 1
+  room_id: 

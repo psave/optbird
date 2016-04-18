@@ -11,18 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160416052043) do
+ActiveRecord::Schema.define(version: 20160418225220) do
 
-  create_table "occupants", force: true do |t|
-    t.date     "date"
-    t.time     "time"
+  create_table "buildings", force: true do |t|
     t.integer  "building_number"
     t.string   "building_name"
-    t.string   "room_number"
-    t.integer  "number_occupants"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "occupants", force: true do |t|
+    t.string   "sample_time"
+    t.integer  "number_occupants"
+    t.integer  "room_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "occupants", ["room_id"], name: "index_occupants_on_room_id", using: :btree
 
   create_table "populates", force: true do |t|
     t.string   "date_time"
@@ -30,6 +36,17 @@ ActiveRecord::Schema.define(version: 20160416052043) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "rooms", force: true do |t|
+    t.integer  "building_id"
+    t.integer  "floor"
+    t.string   "room"
+    t.string   "room_code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rooms", ["building_id"], name: "index_rooms_on_building_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "name"
