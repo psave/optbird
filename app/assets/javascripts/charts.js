@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
-  $('#button').on('click', function(e) {
-    e.preventDefault();
+  $('#button').on('click', function(event) {
+    event.preventDefault();
     $.ajax({
       method: 'GET',
       url: '/charts/show',
@@ -14,19 +14,18 @@ $(document).ready(function() {
   var series = {};
 
   function dataToArray(response) {
-    var y_axis = [];
     var x_axis = [];
+    var y_axis = [];
 
     for (var i = 0; i < response.length; i++) {
-      y_axis.push(response[i].occupants);
       x_axis.push(response[i].date_time);
+      y_axis.push(response[i].occupants);
     }
 
     series = {
-      y_axis: y_axis,
-      x_axis: x_axis
+      x_axis: x_axis,
+      y_axis: y_axis
     };
-    console.log(series.x_axis);
 
     dataToChart();
   }
@@ -45,7 +44,7 @@ $(document).ready(function() {
         x: -20
       },
       xAxis: {
-        categories: series.x_axis.map(function(time){ return moment(time).format('MMMM Do YYYY, h:mm')}),
+        categories: series.x_axis.map(function(time){ return moment(time).format('H:mm')}),
       },
       yAxis: {
         title: {
