@@ -11,3 +11,15 @@
  *= require_self
  *= require_tree .
  */
+@import "bulma";
+
+.navbar {
+  margin-top: 15px;
+  margin-right: 11px;
+  margin-bottom: 20px;
+  margin-left: 11px;
+}
+
+.container {
+  max-width: 1200px;
+}

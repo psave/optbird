@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20160418225332) do
-=======
 ActiveRecord::Schema.define(version: 20160418234141) do
->>>>>>> master
 
   create_table "buildings", force: true do |t|
     t.integer  "building_number"
@@ -33,13 +29,6 @@ ActiveRecord::Schema.define(version: 20160418234141) do
   end
 
   add_index "occupants", ["room_id"], name: "index_occupants_on_room_id", using: :btree
-
-  create_table "populates", force: true do |t|
-    t.string   "date_time"
-    t.integer  "occupants"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "rooms", force: true do |t|
     t.integer  "building_id"
