@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.0'
+gem 'rails', '4.2.1'
 
 gem 'pry'
 
@@ -44,6 +44,7 @@ end
 
 gem 'bulma'
 
+gem 'sidekiq'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
