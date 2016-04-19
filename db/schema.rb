@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
+ActiveRecord::Schema.define(version: 20160418225332) do
+=======
 ActiveRecord::Schema.define(version: 20160418234141) do
+>>>>>>> master
 
   create_table "buildings", force: true do |t|
     t.integer  "building_number"

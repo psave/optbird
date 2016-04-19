@@ -39,7 +39,7 @@ $(document).ready(function() {
     e.preventDefault();
     $.ajax({
       method: 'GET',
-      url: '/overview/show',
+      url: '/overviews/show',
       dataType: 'json',
       contentType: 'application/json',
       success: dataToArray
