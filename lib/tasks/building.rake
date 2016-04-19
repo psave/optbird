@@ -7,8 +7,7 @@ namespace :csv do
     #setting first_row (flag) to true to be able to parse header
     first_row = true
     #initializing room object to gather data for occupants table.
-    room_obj = {}
-    column_to_room = {}
+    column_to_room = []
     CSV.foreach(csv_file_path) do |row|
       # count the number of the rows.
       number_columns = row.length - 1
@@ -36,36 +35,27 @@ namespace :csv do
           room = Room.where("room_code = ?", row[i]).first
           # if the "room_code" does not exist
           if !room
-            room_obj = Room.create!({
+            room = Room.create!({
               building_id: building.id,
               floor: floor,
               room: room_no,
               room_code: row[i]
             })
           end
+          column_to_room[i] = room
 
-
-          # column_to_room[i] = room_obj
-
-          # building != nil
-
-
-
-          # TODO
-          # room_obj = Room.create!(...)
-          # column_to_room[i] = room_obj
         end # for for statement
-        first_row = false
-      # else
-      #   # other rows
-      #   for i in 2..number_columns
-      #     room_obj = column_to_room[i]
-      #     room_obj.id
-      #     Occupant.create!({
-      #       sampleTime: (row[0] + ' ' + row[1]).to_datetime.strftime("%Y-%m-%dT%H:%M:%S")
-      #       no_occupants: row[i],
-      #       room_id: room_obj.id
-      #       })
+      first_row = false
+      else
+        # other rows
+        for i in 2..number_columns
+          room_obj = column_to_room[i]
+          Occupant.create!({
+            sample_time: (row[0] + ' ' + row[1]).to_datetime.strftime("%Y-%m-%dT%H:%M:%S"),
+            number_occupants: row[i],
+            room_id: room_obj.id
+            })
+        end # for for statement
       end # for if statement
     end #end fo CSV.foreach loop
   end #end for task
