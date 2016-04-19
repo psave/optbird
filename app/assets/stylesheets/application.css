@@ -11,8 +11,11 @@
  *= require_self
  *= require_tree .
  */
+
+ 
 @import "bulma";
 
+/*simple way to add custom edits to bulma classes*/
 .navbar {
   margin-top: 15px;
   margin-right: 11px;
