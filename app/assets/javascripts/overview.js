@@ -80,7 +80,6 @@
 
 // $(document).ready(function() {
 
-<<<<<<< HEAD:app/assets/javascripts/overview.js
 //   $('#button').on('click', function(e) {
 //     e.preventDefault();
 //     $.ajax({
@@ -91,18 +90,6 @@
 //       success: dataToArray
 //     }); 
 //   });
-=======
-  $('#button').on('click', function(e) {
-    e.preventDefault();
-    $.ajax({
-      method: 'GET',
-      url: '/overviews/show',
-      dataType: 'json',
-      contentType: 'application/json',
-      success: dataToArray
-    }); 
-  });
->>>>>>> 8ef4b9d6c8e4a0309c3082d714e8985a11eba7bc:app/assets/javascripts/overviews.js
 
 //   var series = {};
 
