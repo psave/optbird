@@ -1,4 +1,4 @@
-require 'csv'
+# require 'csv'
 
 # namespace :csv do
 #   desc "Import CSV Data  occupant data"
@@ -11,4 +11,6 @@ require 'csv'
 #         })
 #     end #end fo CSV.foreach loop
 #   end #end for task
+
 # end #namespace end
+
