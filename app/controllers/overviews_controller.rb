@@ -1,6 +1,6 @@
 require 'json'
 
-class OverviewController < ApplicationController
+class OverviewsController < ApplicationController
 
   def index
     # #Selecting a range
@@ -28,7 +28,7 @@ class OverviewController < ApplicationController
   end
 
   def show
-    @chart = Populate.all
+    @chart = Occupant.all
     render json: @chart
   end
 
