@@ -31,4 +31,6 @@
 #           :time => row[1],
 #           :number_occupants => row[2]
 #         })
+
 #     end #end fo CSV.foreach loop
+
