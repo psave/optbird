@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20160418225332) do
-=======
-ActiveRecord::Schema.define(version: 20160418234141) do
->>>>>>> master
+ActiveRecord::Schema.define(version: 20160419203233) do
 
   create_table "buildings", force: true do |t|
     t.integer  "building_number"
@@ -23,6 +19,46 @@ ActiveRecord::Schema.define(version: 20160418234141) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "courses", force: true do |t|
+    t.integer  "room_id"
+    t.string   "subject"
+    t.string   "course"
+    t.string   "crs_dtl_cd"
+    t.string   "sec_no"
+    t.string   "crs_credit"
+    t.string   "sec_trm_cd"
+    t.string   "meeting_type"
+    t.string   "sec_actv_no"
+    t.string   "sec_num_linked_actv"
+    t.string   "daysmet"
+    t.string   "start_time"
+    t.string   "end_time"
+    t.string   "start_date"
+    t.string   "end_date"
+    t.integer  "sec_rel_tot"
+    t.integer  "sec_enr_tot"
+    t.integer  "max_enrollment"
+    t.string   "instructor_names"
+    t.string   "short_title"
+    t.string   "long_title"
+    t.string   "building"
+    t.string   "room"
+    t.integer  "capacity"
+    t.string   "sec_publ_fl"
+    t.string   "sec_ses_yr"
+    t.string   "sec_ses_cd"
+    t.string   "admin_campus_cd"
+    t.string   "sec_typ_cd"
+    t.string   "registration_status"
+    t.string   "section_status"
+    t.string   "activity_status"
+    t.string   "cross_listed"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "courses", ["room_id"], name: "index_courses_on_room_id", using: :btree
 
   create_table "occupants", force: true do |t|
     t.string   "sample_time"
@@ -33,13 +69,6 @@ ActiveRecord::Schema.define(version: 20160418234141) do
   end
 
   add_index "occupants", ["room_id"], name: "index_occupants_on_room_id", using: :btree
-
-  create_table "populates", force: true do |t|
-    t.string   "date_time"
-    t.integer  "occupants"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "rooms", force: true do |t|
     t.integer  "building_id"
