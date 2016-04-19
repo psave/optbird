@@ -70,13 +70,6 @@ ActiveRecord::Schema.define(version: 20160419203233) do
 
   add_index "occupants", ["room_id"], name: "index_occupants_on_room_id", using: :btree
 
-  create_table "populates", force: true do |t|
-    t.string   "date_time"
-    t.integer  "occupants"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "rooms", force: true do |t|
     t.integer  "building_id"
     t.integer  "floor"
