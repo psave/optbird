@@ -64,5 +64,13 @@ namespace :csv do
         end # for current_column for statement
       end # for if first_row statement
     end #end fo CSV.foreach loop
+    #for assigning room ids to the nil records in the courses table
+    # @courses = Course.where("room_id is null")
+    # @courses.each do |row|
+    #   puts row[:building]
+    #   puts row[:room_code]
+    #   @room = Room.where("room_code like ? or room_code like ?",'%row[:building]%','%row[:room_code]%')
+    #   puts @room.count
+    # end #end for courses each do
   end #end for task
 end #namespace end
