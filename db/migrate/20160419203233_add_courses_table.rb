@@ -26,7 +26,7 @@ class AddCoursesTable < ActiveRecord::Migration
       t.string :short_title
       t.string :long_title
       t.string :building
-      t.string :room
+      t.string :room_code
       t.integer :capacity
       t.string :sec_publ_fl
       t.string :sec_ses_yr
