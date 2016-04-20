@@ -8,6 +8,7 @@ namespace :csv do
     first_row = true
     #initializing room object to gather data for occupants table.
     column_to_room = []
+
     CSV.foreach(csv_file_path) do |row|
       # count the number of the rows.
       number_columns = row.length - 1
@@ -45,6 +46,11 @@ namespace :csv do
           #im creating a hash called column_to_room, so i can lookup a room based on the column id
           column_to_room[current_column] = room
 
+          #for assigning room ids to the nil records in the courses table
+          # no_records_to_update = Course.where()
+          # course_to_update = Course.find_by(building: building_name, room_code: building_no, room_id: nil)
+          # course_to_update.update(room_id: room.id)
+
         end # for current_column statement
       first_row = false
       else
@@ -64,13 +70,5 @@ namespace :csv do
         end # for current_column for statement
       end # for if first_row statement
     end #end fo CSV.foreach loop
-    #for assigning room ids to the nil records in the courses table
-    # @courses = Course.where("room_id is null")
-    # @courses.each do |row|
-    #   puts row[:building]
-    #   puts row[:room_code]
-    #   @room = Room.where("room_code like ? or room_code like ?",'%row[:building]%','%row[:room_code]%')
-    #   puts @room.count
-    # end #end for courses each do
   end #end for task
 end #namespace end
