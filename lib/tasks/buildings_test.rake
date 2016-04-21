@@ -2,8 +2,8 @@ require 'csv'
 
 namespace :csv do
   desc "Import CSV Data occupant data"
-  task :buildings => :environment do
-    csv_file_path = 'db/confidential/multi_room_sample_duplicates.csv'
+  task :buildings_test => :environment do
+    csv_file_path = 'db/confidential/multi_room_500_rows.csv'
     #setting first_row (flag) to true to be able to parse header
     first_row = true
     #initializing room object to gather data for occupants table.
