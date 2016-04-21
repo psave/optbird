@@ -1,14 +1,15 @@
 require 'csv'
+require './lib/dropboxAPI.rb'
 
 namespace :csv do
   desc "Import CSV Data occupant data"
   task :buildings => :environment do
-    csv_file_path = 'db/confidential/multi_room_sample.csv'
+    # csv_file_path = @test
     #setting first_row (flag) to true to be able to parse header
     first_row = true
     #initializing room object to gather data for occupants table.
     column_to_room = []
-    CSV.foreach(csv_file_path) do |row|
+    CSV.parse(@new_csv) do |row|
       # count the number of the rows.
       number_columns = row.length - 1
       if first_row    
