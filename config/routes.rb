@@ -1,4 +1,4 @@
-Optbird::Application.routes.draw do
+:Optbird::Application.routes.draw do
 
   resources :sessions, only: [:new, :create]
 

@@ -45,6 +45,10 @@ end
 gem 'bulma'
 
 gem 'sidekiq'
+
+gem 'dotenv-rails', :groups => [:development, :test]
+
+gem 'dropbox-sdk'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
