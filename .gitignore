@@ -11,17 +11,16 @@
 /db/*.sqlite3
 /db/*.sqlite3-journal
 
-# Ignore the csv files
-# .csv
-# /db/confidential/*.csv
-
 # Ignore everything in the confidential folder
 /db/confidential/*
 
+# Ignore files in database
+/db/confidential/*.csv
 
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
 
 .DS_Store
+
 .env

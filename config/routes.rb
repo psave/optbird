@@ -1,16 +1,23 @@
 Optbird::Application.routes.draw do
 
-  resources :sessions, only: [:new, :create]
+
+  resources :sessions, only: [:new, :create, :destroy]
 
   resources :charts, only: [:index, :show]
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".s
 
   resources :overviews, only: [:index, :show]
 
   resources :room
+
+  # This resource is for experimenting with highcharts and bulma
+  # with real data pulled from the database
+  resources :realgraphs, only: [:index, :show]
+
   # You can have the root of your site routed with "root"
-  # root '#index'
+  root to: 'sessions#new'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
