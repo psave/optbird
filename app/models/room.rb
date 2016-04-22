@@ -4,4 +4,6 @@ class Room < ActiveRecord::Base
   has_many :occupants
   has_many :courses
   
+  validates :room, uniqueness: true
+
 end

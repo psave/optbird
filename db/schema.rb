@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20160419203233) do
     t.integer  "sec_rel_tot"
     t.integer  "sec_enr_tot"
     t.integer  "max_enrollment"
-    t.string   "instructor_names"
+    t.text     "instructor_names"
     t.string   "short_title"
     t.string   "long_title"
     t.string   "building"
