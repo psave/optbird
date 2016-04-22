@@ -1,2 +1,16 @@
-<h1>Sessions#new</h1>
-<p>Find me in app/views/sessions/new.html.erb</p>
+<h1>Please Log In</h1>
+  <%= form_tag sessions_path do %>
+    <div>
+      <form class="login">
+        <%= label_tag :name, nil, class: 'label' %>
+        <%= text_field_tag :name, nil, class: 'input' %>
+
+        <%= label_tag :password, nil, class: 'label' %>
+        <%= password_field_tag :password, nil, class: 'input' %>
+
+        <p class="control">
+          <button class="button is-primary">Submit</button>
+        </p>
+      </form>
+    </div>
+  <% end %>
