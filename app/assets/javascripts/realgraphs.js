@@ -36,7 +36,7 @@ $(document).ready(function() {
         "<p class='control'>" +
         "<span class='select'>" +
         "<select class='room_choice'>" +
-        "<option value='5'>0277-AERL-04-0403</option>" +
+        "<option value='1'>0403</option>" +
         "</select></span></p></div>"
       )
       // $(".room_choice").change(function(){
@@ -53,8 +53,30 @@ $(document).ready(function() {
         "<p class='control'>" +
         "<span class='select'>" +
         "<select class='room_choice'>" +
-        "<option value='2'>0403-CIRS-02-0203</option>" +
-        "<option value='3'>0403-CIRS-02-0202</option>" +
+        "<option value='1'>0202</option>" +
+        "<option value='2'>0203</option>" +
+        "</select></span></p></div>"
+      )
+
+      rmID = $(".room_choice").val();
+      dataToArray(info_to_graph);
+
+      $(".room_choice").change(function(){
+        rmID = $(".room_choice").val();
+        dataToArray(info_to_graph);
+      })
+    } else if(building == 3){
+      if ($('.room_choice_container')){
+        $('.room_choice_container').remove();
+      };
+      $(".graph_controls").append(
+        "<div class='room_choice_container'>" +
+        "<label class='label'>Room</label>" +
+        "<p class='control'>" +
+        "<span class='select'>" +
+        "<select class='room_choice'>" +
+        "<option value='1'>0101</option>" +
+        "<option value='2'>0182</option>" +
         "</select></span></p></div>"
       )
 
@@ -68,14 +90,14 @@ $(document).ready(function() {
     }
   })
 
-  
+
   $(".graph_controls").append(
     "<div class='room_choice_container'>" +
     "<label class='label'>Room</label>" +
     "<p class='control'>" +
     "<span class='select'>" +
     "<select class='room_choice'>" +
-    "<option value='5'>0277-AERL-04-0403</option>" +
+    "<option value='1'>0403</option>" +
     "</select></span></p></div"
   )
   // $(".room_choice").change(function(){
