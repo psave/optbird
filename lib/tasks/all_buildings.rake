@@ -100,10 +100,22 @@ end
 
 def populate_courses_room_id()
 
+  # 1. Iterate through each course 
   Course.all.each do |course|
+    # 2. Find the building where the course is taking place. Building has to exist in the database
     building = Building.find_by(building_name: course.building)
-    room = building.rooms.find_by(room: course.room_code)
-    course.update(room_id: room.id) unless room.nil?
+    unless building.nil?
+      # 3. Go through the rooms of that building and find the room by the room code
+      room = building.rooms.find_by(room: course.room_code)
+      unless room.nil?
+        # 4. Room found!! add room id to course so you can have course.room accessible
+        course.update(room_id: room.id) 
+      else
+        # puts "#{course.room_code} not found!"
+      end
+    # else
+    #   puts "building: #{course.building} not found."
+    end
   end
 
 end
@@ -111,7 +123,7 @@ end
 namespace :csv do
   desc "Import CSV Data occupant data"
   task :all_buildings => :environment do
-    csv_file_path = 'db/confidential/multi_room_sample_duplicates.csv'
+    csv_file_path = 'db/confidential/ANGU_sample_realdata.csv'
     buildings = []
 
     # turns the csv object to array of hashes to make it easier to parse
