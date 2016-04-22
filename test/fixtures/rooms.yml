@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  building_id: 
+  floor: 1
+  room: MyString
+  room_code: MyString
+
+two:
+  building_id: 
+  floor: 1
+  room: MyString
+  room_code: MyString

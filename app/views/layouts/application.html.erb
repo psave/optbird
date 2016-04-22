@@ -3,9 +3,12 @@
 <head>
   <title>Optbird</title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <script src="/assets/vendor/moment.js"></script>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <!-- <script src="https://code.highcharts.com/stock/highcharts-more.js"></script> -->
   <%= csrf_meta_tags %>
-</head>
+<!--   <script src="/javascript/highstock.js"></script>
+ --></head>
 <body>
   <% flash.each do |key, value| %>
     <%= content_tag(:div, value) %>

@@ -8,3 +8,21 @@
 
 User.create!(name: "UBC", password: "operation_tbird", password_confirmation: "operation_tbird")
 
+
+# class Dummy
+
+#   def self.populate(n)
+#     timer = Time.now
+#     counter = 1
+#     n.times do
+#       date_time = timer + (5*60)*counter
+#       occupants = Random.new.rand(50)
+#       counter+= 1
+
+#       Populate.create(date_time: date_time, occupants: occupants) 
+#     end
+#   end
+
+# end
+
+# Dummy.populate(50)

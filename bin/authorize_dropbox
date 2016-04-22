@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require 'dropbox_sdk'
+require 'dotenv'
+Dotenv.load
+
+flow = DropboxOAuth2FlowNoRedirect.new(ENV['DROPBOX_APP_KEY'], ENV['DROPBOX_APP_SECRET'])
+
+authorize_url = flow.start()
+
+puts '1. Go to: ' + authorize_url
+puts '2. Click "Allow" (you might have to log in first)'
+puts '3. Copy the authorization code'
+print 'Enter the authorization code here: '
+code = gets.strip
+
+access_token, user_id = flow.finish(code)
+puts "Access Token: " + access_token
+puts "User Id: " + user_id
