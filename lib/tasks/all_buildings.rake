@@ -116,7 +116,7 @@ end
 namespace :csv do
   desc "Import CSV Data occupant data"
   task :all_buildings => :environment do
-    csv_file_path = 'db/confidential/Henn-652.csv'
+    csv_file_path = 'db/confidential/DMP-Hugh-1.csv'
     buildings = []
 
     # turns the csv object to array of hashes to make it easier to parse
