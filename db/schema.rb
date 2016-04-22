@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 20160419203233) do
     t.string   "short_title"
     t.string   "long_title"
     t.string   "building"
-    t.string   "room"
+    t.string   "room_code"
     t.integer  "capacity"
     t.string   "sec_publ_fl"
     t.string   "sec_ses_yr"
@@ -60,7 +60,6 @@ ActiveRecord::Schema.define(version: 20160419203233) do
 
   add_index "courses", ["room_id"], name: "index_courses_on_room_id", using: :btree
 
-<<<<<<< HEAD
   create_table "occupants", force: true do |t|
     t.string   "sample_time"
     t.integer  "number_occupants"
@@ -71,8 +70,6 @@ ActiveRecord::Schema.define(version: 20160419203233) do
 
   add_index "occupants", ["room_id"], name: "index_occupants_on_room_id", using: :btree
 
-=======
->>>>>>> 74e58a4df81c23c4c0ba81f55e4b47206b3a9a43
   create_table "rooms", force: true do |t|
     t.integer  "building_id"
     t.integer  "floor"

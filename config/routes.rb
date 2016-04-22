@@ -9,6 +9,11 @@ Optbird::Application.routes.draw do
   resources :overviews, only: [:index, :show]
 
   resources :room
+
+  # This resource is for experimenting with highcharts and bulma
+  # with real data pulled from the database
+  resources :realgraphs, only: [:index, :show]
+
   # You can have the root of your site routed with "root"
   # root '#index'
 
