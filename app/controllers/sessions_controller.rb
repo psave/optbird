@@ -8,10 +8,17 @@ class SessionsController < ApplicationController
 
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to charts_path
+      redirect_to charts_path, notice: "Successfully logged in."
     else
+      flash.now[:alert] = "Log in failed."
       render :new
     end
   end
 
+  def destroy
+    session[:user_id] = nil
+    redirect_to :root, notice: "Logged out."
+  end
+
 end
+ 

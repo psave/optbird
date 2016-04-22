@@ -44,8 +44,8 @@ $(document).ready(function() {
         x: -20
       },
       xAxis: {
-        type: 'datetime',
-        categories: series.x_axis.map(function(time){ return moment(time).format("H:mm")}),
+
+        categories: series.x_axis.map(function(time){ return moment(time).format('H:mm')}),
       },
       yAxis: {
         title: {
@@ -57,9 +57,16 @@ $(document).ready(function() {
             color: '#808080'
         }]
       },
+
       // tooltip: {
       //   valueSuffix: ''
       // },
+
+      tooltip: {
+        valueSuffix: ''
+      },
+
+
       legend: {
         layout: 'vertical',
         align: 'right',
@@ -69,8 +76,11 @@ $(document).ready(function() {
       series: [{
         name: 'Occupants',
         data: series.y_axis,
+
         // pointStart: series.x_axis[0],
         // pointInterval: 5*60,
+
+
         tooltip: {
           valueDecimals: 2
         }
