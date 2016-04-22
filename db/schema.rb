@@ -13,14 +13,17 @@
 
 ActiveRecord::Schema.define(version: 20160419203233) do
 
-  create_table "buildings", force: true do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "buildings", force: :cascade do |t|
     t.integer  "building_number"
-    t.string   "building_name"
+    t.string   "building_name",   limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "courses", force: true do |t|
+  create_table "courses", force: :cascade do |t|
     t.integer  "room_id"
     t.string   "subject"
     t.string   "course"
@@ -60,8 +63,8 @@ ActiveRecord::Schema.define(version: 20160419203233) do
 
   add_index "courses", ["room_id"], name: "index_courses_on_room_id", using: :btree
 
-  create_table "occupants", force: true do |t|
-    t.string   "sample_time"
+  create_table "occupants", force: :cascade do |t|
+    t.string   "sample_time",      limit: 255
     t.integer  "number_occupants"
     t.integer  "room_id"
     t.datetime "created_at"
@@ -70,11 +73,11 @@ ActiveRecord::Schema.define(version: 20160419203233) do
 
   add_index "occupants", ["room_id"], name: "index_occupants_on_room_id", using: :btree
 
-  create_table "rooms", force: true do |t|
+  create_table "rooms", force: :cascade do |t|
     t.integer  "building_id"
     t.integer  "floor"
-    t.string   "room"
-    t.string   "room_code"
+    t.string   "room",        limit: 255
+    t.string   "room_code",   limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -82,9 +85,9 @@ ActiveRecord::Schema.define(version: 20160419203233) do
   add_index "rooms", ["building_id"], name: "index_rooms_on_building_id", using: :btree
   add_index "rooms", ["room_code"], name: "index_rooms_on_room_code", using: :btree
 
-  create_table "users", force: true do |t|
-    t.string   "name"
-    t.string   "password_digest"
+  create_table "users", force: :cascade do |t|
+    t.string   "name",            limit: 255
+    t.string   "password_digest", limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
