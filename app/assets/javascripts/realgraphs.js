@@ -21,92 +21,73 @@ $(document).ready(function() {
   var building = $(".building_choice").val();
   var rmID = $(".room_choice").val();
 
+  // loads graph for room in the room dropdown
+  // pass "true" to reloadGraph if you want it to wait for a choice from a dropdown
+  // pass "false" if you want it to load without waiting
+  function reloadGraph(wait_for_event){
+    if (wait_for_event)
+    $(".room_choice").change(function(){
+      rmID = $(".room_choice").val();
+      dataToArray(info_to_graph);
+    })
+    else{
+      rmID = $(".room_choice").val();
+      dataToArray(info_to_graph);
+    }
+  }
 
+  // puts the given building's rooms in the room dropdown
+  function setBuilding(building){
+    var building1rooms = "<option value='1'>0403</option>";
+    var building2rooms = "<option value='1'>0202</option><option value='2'>0203</option>";
+    var building3rooms = "<option value='1'>0101</option><option value='2'>0182</option>";
+    var which_rooms;
+    if (building == 1){
+      which_rooms = building1rooms;
+    }
+    else if (building == 2){
+      which_rooms = building2rooms;
+    }
+    else if (building == 3){
+      which_rooms = building3rooms;
+    }
+
+    if ($('.room_choice_container')){
+        $('.room_choice_container').remove();
+      };
+
+      $(".graph_controls").append(
+        "<div class='room_choice_container'>" +
+        "<label class='label'>Room</label>" +
+        "<p class='control'>" +
+        "<span class='select'>" +
+        "<select class='room_choice'>" +
+        which_rooms +
+        "</select></span></p></div>"
+      )
+  }
+
+  // sets building based on change in building dropdown
+  // and reloads graph
   $(".building_choice").change(function(){
     building = $(".building_choice").val();
-
     if (building == 1){
-      if ($('.room_choice_container')){
-        $('.room_choice_container').remove();
-      };
-
-      $(".graph_controls").append(
-        "<div class='room_choice_container'>" +
-        "<label class='label'>Room</label>" +
-        "<p class='control'>" +
-        "<span class='select'>" +
-        "<select class='room_choice'>" +
-        "<option value='1'>0403</option>" +
-        "</select></span></p></div>"
-      )
-      // $(".room_choice").change(function(){
-        rmID = $(".room_choice").val();
-        dataToArray(info_to_graph);
-      // })
+      setBuilding(1);
+      reloadGraph(false);
     } else if(building == 2){
-      if ($('.room_choice_container')){
-        $('.room_choice_container').remove();
-      };
-      $(".graph_controls").append(
-        "<div class='room_choice_container'>" +
-        "<label class='label'>Room</label>" +
-        "<p class='control'>" +
-        "<span class='select'>" +
-        "<select class='room_choice'>" +
-        "<option value='1'>0202</option>" +
-        "<option value='2'>0203</option>" +
-        "</select></span></p></div>"
-      )
-
-      rmID = $(".room_choice").val();
-      dataToArray(info_to_graph);
-
-      $(".room_choice").change(function(){
-        rmID = $(".room_choice").val();
-        dataToArray(info_to_graph);
-      })
+      setBuilding(2);
+      reloadGraph(false);
     } else if(building == 3){
-      if ($('.room_choice_container')){
-        $('.room_choice_container').remove();
-      };
-      $(".graph_controls").append(
-        "<div class='room_choice_container'>" +
-        "<label class='label'>Room</label>" +
-        "<p class='control'>" +
-        "<span class='select'>" +
-        "<select class='room_choice'>" +
-        "<option value='1'>0101</option>" +
-        "<option value='2'>0182</option>" +
-        "</select></span></p></div>"
-      )
-
-      rmID = $(".room_choice").val();
-      dataToArray(info_to_graph);
-
-      $(".room_choice").change(function(){
-        rmID = $(".room_choice").val();
-        dataToArray(info_to_graph);
-      })
+      setBuilding(3);
+      reloadGraph(false);
     }
+    reloadGraph(true);
   })
 
-
-  $(".graph_controls").append(
-    "<div class='room_choice_container'>" +
-    "<label class='label'>Room</label>" +
-    "<p class='control'>" +
-    "<span class='select'>" +
-    "<select class='room_choice'>" +
-    "<option value='1'>0403</option>" +
-    "</select></span></p></div"
-  )
-  // $(".room_choice").change(function(){
-    rmID = $(".room_choice").val();
-    dataToArray(info_to_graph);
-  // })
-
-  // whenever room_choice changes, set rmID to room_choice and
-  // call dataToArray again (i.e. reload graph)
+  // when document ready, loads graph of first room in first building
+  // so the page doesn't load with an empty graph
+  setBuilding(1);
+  reloadGraph(false);
  
 
   // response contains all data in multi_room_500_rows.csv
@@ -130,7 +111,7 @@ $(document).ready(function() {
       // all number_occupants for room_id=rmID
       y_axis: y_axis
     };
-
+    // return series;
     dataToChart();
   }
 
