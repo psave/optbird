@@ -5,6 +5,13 @@ Dotenv.load
 
 @client = DropboxClient.new(ENV['DROPBOX_ACCESS_TOKEN'])
 
+
+delta = @client.delta(cursor=nil, path_prefix='/')
+
+delta_path = delta["entries"][0][0]
+
+@new_csv = @client.get_file(delta_path)
+
 ### For all files in the Dropbox
 
 # @metadata = @client.metadata('/', file_limit=10, list=true)
@@ -23,9 +30,3 @@ Dotenv.load
 
 
 ### For new files in the Dropbox
-
-delta = @client.delta(cursor=nil, path_prefix='/')
-
-delta_path = delta["entries"][0][0]
-
-@new_csv = @client.get_file(delta_path)

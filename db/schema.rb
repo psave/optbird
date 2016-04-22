@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20160419203233) do
 
   create_table "buildings", force: :cascade do |t|
     t.integer  "building_number"
-    t.string   "building_name",   limit: 255
+    t.string   "building_name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -64,7 +64,7 @@ ActiveRecord::Schema.define(version: 20160419203233) do
   add_index "courses", ["room_id"], name: "index_courses_on_room_id", using: :btree
 
   create_table "occupants", force: :cascade do |t|
-    t.string   "sample_time",      limit: 255
+    t.string   "sample_time"
     t.integer  "number_occupants"
     t.integer  "room_id"
     t.datetime "created_at"
@@ -76,8 +76,8 @@ ActiveRecord::Schema.define(version: 20160419203233) do
   create_table "rooms", force: :cascade do |t|
     t.integer  "building_id"
     t.integer  "floor"
-    t.string   "room",        limit: 255
-    t.string   "room_code",   limit: 255
+    t.string   "room"
+    t.string   "room_code"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -86,8 +86,8 @@ ActiveRecord::Schema.define(version: 20160419203233) do
   add_index "rooms", ["room_code"], name: "index_rooms_on_room_code", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "name",            limit: 255
-    t.string   "password_digest", limit: 255
+    t.string   "name"
+    t.string   "password_digest"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
