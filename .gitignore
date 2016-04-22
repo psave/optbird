@@ -10,10 +10,18 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
-/db/confidential/*.csv
+
+# Ignore the csv files
+# .csv
+# /db/confidential/*.csv
+
+# Ignore everything in the confidential folder
+/db/confidential/*
+
 
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
 
 .DS_Store
+.env

@@ -3,7 +3,7 @@ require 'csv'
 namespace :csv do
   desc "Import CSV Data course data"
   task :courses => :environment do
-    csv_file_path = 'db/confidential/ANGU_DMP_courses.csv'
+    csv_file_path = 'db/confidential/all_courses2015.csv'
     CSV.foreach(csv_file_path, headers: true) do |row|
     
       unless row[9].nil? && row[20].nil?

@@ -31,18 +31,11 @@ def populate_buildings(buildings)
 
     @building_codes << building
 
-    #assigning either building_no OR nil to building
-    building = Building.where("building_number = ?", room_codes["building_no"]).first
-    
-    # creates a building if one does not already exist
-
-    if !building
-      building = Building.create!({
+    # creates a building if one does not already exist (Active Record Validation)
+      Building.create({
         building_number: room_codes[:building_no],
         building_name: room_codes[:building_name]
       })
-    end
-
   end 
 end
 
@@ -52,15 +45,15 @@ def populate_rooms()
 
     room_codes_hash = split_roomcode(room_codes)
 
+    # room_exists = Building.find_by_building_number(room_codes_hash[:building_no])
+
     building = Building.find_by_building_number(room_codes_hash[:building_no])
 
-    if !building.nil?
-      building.rooms.create({
-        floor: room_codes_hash[:floor], 
-        room: room_codes_hash[:room_no], 
-        room_code: room_codes
-      })
-    end
+    building.rooms.create({
+      floor: room_codes_hash[:floor], 
+      room: room_codes_hash[:room_no], 
+      room_code: room_codes
+    })
 
   end
 
@@ -123,7 +116,7 @@ end
 namespace :csv do
   desc "Import CSV Data occupant data"
   task :all_buildings => :environment do
-    csv_file_path = 'db/confidential/ANGU_sample_realdata.csv'
+    csv_file_path = 'db/confidential/Henn-652.csv'
     buildings = []
 
     # turns the csv object to array of hashes to make it easier to parse
@@ -141,7 +134,7 @@ namespace :csv do
   end
 end
 
-# Comments
+# Additional Comments
 
 ################ RUBY MULTIPLE ASSIGNMENT##############################
 # fields = room_code.split('-')
@@ -151,3 +144,7 @@ end
 # room_no = fields[3]
 #### This single line below does the above ###
 # building_no, building_name, floor, room_no = fields
+
+############### COMMANDS TO CHECK IF RAKE IS WORKING #################
+# Course.find_by(room_code: "101")
+# Building.find_by(building_name: "DMP").rooms.find_by(room: "101")
