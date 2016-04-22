@@ -38,9 +38,9 @@ $(document).ready(function() {
 
   // puts the given building's rooms in the room dropdown
   function setBuilding(building){
-    var building1rooms = "<option value='1'>0403</option>";
-    var building2rooms = "<option value='1'>0202</option><option value='2'>0203</option>";
-    var building3rooms = "<option value='1'>0101</option><option value='2'>0182</option>";
+    var building1rooms = "<option value='1'>343</option>";
+    var building2rooms = "<option value='1'>1202</option><option value='2'>1204</option>";
+    var building3rooms = "<option value='1'>101</option><option value='2'>110</option>";
     var which_rooms;
     if (building == 1){
       which_rooms = building1rooms;
