@@ -1,3 +1,8 @@
+/////////     This is the JS file for the graph currently on the "graph2" tab.
+
+//////  TODO / WARNING :  Every select (like in a $('xyz') call) in this file should have '#graph2'
+//////                        added to the front, like $('#graph2 xyz')
+
 $(document).ready(function() {
 
   // variable to store the ajax response
@@ -18,20 +23,20 @@ $(document).ready(function() {
   var series = {};
 
   // make it so options can be set from menus
-  var building = $(".building_choice").val();
-  var rmID = $(".room_choice").val();
+  var building = $("#graph2 .building_choice").val();
+  var rmID = $("#graph2 .room_choice").val();
 
   // loads graph for room in the room dropdown
   // pass "true" to reloadGraph if you want it to wait for a choice from a dropdown
   // pass "false" if you want it to load without waiting
   function reloadGraph(wait_for_event){
     if (wait_for_event)
-    $(".room_choice").change(function(){
-      rmID = $(".room_choice").val();
+    $("#graph2 .room_choice").change(function(){
+      rmID = $("#graph2 .room_choice").val();
       dataToArray(info_to_graph);
     })
     else{
-      rmID = $(".room_choice").val();
+      rmID = $("#graph2 .room_choice").val();
       dataToArray(info_to_graph);
     }
   }
@@ -52,11 +57,11 @@ $(document).ready(function() {
       which_rooms = building3rooms;
     }
 
-    if ($('.room_choice_container')){
-        $('.room_choice_container').remove();
+    if ($('#graph2 .room_choice_container')){
+        $('#graph2 .room_choice_container').remove();
       };
 
-      $(".graph_controls").append(
+      $("#graph2 .graph_controls").append(
         "<div class='room_choice_container'>" +
         "<label class='label'>Room</label>" +
         "<p class='control'>" +
@@ -69,7 +74,7 @@ $(document).ready(function() {
 
   // sets building based on change in building dropdown
   // and reloads graph
-  $(".building_choice").change(function(){
+  $("#graph2 .building_choice").change(function(){
     building = $(".building_choice").val();
     if (building == 1){
       setBuilding(1);
@@ -115,9 +120,11 @@ $(document).ready(function() {
     dataToChart();
   }
 
+
+
   function dataToChart() {
     // console.log("inside dataToChart");
-    $('#graphContainer').highcharts({      
+    $('#graph2 #graphContainer').highcharts({
       title: {
         text: 'Occupancy over Time',
         x: -20 //center
