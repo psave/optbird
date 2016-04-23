@@ -116,11 +116,11 @@ end
 namespace :csv do
   desc "Import CSV Data occupant data"
   task :all_buildings => :environment do
-    csv_file_path = 'db/confidential/DMP-Hugh-1.csv'
+    # csv_file_path = 'db/confidential/DMP-Hugh-1.csv'
     buildings = []
 
     # turns the csv object to array of hashes to make it easier to parse
-    CSV.foreach(csv_file_path, headers: true) do |row|
+    CSV.foreach(@occupancy_csvs[0], headers: true) do |row|
       buildings << row.to_hash
       # example row:
       # {"Date"=>"16-01-05", "Time"=>"0:00:00", "0516-IBLC-02-0101"=>"1", "0403-CIRS-02-0203"=>"1"}
