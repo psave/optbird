@@ -2,34 +2,12 @@ require 'json'
 
 class OverviewsController < ApplicationController
 
-  def index
-    # #Selecting a range
-    # startDate = "2016-04-16 22:27:56"
-    # endDate = "2016-04-17 02:32:56"
-    # testDate = "2016-04-16 23:57:56"
-    # @test_occupants = Populate.where(date_time: startDate..testDate)
-
-    # #creating arrays to use in json
-    # data = [] 
-    # xaxis = [] 
-
-    # #looping through the occupants
-    # @test_occupants.each do |occupant|
-    #   data << occupant.occupants
-    #   xaxis << occupant.date_time
-    # end
-    # puts xaxis
-    # @series = 
-    # {
-    #   'data' => data,
-    #   'xaxis' => xaxis
-    # }
-    # @series = @series.to_json
-  end
-
+  # this returns everything in the occupants table
+  # TODO: get data into the database
   def show
-    @chart = Occupant.all
-    render json: @chart
+    # @all_occupancy_data = Occupant.all
+    @all_occupancy_data = ActiveRecord::Base.connection.execute("SELECT sample_time AS s, number_occupants::int AS n, room_id::int AS r FROM occupants")
+    render json: @all_occupancy_data
   end
 
 end

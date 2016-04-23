@@ -1,152 +1,160 @@
- // Hardcoded data for getting started with bulma
+$(document).ready(function() {
+
+  // variable to store the ajax response
+  var info_to_graph;
+
+  // when document is ready, load graph, and set info_to_graph equal to ajax response
+  $.ajax({
+    method: 'GET',
+    url: '/overviews/all',
+    dataType: 'json',
+    contentType: 'application/json',
+    success: function(response){
+      dataToArray(response);
+      info_to_graph = response;
+    }
+  });
+
+  var series = {};
+
+  // make it so options can be set from menus
+  var building = $(".building_choices").val();
+  var rmID = $(".room_choice").val();
+
+  // loads graph for room in the room dropdown
+  // pass "true" to reloadGraph if you want it to wait for a choice from a dropdown
+  // pass "false" if you want it to load without waiting
+  function reloadGraph(wait_for_event){
+    if (wait_for_event)
+    $(".room_choice").change(function(){
+      rmID = $(".room_choice").val();
+      dataToArray(info_to_graph);
+    })
+    else{
+      rmID = $(".room_choice").val();
+      dataToArray(info_to_graph);
+    }
+  }
+
+  // puts the given building's rooms in the room dropdown
+  function setBuilding(building){
+    var building1rooms = "<option value='1'>343</option>";
+    var building2rooms = "<option value='1'>1202</option><option value='2'>1204</option>";
+    var building3rooms = "<option value='1'>101</option><option value='2'>110</option>";
+    var which_rooms;
+    if (building == 1){
+      which_rooms = building1rooms;
+    }
+    else if (building == 2){
+      which_rooms = building2rooms;
+    }
+    else if (building == 3){
+      which_rooms = building3rooms;
+    }
+
+    if ($('.room_choice_container')){
+        $('.room_choice_container').remove();
+      };
+
+      $(".graph_controls").append(
+        "<div class='room_choice_container'>" +
+        "<label class='label'>Room</label>" +
+        "<p class='control'>" +
+        "<span class='select'>" +
+        "<select class='room_choice'>" +
+        which_rooms +
+        "</select></span></p></div>"
+      )
+  }
+
+  // sets building based on change in building dropdown
+  // and reloads graph
+  $(".building_choice").change(function(){
+    building = $(".building_choice").val();
+    if (building == 1){
+      setBuilding(1);
+      reloadGraph(false);
+    } else if(building == 2){
+      setBuilding(2);
+      reloadGraph(false);
+    } else if(building == 3){
+      setBuilding(3);
+      reloadGraph(false);
+    }
+    reloadGraph(true);
+  })
+
+  // when document ready, loads graph of first room in first building
+  // so the page doesn't load with an empty graph
+  setBuilding(1);
+  reloadGraph(false);
  
- $(function () {
-   $('#overview-firstGraph').highcharts({
-     title: {
-       text: 'Room 182 Occupancy',
-       x: -20 //center
-     },
-     xAxis: {
+
+  // response contains all data in multi_room_500_rows.csv
+  // filter it here before passing it to highcharts
+  function dataToArray(response) {
+    if (!response) return;
+    var x_axis = [];
+    var y_axis = [];
+    for (var i = 0; i < response.length; i++) {
+      // pick out only those with room_id r == rmID
+      if (response[i].r == rmID) {
+        // push their sample_time s and number_occupants n into x and y arrays
+        x_axis.push(response[i].s);
+        y_axis.push(parseInt(response[i].n));
+      }
+    }
+
+    series = {
+      // all sample_times s for room_id r=rmID
+      x_axis: x_axis,
+      // all number_occupants s for room_id r=rmID
+      y_axis: y_axis
+    };
+    // return series;
+    dataToChart();
+  }
+
+  function dataToChart() {
+    // console.log("inside dataToChart");
+    $('#graphContainer').highcharts({      
       title: {
-         text: 'Time'
-       },
-       categories: ['10:20:00', '10:25:00', '10:30:00', '10:35:00', '10:40:00', '10:45:00', '10:50:00', '10:55:00', '11:00:00', '11:05:00', '11:10:00', '11:15:00']
-     },
-     yAxis: {
-       title: {
-         text: 'Occupants'
-       },
-       plotLines: [{
-         value: 0,
-         width: 1,
-         color: '#808080'
-       }]
-     },
-     tooltip: {
-       valueSuffix: 'Occupants'
-     },
-     legend: {
-       layout: 'vertical',
-       align: 'right',
-       verticalAlign: 'middle',
-       borderWidth: 0
-     },
-     series: [{
-       name: 'Room 182',
-       data: [98, 101, 31, 29, 28, 33, 38, 57, 82, 92, 94, 95]
-     }]
-   });
- });
+        text: 'Occupancy over Time',
+        x: -20 //center
+      },
+      xAxis: {
+        type: 'datetime',
+        categories: series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
+        tickInterval: 35
+      },
+      yAxis: {
+        title: {
+          text: 'Number of Occupants'
+        },
+        plotLines: [{
+          value: 0,
+          width: 1,
+          color: '#1F99D3'
+        }]
+      },
+      tooltip: {
+        valueSuffix: ''
+      },
+      legend: {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        floating: true,
+        borderWidth: 0
+      },
+      series: [{
+        name: 'Occupants',
+        data: series.y_axis,
+        tooltip: {
+          valueDecimals: 2
+        }
+      }]
+    });
+  }
 
-
-
-
-
-/***************************/
-
-// $(function() {
-// //   // obtaining element by id and parsing to JSON to check out what it is.
-//   var alldata = $.parseJSON($('#seriesdata').text());
-  
-  
-//   $('#overview_line_chart').highcharts('StockChart',{
-
-//     title: {
-//       text: "Occupancy of Irving Room 182"
-//       // text: y.name
-//     },
-//     rangeSelector: {
-//       allButtonsEnabled: true,
-//       selected: 1
-//     },
-//     xAxis: {
-//       categories: alldata.xaxis.map(function(time){ return moment(time).format("H:mm")}),
-//       type: 'units'
-//       //type: "datetime"
-//     },
-//     yAxis: {
-//       title: {
-//         text: "# Occupants"
-//       }
-//     },
-//     series: [{
-//       name: 'Occupants',
-//       data: alldata.data
-//     }],
-//   });
-
-
-// });
-
-// $(document).ready(function() {
-
-//   $('#button').on('click', function(e) {
-//     e.preventDefault();
-//     $.ajax({
-//       method: 'GET',
-//       url: '/overview/show',
-//       dataType: 'json',
-//       contentType: 'application/json',
-//       success: dataToArray
-//     }); 
-//   });
-
-//   var series = {};
-
-//   function dataToArray(response) {
-//     var y_axis = [];
-//     var x_axis = [];
-
-//     for (var i = 0; i < response.length; i++) {
-//       y_axis.push(response[i].occupants);
-//       x_axis.push(response[i].date_time);
-//     }
-
-//     series = {
-//       y_axis: y_axis,
-//       x_axis: x_axis
-//     };
-
-//     dataToChart();
-//   }
-
-//   function dataToChart() {
-//     $('#overview_line_chart').highcharts({
-//       title: {
-//           text: 'Dummy Data',
-//           x: -20 //center
-//       },
-//       subtitle: {
-//           text: 'Awesome subtitle',
-//           x: -20
-//       },
-//       xAxis: {
-//           categories: series.x_axis.map(function(time){ return moment(time).format("H:mm")}),
-//       },
-//       yAxis: {
-//           title: {
-//               text: 'Number of Occupants'
-//           },
-//           plotLines: [{
-//               value: 0,
-//               width: 1,
-//               color: '#808080'
-//           }]
-//       },
-//       tooltip: {
-//           valueSuffix: ''
-//       },
-//       legend: {
-//           layout: 'vertical',
-//           align: 'right',
-//           verticalAlign: 'middle',
-//           borderWidth: 0
-//       },
-//       series: [{
-//         name: 'Occupants',
-//         data: series.y_axis
-//       }]
-//     });
-//   }
-
-// });
+});
