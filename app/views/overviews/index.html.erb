@@ -40,37 +40,10 @@
         <label class="label">Building</label>
           <p class="control">
             <span class="select">
-              <select class="building_choices">
-                <option value="1">ANGU</option>
-                <option value="2">CEME</option>
-                <option value="3">DMP</option>
-                <option value="4">OTH</option>
-              </select>
+             <%= select_tag "building_choices", options_from_collection_for_select(@buildings, "id", "building_name")%>
             </span>
           </p>
-        <!-- <label class="label">Room</label>
-          <p class="control">
-            <span class="select">
-              <select class="room_choices">
-                <option value="1">0516-IBLC-02-0101</option>
-                <option value="2">0403-CIRS-02-0203</option>
-                <option value="3">0403-CIRS-02-0202</option>
-                <option value="4">0516-IBLC-01-0182</option>
-                <option value="5">0277-AERL-04-0403</option>
-              </select>
-            </span>
-          </p>
-        <label class="label">Timescale</label>
-          <p class="control">
-            <span class="select">
-              <select>
-                <option>Day</option>
-                <option>Week</option>
-                <option>Semester</option>
-                <option>All Time</option>
-              </select>
-            </span>
-          </p> -->
+
       </div>
 
     </div>

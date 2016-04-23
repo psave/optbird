@@ -19,70 +19,72 @@ $(document).ready(function() {
 
   // make it so options can be set from menus
   var building = $(".building_choices").val();
-  var rmID = $(".room_choice").val();
+  var rmID = $(".room_choices").val();
 
   // loads graph for room in the room dropdown
   // pass "true" to reloadGraph if you want it to wait for a choice from a dropdown
   // pass "false" if you want it to load without waiting
   function reloadGraph(wait_for_event){
     if (wait_for_event)
-    $(".room_choice").change(function(){
-      rmID = $(".room_choice").val();
+    $(".room_choices").change(function(){
+      rmID = $(".room_choices").val();
       dataToArray(info_to_graph);
     })
     else{
-      rmID = $(".room_choice").val();
+      rmID = $(".room_choices").val();
       dataToArray(info_to_graph);
     }
   }
 
   // puts the given building's rooms in the room dropdown
   function setBuilding(building){
-    var building1rooms = "<option value='1'>343</option>";
-    var building2rooms = "<option value='1'>1202</option><option value='2'>1204</option>";
-    var building3rooms = "<option value='1'>101</option><option value='2'>110</option>";
-    var which_rooms;
-    if (building == 1){
-      which_rooms = building1rooms;
-    }
-    else if (building == 2){
-      which_rooms = building2rooms;
-    }
-    else if (building == 3){
-      which_rooms = building3rooms;
-    }
+   console.log(building)
+    // var which_rooms;
+    // if (building == 1){
+    //   which_rooms = building1rooms;
+    // }
+    // else if (building == 2){
+    //   which_rooms = building2rooms;
+    // }
+    // else if (building == 3){
+    //   which_rooms = building3rooms;
+    // }
 
-    if ($('.room_choice_container')){
-        $('.room_choice_container').remove();
+    if ($('.room_choices_container')){
+        $('.room_choices_container').remove();
       };
 
+      // Make the below an Ajax calls
       $(".graph_controls").append(
-        "<div class='room_choice_container'>" +
+        "<div class='room_choices_container'>" +
         "<label class='label'>Room</label>" +
         "<p class='control'>" +
         "<span class='select'>" +
-        "<select class='room_choice'>" +
-        which_rooms +
+        "<select class='room_choices'>" +
+        building +
         "</select></span></p></div>"
       )
   }
 
+  $('#building_choices').on('change', function(e){
+    setBuilding($('#building_choices').val());
+  });
   // sets building based on change in building dropdown
   // and reloads graph
-  $(".building_choice").change(function(){
-    building = $(".building_choice").val();
-    if (building == 1){
-      setBuilding(1);
-      reloadGraph(false);
-    } else if(building == 2){
-      setBuilding(2);
-      reloadGraph(false);
-    } else if(building == 3){
-      setBuilding(3);
-      reloadGraph(false);
-    }
-    reloadGraph(true);
-  })
+  // $(".building_choices").change(function(){
+  //   building = $(".building_choices").val();
+  //   if (building == building.id){
+  //     setBuilding(building.id);
+  //     reloadGraph(false);
+  //   } else if(building == 2){
+  //     setBuilding(2);
+  //     reloadGraph(false);
+  //   } else if(building == 3){
+  //     setBuilding(3);
+  //     reloadGraph(false);
+  //   }
+  //   reloadGraph(true);
+  // })
 
   // when document ready, loads graph of first room in first building
   // so the page doesn't load with an empty graph
