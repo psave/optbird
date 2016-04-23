@@ -6,7 +6,7 @@ $(document).ready(function() {
   // when document is ready, load graph, and set info_to_graph equal to ajax response
   $.ajax({
     method: 'GET',
-    url: '/realgraphs/show',
+    url: '/realgraphs/all',
     dataType: 'json',
     contentType: 'application/json',
     success: function(response){
@@ -38,9 +38,9 @@ $(document).ready(function() {
 
   // puts the given building's rooms in the room dropdown
   function setBuilding(building){
-    var building1rooms = "<option value='1'>0403</option>";
-    var building2rooms = "<option value='1'>0202</option><option value='2'>0203</option>";
-    var building3rooms = "<option value='1'>0101</option><option value='2'>0182</option>";
+    var building1rooms = "<option value='1'>343</option>";
+    var building2rooms = "<option value='1'>1202</option><option value='2'>1204</option>";
+    var building3rooms = "<option value='1'>101</option><option value='2'>110</option>";
     var which_rooms;
     if (building == 1){
       which_rooms = building1rooms;
@@ -93,22 +93,22 @@ $(document).ready(function() {
   // response contains all data in multi_room_500_rows.csv
   // filter it here before passing it to highcharts
   function dataToArray(response) {
+    if (!response) return;
     var x_axis = [];
     var y_axis = [];
-    // loop through response
     for (var i = 0; i < response.length; i++) {
-      // pick out only those with room_id == rmID
-      if (response[i].room_id == rmID) {
-        // push their sample_time and number_occupants into x and y arrays
-        x_axis.push(response[i].sample_time);
-        y_axis.push(response[i].number_occupants);
+      // pick out only those with room_id r == rmID
+      if (response[i].r == rmID) {
+        // push their sample_time s and number_occupants n into x and y arrays
+        x_axis.push(response[i].s);
+        y_axis.push(parseInt(response[i].n));
       }
     }
 
     series = {
-      // all sample_times for room_id=rmID
+      // all sample_times s for room_id r=rmID
       x_axis: x_axis,
-      // all number_occupants for room_id=rmID
+      // all number_occupants s for room_id r=rmID
       y_axis: y_axis
     };
     // return series;
