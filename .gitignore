@@ -17,8 +17,6 @@
 # Ignore files in database
 /db/confidential/*.csv
 
-.env
-
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp

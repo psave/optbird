@@ -1,36 +1,26 @@
-$(document).ready(function() {
+/////////     This is the JS file for the graph currently on the "graph3" tab.
 
-  // variable to store the ajax response
-  var info_to_graph;
+//////  TODO / WARNING :  Every select (like in a $('xyz') call) in this file should have '#graph3'
+//////                        added to the front, like $('#graph3 xyz')
 
-  // when document is ready, load graph, and set info_to_graph equal to ajax response
-  $.ajax({
-    method: 'GET',
-    url: '/realgraphs/all',
-    dataType: 'json',
-    contentType: 'application/json',
-    success: function(response){
-      dataToArray(response);
-      info_to_graph = response;
-    }
-  });
+function graph3(response) {
 
   // make it so options can be set from menus
-  var building = $(".building_choice").val();
-  var rmID = $(".room_choice").val();
+  var building = $("#graph3 .building_choice").val();
+  var rmID = $("#graph3 .room_choice").val();
 
   // loads graph for room in the room dropdown
   // pass "true" to reloadGraph if you want it to wait for a choice from a dropdown
   // pass "false" if you want it to load without waiting
   function reloadGraph(wait_for_event){
     if (wait_for_event)
-    $(".room_choice").change(function(){
-      rmID = $(".room_choice").val();
-      dataToArray(info_to_graph);
+    $("#graph3 .room_choice").change(function(){
+      rmID = $("#graph3 .room_choice").val();
+      dataToArray(response);
     })
     else{
-      rmID = $(".room_choice").val();
-      dataToArray(info_to_graph);
+      rmID = $("#graph3 .room_choice").val();
+      dataToArray(response);
     }
   }
 
@@ -50,11 +40,11 @@ $(document).ready(function() {
       which_rooms = building3rooms;
     }
 
-    if ($('.room_choice_container')){
-        $('.room_choice_container').remove();
+    if ($('#graph3 .room_choice_container')){
+        $('#graph3 .room_choice_container').remove();
       };
 
-      $(".graph_controls").append(
+      $("#graph3 .graph_controls").append(
         "<div class='room_choice_container'>" +
         "<label class='label'>Room</label>" +
         "<p class='control'>" +
@@ -67,15 +57,15 @@ $(document).ready(function() {
 
   // sets building based on change in building dropdown
   // and reloads graph
-  $(".building_choice").change(function(){
-    building = $(".building_choice").val();
+  $("#graph3 .building_choice").change(function(){
+    building = $("#graph3 .building_choice").val();
     if (building == 1){
       setBuilding(1);
       reloadGraph(false);
-    } else if(building == 2){
+    } else if (building == 2){
       setBuilding(2);
       reloadGraph(false);
-    } else if(building == 3){
+    } else if (building == 3){
       setBuilding(3);
       reloadGraph(false);
     }
@@ -154,7 +144,7 @@ $(document).ready(function() {
       }
     });
 
-    $('#graphContainer').highcharts({      
+    $('#graph3 #graphContainer').highcharts({      
       title: {
         text: 'Occupancy over Time',
         x: -20 //center
@@ -220,4 +210,4 @@ $(document).ready(function() {
     });
   }
 
-});
+}
