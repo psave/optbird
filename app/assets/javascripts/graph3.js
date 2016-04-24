@@ -82,8 +82,21 @@ function graph3(response) {
   // filter it here before passing it to highcharts
   function dataToArray(response) {
     if (!response) return;
-    // a series for each weekday, where the series is a nested array
-    // of [x, y] datapoints with x = sample_time s and y = number_occupants n
+    // a whole day in 5-minute increments
+    var time_of_day = [];
+    for (var hour = 0; hour < 24; hour++){
+      for (minute = 0; minute < 60; minute++){
+        if (minute%5 == 0){ 
+          if (minute < 10){
+            minute = '0' + minute;
+          }
+          time_of_day.push(hour + ":" + minute);
+        }
+      }
+    }
+    // console.log(time_of_day);
+
+    // a series for each weekday
     var sunday = [];
     var monday = [];
     var tuesday = [];
@@ -96,45 +109,72 @@ function graph3(response) {
       if (response[i].r == rmID) {
 
         var datapoint = [];
-        var a_day = new Date(response[i].s);
+        var sample_time = response[i].s;
+        var number_occupants = parseInt(response[i].n);
+        var datapoint = [sample_time, number_occupants];
+        // console.log(datapoint);
+        var a_day = new Date(sample_time);
         var weekday = a_day.getDay();
+        var hour = a_day.getHours();
+        var minute = a_day.getMinutes();
+        if (minute < 10){
+          minute = '0' + minute;
+        }
+        var time = hour + ":" + minute;
+        // console.log(time);
+
+        // // testing output
+        // var test_day = new Date(response[7080].s);
+        // var test_weekday = test_day.getDay();
+        // var test_hour = test_day.getHours();
+        // var test_minute = test_day.getMinutes();
+        // // console.log("test_day: " + test_day);
+        // // console.log("test_weekday: " + test_weekday);
+        // // console.log("test_hour: " + test_hour);
+        // // console.log("test_minute: " + test_minute);
+        // // console.log("date: " + a_day);
+        // // console.log("time: " + time);
+
+        var occ_tracker = {sum: 0, counter: 0}
+        for (var t = 0; t < time_of_day.length; t++){
+          if (time == time_of_day[t]){
+            occ_tracker.sum += number_occupants;
+            occ_tracker.counter++;
+          }
+        }
+        var occ_avg = occ_tracker.sum / occ_tracker.counter;
+        var datapoint_avg = [time, occ_avg];
+        // console.log(datapoint_avg);
 
         // getDay() returns 0 for Sunday, 1 for Monday, 2 for Tuesday etc.
         if (weekday === 0) {
-          datapoint = [response[i].s, (parseInt(response[i].n))];
-          sunday.push(datapoint);
+          sunday.push(datapoint_avg);
         }
         else if (weekday === 1){
-          datapoint = [response[i].s, (parseInt(response[i].n))];
-          monday.push(datapoint);
+          monday.push(datapoint_avg);
         }
         else if (weekday === 2){
-          datapoint = [response[i].s, (parseInt(response[i].n))];
-          tuesday.push(datapoint);
+          tuesday.push(datapoint_avg);
         }
         else if (weekday === 3){
-          datapoint = [response[i].s, (parseInt(response[i].n))];
-          wednesday.push(datapoint);
+          wednesday.push(datapoint_avg);
         }
         else if (weekday === 4){
-          datapoint = [response[i].s, (parseInt(response[i].n))];
-          thursday.push(datapoint);
+          thursday.push(datapoint_avg);
         }
         else if (weekday === 5){
-          datapoint = [response[i].s, (parseInt(response[i].n))];
-          friday.push(datapoint);
+          friday.push(datapoint_avg);
         }
         else if (weekday === 6){
-          datapoint = [response[i].s, (parseInt(response[i].n))];
-          saturday.push(datapoint);
+          saturday.push(datapoint_avg);
         }
       }
     }
 
-    dataToChart(sunday, monday, tuesday, wednesday, thursday, friday, saturday);
+    dataToChart(time_of_day, sunday, monday, tuesday, wednesday, thursday, friday, saturday);
   }
 
-  function dataToChart(sunday, monday, tuesday, wednesday, thursday, friday, saturday) {
+  function dataToChart(time_of_day, sunday, monday, tuesday, wednesday, thursday, friday, saturday) {
     
     Highcharts.setOptions({
       chart: {
@@ -144,9 +184,15 @@ function graph3(response) {
       }
     });
 
-    $('#graph3 #graphContainer').highcharts({      
+    $('#graph3 #graphContainer').highcharts({
+      chart: {
+        borderColor: '#E7E7E7',
+        borderRadius: 3,
+        borderWidth: 1,
+        type: 'line'
+      },     
       title: {
-        text: 'Occupancy over Time',
+        text: 'Occupancy by Day of Week',
         x: -20 //center
       },
       xAxis: {
@@ -154,8 +200,8 @@ function graph3(response) {
           text: 'Time of Day'
         },
         type: 'datetime',
-        // categories: series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
-        // tickInterval: 35
+        categories: time_of_day
+        // tickInterval: 2
       },
       yAxis: {
         title: {
