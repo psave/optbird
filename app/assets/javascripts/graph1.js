@@ -1,8 +1,8 @@
 function graph1(response) {
 
-  function heatMapData(response) {
+  // function heatMapData(response) {
 
-  }
+  // }
 
   $('#container').highcharts({
 
@@ -59,4 +59,5 @@ function graph1(response) {
         }
     }]
 
-}
+  });
+};
