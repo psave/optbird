@@ -3,11 +3,12 @@ require 'json'
 class ChartsController < ApplicationController
 
   def index
+    @buildings = Building.all
+    # @rooms = Room.all
   end
 
-  def show
-    # @chart = Occupants.all
-    # render json: @chart
+  def rooms
+    render json: Room.where(building_id: params[:id])
   end
 
 end
