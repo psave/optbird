@@ -4,8 +4,22 @@
 //= require highstock/modules/exporting
 //= require_tree .
 
-
 $(function(){
+
+  $.ajax({
+    method: 'GET',
+    url: '/data/show',
+    dataType: 'json',
+    contentType: 'application/json',
+    success: function(response){
+      // graph1(response);
+      // graph2(response);
+      graph3(response);
+      // graph4(response);
+      // graph5(response);
+    }
+  });
+
   $('.tabs ul').each(function(){
     // For each set of tabs, we want to keep track of
     // which tab is active and its associated content
@@ -42,6 +56,7 @@ $(function(){
       e.preventDefault();
     });
   });
+
 });
 
 

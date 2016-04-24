@@ -1,15 +1,4 @@
-$(document).ready(function() {
-
-  $('#button').on('click', function(event) {
-    event.preventDefault();
-    $.ajax({
-      method: 'GET',
-      url: '/charts/show',
-      dataType: 'json',
-      contentType: 'application/json',
-      success: dataToArray
-    }); 
-  });
+function graph1(response) {
 
   var series = {};
 
@@ -86,4 +75,4 @@ $(document).ready(function() {
     });
   }
 
-});
+}

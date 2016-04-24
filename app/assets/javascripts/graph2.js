@@ -1,51 +1,36 @@
-/////////     This is the JS file for the graph currently on the "graph2" tab.
+/////////     This is the JS file for the graph currently on the "graph1" tab.
 
 //////  TODO / WARNING :  Every select (like in a $('xyz') call) in this file should have '#graph2'
-//////                        added to the front, like $('#graph2 xyz')
+//////                        added to the front, like $('#graph1 xyz')
 
-$(document).ready(function() {
-
-  // variable to store the ajax response
-  var info_to_graph;
-
-  // when document is ready, load graph, and set info_to_graph equal to ajax response
-  $.ajax({
-    method: 'GET',
-    url: '/realgraphs/all',
-    dataType: 'json',
-    contentType: 'application/json',
-    success: function(response){
-      dataToArray(response);
-      info_to_graph = response;
-    }
-  });
+ // Hardcoded data for getting started with bulma
+ 
+function graph2(response) {
 
   var series = {};
 
   // make it so options can be set from menus
-  var building = $("#graph2 .building_choice").val();
-  var rmID = $("#graph2 .room_choice").val();
+  var building = $("#graph2 .building_choices").val();
+  var rmID = $("#graph2 .room_choices").val();
 
   // loads graph for room in the room dropdown
   // pass "true" to reloadGraph if you want it to wait for a choice from a dropdown
   // pass "false" if you want it to load without waiting
-  function reloadGraph(wait_for_event){
+  function reloadGraph(wait_for_event, $element){
     if (wait_for_event)
-    $("#graph2 .room_choice").change(function(){
-      rmID = $("#graph2 .room_choice").val();
-      dataToArray(info_to_graph);
+    $element.change(function(){
+      rmID = $("#graph2 .room_choices").val();
+      dataToArray(response);
     })
     else{
-      rmID = $("#graph2 .room_choice").val();
-      dataToArray(info_to_graph);
+      rmID = $("#graph2 .room_choices").val();
+      dataToArray(response);
     }
   }
 
   // puts the given building's rooms in the room dropdown
   function setBuilding(building){
-    var building1rooms = "<option value='1'>343</option>";
-    var building2rooms = "<option value='1'>1202</option><option value='2'>1204</option>";
-    var building3rooms = "<option value='1'>101</option><option value='2'>110</option>";
+   console.log(building)
     var which_rooms;
     if (building == 1){
       which_rooms = building1rooms;
@@ -57,27 +42,31 @@ $(document).ready(function() {
       which_rooms = building3rooms;
     }
 
-    if ($('#graph2 .room_choice_container')){
-        $('#graph2 .room_choice_container').remove();
+    if ($('#graph2 .room_choices_container')){
+        $('#graph2 .room_choices_container').remove();
       };
 
+      // Make the below an Ajax calls
       $("#graph2 .graph_controls").append(
-        "<div class='room_choice_container'>" +
+        "<div class='room_choices_container'>" +
         "<label class='label'>Room</label>" +
         "<p class='control'>" +
         "<span class='select'>" +
-        "<select class='room_choice'>" +
-        which_rooms +
+        "<select class='room_choices'>" +
+        building +
         "</select></span></p></div>"
       )
   }
 
+  $('#graph2 #building_choices').on('change', function(e){
+    setBuilding($('#graph2 #building_choices').val());
+  });
   // sets building based on change in building dropdown
   // and reloads graph
-  $("#graph2 .building_choice").change(function(){
-    building = $(".building_choice").val();
-    if (building == 1){
-      setBuilding(1);
+  $(".building_choices").change(function(){
+    building = $(".building_choices").val();
+    if (building == building.id){
+      setBuilding(building.id);
       reloadGraph(false);
     } else if(building == 2){
       setBuilding(2);
@@ -92,9 +81,8 @@ $(document).ready(function() {
   // when document ready, loads graph of first room in first building
   // so the page doesn't load with an empty graph
   setBuilding(1);
-  reloadGraph(false);
- 
-
+  reloadGraph(false); 
+  
   // response contains all data in multi_room_500_rows.csv
   // filter it here before passing it to highcharts
   function dataToArray(response) {
@@ -120,11 +108,8 @@ $(document).ready(function() {
     dataToChart();
   }
 
-
-
   function dataToChart() {
-    // console.log("inside dataToChart");
-    $('#graph2 #graphContainer').highcharts({
+    $('#graph2 #graphContainer').highcharts({      
       title: {
         text: 'Occupancy over Time',
         x: -20 //center
@@ -164,4 +149,4 @@ $(document).ready(function() {
     });
   }
 
-});
+}
