@@ -1,11 +1,34 @@
 require 'bundler/setup'
 require 'dropbox_sdk'
-require 'dotenv'
-Dotenv.load
 
-@client = DropboxClient.new(ENV['DROPBOX_ACCESS_TOKEN'])
+# @client = DropboxClient.new(ENV['DROPBOX_ACCESS_TOKEN'])
 
-### For all files in the Dropbox
+### For new files in the Dropbox ###
+class DropboxUtility
+
+  def initialize(access_token)
+    @client = DropboxClient.new(access_token)
+  end
+
+  def changed_files(path)
+    delta_occupancy = @client.delta(cursor=nil, path_prefix=path)
+    delta_occupancy["entries"].select { |entry| 
+      !entry[1]["is_dir"] 
+    }.map { |entry| 
+      entry[0]
+    }.map { |path| 
+      @client.get_file(path)
+    }
+  end
+
+end
+# @occupancy_csvs = contents_at_path('/occupancy')
+# @new_courses_csvs = contents_at_path('/course_schedule')
+
+
+##########################################################
+
+### For all files in the Dropbox ###
 
 # @metadata = @client.metadata('/', file_limit=10, list=true)
 
@@ -22,10 +45,4 @@ Dotenv.load
 # end
 
 
-### For new files in the Dropbox
 
-delta = @client.delta(cursor=nil, path_prefix='/')
-
-delta_path = delta["entries"][0][0]
-
-@new_csv = @client.get_file(delta_path)

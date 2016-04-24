@@ -5,8 +5,6 @@
 
 function graph3(response) {
 
-  var series = {};
-
   // make it so options can be set from menus
   var building = $("#graph3 .building_choice").val();
   var rmID = $("#graph3 .room_choice").val();
@@ -80,42 +78,84 @@ function graph3(response) {
   reloadGraph(false);
  
 
-  // response contains all data in multi_room_500_rows.csv
+  // response contains the data from the query in realgraphs_controller
   // filter it here before passing it to highcharts
   function dataToArray(response) {
     if (!response) return;
-    var x_axis = [];
-    var y_axis = [];
+    // a series for each weekday, where the series is a nested array
+    // of [x, y] datapoints with x = sample_time s and y = number_occupants n
+    var sunday = [];
+    var monday = [];
+    var tuesday = [];
+    var wednesday = [];
+    var thursday = [];
+    var friday = [];
+    var saturday = [];
+
     for (var i = 0; i < response.length; i++) {
-      // pick out only those with room_id r == rmID
       if (response[i].r == rmID) {
-        // push their sample_time s and number_occupants n into x and y arrays
-        x_axis.push(response[i].s);
-        y_axis.push(parseInt(response[i].n));
+
+        var datapoint = [];
+        var a_day = new Date(response[i].s);
+        var weekday = a_day.getDay();
+
+        // getDay() returns 0 for Sunday, 1 for Monday, 2 for Tuesday etc.
+        if (weekday === 0) {
+          datapoint = [response[i].s, (parseInt(response[i].n))];
+          sunday.push(datapoint);
+        }
+        else if (weekday === 1){
+          datapoint = [response[i].s, (parseInt(response[i].n))];
+          monday.push(datapoint);
+        }
+        else if (weekday === 2){
+          datapoint = [response[i].s, (parseInt(response[i].n))];
+          tuesday.push(datapoint);
+        }
+        else if (weekday === 3){
+          datapoint = [response[i].s, (parseInt(response[i].n))];
+          wednesday.push(datapoint);
+        }
+        else if (weekday === 4){
+          datapoint = [response[i].s, (parseInt(response[i].n))];
+          thursday.push(datapoint);
+        }
+        else if (weekday === 5){
+          datapoint = [response[i].s, (parseInt(response[i].n))];
+          friday.push(datapoint);
+        }
+        else if (weekday === 6){
+          datapoint = [response[i].s, (parseInt(response[i].n))];
+          saturday.push(datapoint);
+        }
       }
     }
 
-    series = {
-      // all sample_times s for room_id r=rmID
-      x_axis: x_axis,
-      // all number_occupants s for room_id r=rmID
-      y_axis: y_axis
-    };
-    // return series;
-    dataToChart();
+    dataToChart(sunday, monday, tuesday, wednesday, thursday, friday, saturday);
   }
 
-  function dataToChart() {
-    // console.log("inside dataToChart");
-    $('#graph3 #graphContainer').highcharts({
+  function dataToChart(sunday, monday, tuesday, wednesday, thursday, friday, saturday) {
+    
+    Highcharts.setOptions({
+      chart: {
+        style: {
+          fontFamily: 'Helvetica'
+        }
+      }
+    });
+
+    $('#graph3 #graphContainer').highcharts({      
       title: {
         text: 'Occupancy over Time',
         x: -20 //center
       },
       xAxis: {
+        title: {
+          text: 'Time of Day'
+        },
         type: 'datetime',
-        categories: series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
-        tickInterval: 35
+        // categories: series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
+        // tickInterval: 35
       },
       yAxis: {
         title: {
@@ -131,18 +171,41 @@ function graph3(response) {
         valueSuffix: ''
       },
       legend: {
+        align: 'right',
+        borderColor: '#E7E7E7',
+        borderRadius: 3,
+        borderWidth: 1,
+        itemMarginTop: 5,
+        itemMarginBottom: 5,
+        itemStyle: {
+          color: '#000000',
+          fontSize: '14px',
+          fontWeight: 'normal'
+        },
         layout: 'vertical',
-        align: 'left',
-        verticalAlign: 'top',
-        floating: true,
-        borderWidth: 0
+        verticalAlign: 'middle'
       },
       series: [{
-        name: 'Occupants',
-        data: series.y_axis,
-        tooltip: {
-          valueDecimals: 2
-        }
+        name: 'Sunday',
+        data: sunday
+      }, {
+        name: 'Monday',
+        data: monday
+      }, {
+        name: 'Tuesday',
+        data: tuesday
+      }, {
+        name: 'Wednesday',
+        data: wednesday
+      }, {
+        name: 'Thursday',
+        data: thursday
+      }, {
+        name: 'Friday',
+        data: friday
+      }, {
+        name: 'Saturday',
+        data: saturday
       }]
     });
   }
