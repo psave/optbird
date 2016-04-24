@@ -60,14 +60,14 @@ function graph3(response) {
   // sets building based on change in building dropdown
   // and reloads graph
   $("#graph3 .building_choice").change(function(){
-    building = $(".building_choice").val();
+    building = $("#graph3 .building_choice").val();
     if (building == 1){
       setBuilding(1);
       reloadGraph(false);
-    } else if(building == 2){
+    } else if (building == 2){
       setBuilding(2);
       reloadGraph(false);
-    } else if(building == 3){
+    } else if (building == 3){
       setBuilding(3);
       reloadGraph(false);
     }
