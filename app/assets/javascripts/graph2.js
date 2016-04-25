@@ -4,6 +4,9 @@
 //////                        added to the front, like $('#graph2 xyz')
 
 function graph2(response) {
+// function graph2(response) $("#graph2").change(function() {
+//   var id = $(this).children(":selected").attr("id");
+//   }); {
 
   // variable to store the ajax response
   var info_to_graph;
@@ -34,8 +37,10 @@ function graph2(response) {
   // puts the given building's rooms in the room dropdown
   function setBuilding(building){
 
-    // $.get( "/charts/rooms.json?id=3", function( data ) {
-    $.get( "/charts/rooms.json?id=" + room.building_id, function( data ) {
+    // on change 
+    // data attribute building.id
+    $.get( "/charts/rooms.json?id=2", function( data ) {
+    // $.get( "/charts/rooms.json?id=" + room.building_id, function( data ) {
       var which_rooms = "";
       data.forEach(function (room) {
         console.log(room.id);
