@@ -79,6 +79,8 @@ def populate_occupants(buildings)
       # Obtaining the room number from the room codes hash
       room = Room.find_by_room(room_codes_hash[:room_no])
       #<Room id: 6, building_id: 24, floor: 2, room: nil, room_code: "0516-IBLC-02-0101", created_at: "2016-04-21 03:24:08", updated_at: "2016-04-21 03:24:08">
+      
+      # Does not currently create occupants if the room already exits. See DMP-Hugh-2
       if !room.nil?
         room.occupants.create({
           sample_time: date_time,
@@ -115,11 +117,11 @@ end
 
 namespace :csv do
   desc "Import CSV Data occupant data"
-  task :all_buildings => :environment do
+  task :devbuildings => :environment do
 
 
 
-    csv_file_path = 'db/confidential/HENN-652.csv'
+    csv_file_path = 'db/confidential/CEME-306-Level-1.csv'
 
     buildings = []
 
