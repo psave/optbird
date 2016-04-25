@@ -6,22 +6,23 @@
         </div>
       </div>
             
-    <div class="column graph_controls">
+      <div class="column graph_controls">
         <h5 class="title is-5">Graph Controls</h5>
-        <label id="graph1" class="label">Building</label>
-          <p id="graph1" class="control">
-            <span id="graph1" class="select">
-             <%= select_tag "#graph1 .building_choice", options_from_collection_for_select(@buildings, 'id', 'building_name'), id: "graph1_building_choice" %>
-            </span>
-          </p>
+        <label class="label">Building</label>
+        <p class="control">
+          <span class="select">
+           <%= select_tag "building_choice", options_from_collection_for_select(@buildings, 'id', 'building_name'), class: "building_choice" %>
+          </span>
+        </p>
         <div class='room_choice_container'>
-          <label id="graph1_room" class="label">Room</label>
-          <p id="graph1_room" class="control">
-            <span id="graph1_room" class="select">
-              <select id="graph1_room_choice" ></select>
+          <label class="label">Room</label>
+          <p class="control">
+            <span class="select">
+              <select class="room_choice" ><select value='1'></select></select>
             </span>
           </p>
         </div>
       </div>
+
     </div>
   </section>
