@@ -1,6 +1,8 @@
 class DataController < ApplicationController
 
   def index
+    @buildings = Building.all
+    # @rooms = Room.all
   end
 
   def show
