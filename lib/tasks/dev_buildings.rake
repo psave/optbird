@@ -63,6 +63,7 @@ def populate_occupants(buildings)
   date_time = nil
 
   buildings.each do |building|
+    binding.pry
     # Setting the DateTime
     date = building["Date"]
     time = building["Time"]
@@ -82,10 +83,10 @@ def populate_occupants(buildings)
       
       # Does not currently create occupants if the room already exits. See DMP-Hugh-2
       if !room.nil?
-        room.occupants.create({
-          sample_time: date_time,
-          number_occupants: number_occupants
-          })
+      room.occupants.create({
+        sample_time: date_time,
+        number_occupants: number_occupants
+        })
       end
     end
 
@@ -119,9 +120,7 @@ namespace :csv do
   desc "Import CSV Data occupant data"
   task :devbuildings => :environment do
 
-
-
-    csv_file_path = 'db/confidential/CEME-306-Level-1.csv'
+    csv_file_path = 'db/confidential/DMP-Hugh-2.csv'
 
     buildings = []
 

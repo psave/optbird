@@ -44,16 +44,40 @@ var graph = function (name, response) {
 
   }
 
+  // this.dataToArrayGraph2 =  function (response) {
+  //   if (!this.response) return;
+    
+  //   var x_axis = [];
+  //   var y_axis = [];
+  //   for (var i = 0; i < this.response.length; i++) {
+  //     // pick out only those with room_id r == rmID (rmID is room_select.val())
+  //     if (this.response[i].r == this.room_select.val()) {
+  //       // push their sample_time s and number_occupants n into x and y arrays
+  //       x_axis.push(this.response[i].s);
+  //       y_axis.push(parseInt(this.response[i].n));
+  //     }
+  //   }
+
+  //   this.series = {
+  //     // all sample_times s for room_id r=rmID (rmID is room_select.val())
+  //     x_axis: x_axis,
+  //     // all number_occupants s for room_id r=rmID (rmID is room_select.val())
+  //     y_axis: y_axis
+  //   };
+  //   // return series;
+  //   this.dataToChartGraph2();
+  // }
+
   this.dataToArrayGraph2 =  function (response) {
     if (!this.response) return;
     
-    var x_axis = [];
+    // var x_axis = [];
     var y_axis = [];
     for (var i = 0; i < this.response.length; i++) {
       // pick out only those with room_id r == rmID (rmID is room_select.val())
       if (this.response[i].r == this.room_select.val()) {
         // push their sample_time s and number_occupants n into x and y arrays
-        x_axis.push(this.response[i].s);
+        // x_axis.push(this.response[i].s);
         y_axis.push(parseInt(this.response[i].n));
       }
     }
@@ -68,7 +92,6 @@ var graph = function (name, response) {
     this.dataToChartGraph2();
   }
 
-
   this.dataToChartGraph2 = function () {
 
     $("#" + this.name + " #graphContainer").highcharts({      
@@ -77,8 +100,8 @@ var graph = function (name, response) {
         x: -20 //center
       },
       xAxis: {
-        type: 'datetime',
-        categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
+        type: 'time',
+        categories: [08:00, 09:00, 10:00, 11:00, 12:00, 13;00, 14:00, 15:00, 16:00, 17:00, 18:00, 19:00, 20:00],
         tickInterval: 35
       },
       yAxis: {
@@ -110,4 +133,46 @@ var graph = function (name, response) {
       }]
     });
   }
+
+  // this.dataToChartGraph2 = function () {
+
+  //   $("#" + this.name + " #graphContainer").highcharts({      
+  //     title: {
+  //       text: 'Occupancy over Time',
+  //       x: -20 //center
+  //     },
+  //     xAxis: {
+  //       type: 'datetime',
+  //       categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
+  //       tickInterval: 35
+  //     },
+  //     yAxis: {
+  //       title: {
+  //         text: 'Number of Occupants'
+  //       },
+  //       plotLines: [{
+  //         value: 0,
+  //         width: 1,
+  //         color: '#1F99D3'
+  //       }]
+  //     },
+  //     tooltip: {
+  //       valueSuffix: ''
+  //     },
+  //     legend: {
+  //       layout: 'vertical',
+  //       align: 'left',
+  //       verticalAlign: 'top',
+  //       floating: true,
+  //       borderWidth: 0
+  //     },
+  //     series: [{
+  //       name: 'Occupants',
+  //       data: this.series.y_axis,
+  //       tooltip: {
+  //         valueDecimals: 2
+  //       }
+  //     }]
+  //   });
+  // }
 }
