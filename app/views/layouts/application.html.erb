@@ -8,7 +8,11 @@
   <!-- <script src="https://code.highcharts.com/stock/highcharts-more.js"></script> -->
   <%= csrf_meta_tags %>
 <!--   <script src="/javascript/highstock.js"></script>
- --></head>
+ -->
+<script src="https://code.highcharts.com/modules/heatmap.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+ </head>
 <body>
   <% flash.each do |key, value| %>
     <%= content_tag(:div, value) %>

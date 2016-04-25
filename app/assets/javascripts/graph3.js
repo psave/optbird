@@ -183,7 +183,8 @@ function graph3(response) {
           fontWeight: 'normal'
         },
         layout: 'vertical',
-        verticalAlign: 'middle'
+        verticalAlign: 'middle',
+        y: -44
       },
       series: [{
         name: 'Sunday',
@@ -207,6 +208,12 @@ function graph3(response) {
         name: 'Saturday',
         data: saturday
       }]
+      ,
+      navigation: {
+        buttonOptions: {
+          verticalAlign: 'bottom'
+        }
+      }
     });
   }
 
