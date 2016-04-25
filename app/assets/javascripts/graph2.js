@@ -36,10 +36,10 @@ function graph2(response) {
 
   // puts the given building's rooms in the room dropdown
   function setBuilding(building){
-
+     console.log()
     // on change 
     // data attribute building.id
-    $.get( "/charts/rooms.json?id=2", function( data ) {
+    $.get( "/charts/rooms.json?id="+building, function( data ) {
     // $.get( "/charts/rooms.json?id=" + room.building_id, function( data ) {
       var which_rooms = "";
       data.forEach(function (room) {
