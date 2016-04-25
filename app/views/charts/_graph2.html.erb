@@ -11,9 +11,18 @@
         <label id="graph2" class="label">Building</label>
           <p id="graph2" class="control">
             <span id="graph2" class="select">
-             <%= select_tag "#graph2 .building_choice", options_from_collection_for_select(@buildings, 'id', 'building_name') %>
+             <%= select_tag "#graph2 .building_choice", options_from_collection_for_select(@buildings, 'id', 'building_name'), id: "graph2_building_choice" %>
             </span>
           </p>
+        <div class='room_choice_container'>
+          <label id="graph2_room" class="label">Room</label>
+          <p id="graph2_room" class="control">
+            <span id="graph2_room" class="select">
+              <select id="graph2_room_choice" ></select>
+            </span>
+          </p>
+        </div>
+
 <!--         <label id="graph2" class="label">Rooms</label>
           <p id="graph2" class="control">
             <span id="graph2" class="select">
