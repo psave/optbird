@@ -8,44 +8,20 @@
 
       <div class="column graph_controls">
         <h5 class="title is-5">Graph Controls</h5>
-        <label id="graph2" class="label">Building</label>
-          <p id="graph2" class="control">
-            <span id="graph2" class="select">
-             <%= select_tag "#graph2 .building_choice", options_from_collection_for_select(@buildings, 'id', 'building_name'), id: "graph2_building_choice" %>
-            </span>
-          </p>
+        <label class="label">Building</label>
+        <p class="control">
+          <span class="select">
+           <%= select_tag "building_choice", options_from_collection_for_select(@buildings, 'id', 'building_name'), class: "building_choice" %>
+          </span>
+        </p>
         <div class='room_choice_container'>
-          <label id="graph2_room" class="label">Room</label>
-          <p id="graph2_room" class="control">
-            <span id="graph2_room" class="select">
-              <select id="graph2_room_choice" ></select>
+          <label class="label">Room</label>
+          <p class="control">
+            <span class="select">
+              <select class="room_choice" ></select>
             </span>
           </p>
         </div>
-
-<!--         <label id="graph2" class="label">Rooms</label>
-          <p id="graph2" class="control">
-            <span id="graph2" class="select">
-              <select id="graph2" class="room_choice">
-                <option value="1">0516-IBLC-02-0101</option>
-                <option value="2">0403-CIRS-02-0203</option>
-                <option value="3">0403-CIRS-02-0202</option>
-                <option value="4">0516-IBLC-01-0182</option>
-                <option value="5">0277-AERL-04-0403</option>
-              </select>
-            </span>
-          </p> -->
-<!--         <label class="label">Timescale</label>
-          <p class="control">
-            <span class="select">
-              <select>
-                <option>Day</option>
-                <option>Week</option>
-                <option>Semester</option>
-                <option>All Time</option>
-              </select>
-            </span>
-          </p> -->
       </div>
 
     </div>
