@@ -4,6 +4,6 @@ class Occupant < ActiveRecord::Base
 
   validates :sample_time, uniqueness: {scope: :room_id}
 
-  #validates :number_occupants, numericality: { only_integer: true }
+  validates :number_occupants, numericality: { only_integer: true }
   
 end
