@@ -2,18 +2,48 @@ function graph1(response) {
 
   var totals = {};
 
+  var building = $('#graph1_building_choice').val();
+  var rmID = $('#graph1_room_choice').val();
+
+  function setBuilding(building) {
+    $.get('/charts/rooms.json?id='+building, function (data) {
+      var which_rooms = "";
+      data.forEach(function (room) {
+        which_rooms += "<option value='" + room.id + "'>" + room.room + "</option>";
+      });
+      $('#graph1_room_choice').html(which_rooms);
+      reloadGraph();
+    });
+  }
+
+  function reloadGraph() {
+    rmId = $('#graph1_room_choice').val();
+    separateByWeekday();
+  }
+
+  $("#graph1_building_choice").change(function() {
+    setBuilding($(this).val());
+  });
+  $("#graph1_room_choice").change(function() {
+    reloadGraph();
+  });
+
+  setBuilding(1);
+
   function separateByWeekday(response) {
     for (var i = 0; i < response.length; i++) {
-      var day = new Date(response[i].s);
-
-      var time = day.getHours() - 8;
-      var day = 6 - day.getDay();
-      var key = "total"+time+day;
-      if (totals[key] == null) {
-        totals[key] = [response[i].n];
-      } else {
-        totals[key].push(response[i].n);
-      }      
+      if (response[i].r == rmID) {
+        var day = new Date(response[i].s);
+        var time = day.getHours() - 8;
+        var day = 6 - day.getDay();
+        var key = "total"+time+day;
+        if (totals[key] == null) {
+          totals[key] = [response[i].n];
+        } else {
+          totals[key].push(response[i].n);
+        }
+      }
+      heatGrid();  
     }
   }
 
@@ -112,7 +142,7 @@ function graph1(response) {
       }]
     });
   }
-  
+
   /// MAIN 
   separateByWeekday(response);
   heatGrid();
