@@ -16,15 +16,16 @@
 @import "bulma";
 
 /*simple way to add custom edits to bulma classes*/
+
+.container {
+  max-width: 1200px;
+}
+
 .navbar {
   margin-top: 15px;
   margin-right: 11px;
   margin-bottom: 20px;
   margin-left: 11px;
-}
-
-.container {
-  max-width: 1200px;
 }
 
 #overview_line_chart {
@@ -36,3 +37,9 @@
   height: 400px; 
   min-width: 310px;
 }
+
+/*.section.header {
+  margin-top: 15px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}*/

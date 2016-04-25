@@ -3,7 +3,8 @@ Optbird::Application.routes.draw do
 
   resources :sessions, only: [:new, :create, :destroy]
 
-  resources :charts, only: [:index, :show]
+  resources :charts, only: [:index]
+  get 'charts/rooms', defaults: { format: 'json' }
 
   resources :data, only: [:index, :show]
 
