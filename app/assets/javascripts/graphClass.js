@@ -11,6 +11,7 @@ var graph = function (name, response) {
   this.totals = {}; // USED ONLY BY GRAPH 1
   // 
   this.room_select = $("#" + this.name + " .room_choice");
+  this.room_select = $("#" + this.name + " .dayofweek");
 
 
   this.firstGraphLoad = function () {
@@ -39,6 +40,7 @@ var graph = function (name, response) {
       this.heatGridGraph1();
       break;
     case "graph2":
+      this.dataToArrayGraph2(this.response);
       this.roomCourseOverlayGraph2(this.response);
       break;
     case "graph5":
@@ -180,6 +182,31 @@ var graph = function (name, response) {
     }
   }
 
+  this.dataToArrayGraph2 =  function (response) {
+    if (!this.response) return;
+    
+    var x_axis = [];
+    var y_axis = [];
+    for (var i = 0; i < this.response.length; i++) {
+      var day = new Date(this.response[i].s);
+      day = 6 - day.getDay();
+      // pick out only those with room_id r == rmID (rmID is room_select.val())
+      if (this.response[i].r == this.room_select.val() && day == this.dayofweek.val()) {
+        // push their sample_time s and number_occupants n into x and y arrays
+        x_axis.push(this.response[i].s);
+        y_axis.push(parseInt(this.response[i].n));
+      }
+    }
+
+    this.series = {
+      // all sample_times s for room_id r=rmID (rmID is room_select.val())
+      x_axis: x_axis,
+      // all number_occupants s for room_id r=rmID (rmID is room_select.val())
+      y_axis: y_axis
+    };
+    return this.series;
+  }
+
   this.roomCourseOverlayGraph2 = function () {
 
     var total = 194;
@@ -194,7 +221,7 @@ var graph = function (name, response) {
             text: 'Henn Room 251 on Mondy, April 18th, 2016'
         },
         xAxis: [{
-            categories: ['8am', '9am', '10am'],
+            categories: ['8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm'],
             crosshair: true
         }],
         yAxis: [{ // Primary yAxis
@@ -249,31 +276,30 @@ var graph = function (name, response) {
                 valueSuffix: ''//can place something here to add to each value on the axis
             }
 
-        }
-        // , {
-        //     name: 'Number of Occupants',
-        //     type: 'spline',
-        //     data: [7, 6, 9, 14, 18, 21, 25, 26, 23, 18, 13, 9],
-        //     marker: {
-        //         enabled: false
-        //     },
-        //     dashStyle: 'shortdot',
-        //     tooltip: {
-        //         valueSuffix: ''//can place something here to add to each value on the axis
-        //     }
-        // },  {
-        //     name: 'Max Occupancy',
-        //     type: 'spline',
-        //     data: [200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200],
-        //     marker: {
-        //         enabled: false
-        //     },
-        //     dashStyle: 'shortdot',
-        //     tooltip: {
-        //         valueSuffix: ''//can place something here to add to each value on the axis
-        //     }
+        }, {
+            name: 'Number of Occupants',
+            type: 'spline',
+            data: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
+            marker: {
+                enabled: false
+            },
+            dashStyle: 'shortdot',
+            tooltip: {
+                valueSuffix: ''//can place something here to add to each value on the axis
+            }
+        },  {
+            name: 'Max Occupancy',
+            type: 'spline',
+            data: [200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200],
+            marker: {
+                enabled: false
+            },
+            dashStyle: 'shortdot',
+            tooltip: {
+                valueSuffix: ''//can place something here to add to each value on the axis
+            }
 
-        // }
+        }
         ]
     });
   };
@@ -302,6 +328,7 @@ var graph = function (name, response) {
     // return series;
     this.dataToChartGraph5();
   }
+
 
   this.dataToChartGraph5 = function () {
 
