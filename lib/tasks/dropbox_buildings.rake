@@ -1,21 +1,23 @@
 require 'csv'
 require_relative '../dropboxAPI'
 
-  def split_roomcode(room_code)
-    # See comment below about "Ruby multiple assignment"
-    building_no, building_name, floor, room_no = room_code.split('-')
-    return { 
-            building_no: building_no, 
-            building_name: building_name,
-            floor: floor,
-            room_no: room_no
-          }
+
+module DropboxBuildings
+  def self.split_roomcode(room_code)
+      # See comment below about "Ruby multiple assignment"
+      building_no, building_name, floor, room_no = room_code.split('-')
+      return { 
+              building_no: building_no, 
+              building_name: building_name,
+              floor: floor,
+              room_no: room_no
+            }
   end
 
   # Creating empty array in order to save room_codes
   @building_codes = []
 
-  def populate_buildings(buildings)
+  def self.populate_buildings(buildings)
 
     # Obtaining the first hash since that have all the room_codes that we need
     buildings_object = buildings[0]
@@ -40,7 +42,7 @@ require_relative '../dropboxAPI'
     end 
   end
 
-  def populate_rooms()
+  def self.populate_rooms()
 
     @building_codes.each do |room_codes|
 
@@ -60,7 +62,7 @@ require_relative '../dropboxAPI'
 
   end
 
-  def populate_occupants(buildings)
+  def self.populate_occupants(buildings)
     date_time = nil
 
     buildings.each do |building|
@@ -74,17 +76,25 @@ require_relative '../dropboxAPI'
 
       # Loop through to room_codes
       buildings_data.each do |room_code|
+
         number_occupants = building[room_code]
         # Returning a hash of all the room codes
         room_codes_hash = split_roomcode(room_code)
-        # Obtaining the room number from the room codes hash
-        room = Room.find_by_room(room_codes_hash[:room_no])
-        #<Room id: 6, building_id: 24, floor: 2, room: nil, room_code: "0516-IBLC-02-0101", created_at: "2016-04-21 03:24:08", updated_at: "2016-04-21 03:24:08">
-        if !room.nil?
-          room.occupants.create({
-            sample_time: date_time,
-            number_occupants: number_occupants
-            })
+
+        buildingObj = Building.find_by(building_name: room_codes_hash[:building_name])
+
+        unless buildingObj.nil?
+          # Obtaining the room number from the room codes hash
+          room = buildingObj.rooms.find_by_room(room_codes_hash[:room_no])
+          #<Room id: 6, building_id: 24, floor: 2, room: nil, room_code: "0516-IBLC-02-0101", created_at: "2016-04-21 03:24:08", updated_at: "2016-04-21 03:24:08">
+          
+          # Does not currently create occupants if the room already exits. See DMP-Hugh-2
+          if !room.nil?
+            room.occupants.create({
+              sample_time: date_time,
+              number_occupants: number_occupants
+              })
+          end
         end
       end
 
@@ -92,7 +102,7 @@ require_relative '../dropboxAPI'
 
   end
 
-  def populate_courses_room_id()
+  def self.populate_courses_room_id()
 
     # 1. Iterate through each course 
     Course.all.each do |course|
@@ -113,12 +123,12 @@ require_relative '../dropboxAPI'
     end
 
   end
-
+end
 
 
 namespace :csv do
   desc "Import CSV Data occupant data"
-  task :dropboxo => :environment do
+  task :dropboxb => :environment do
     dbu = DropboxUtility.new(ENV['DROPBOX_ACCESS_TOKEN'])
     dbu.changed_files(ENV['DROPBOX_OCCUPANCY_PATH']).each do |path|
     # turns the csv object to array of hashes to make it easier to parse
@@ -129,10 +139,10 @@ namespace :csv do
         # {"Date"=>"16-01-05", "Time"=>"0:00:00", "0516-IBLC-02-0101"=>"1", "0403-CIRS-02-0203"=>"1"}
       end
 
-      populate_buildings(buildings)
-      populate_rooms()
-      populate_occupants(buildings)
-      populate_courses_room_id()
+      DropboxBuildings.populate_buildings(buildings)
+      DropboxBuildings.populate_rooms()
+      DropboxBuildings.populate_occupants(buildings)
+      DropboxBuildings.populate_courses_room_id()
 
     end
   end

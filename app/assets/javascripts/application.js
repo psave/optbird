@@ -13,7 +13,7 @@ $(function(){
     dataType: 'json',
     contentType: 'application/json',
     success: function(response){
-      // graph1(response);
+      graph1(response);
       graph2(response);
       graph3(response);
       // graph4(response);
@@ -21,13 +21,18 @@ $(function(){
     }
   });
 
-  $(function() {
-    $("#start_date").datepicker();
-  });
+  // $(function() {
+  //   $("#start_date").datepicker();
+  // });
 
-  $(function() {
-    $("#end_date").datepicker();
-  });
+  // $(function() {
+  //   $("#end_date").datepicker();
+  // });
+
+  $("#start_date").datepicker();
+
+  $("#end_date").datepicker();
+
 
   $('.tabs ul').each(function(){
     // For each set of tabs, we want to keep track of
