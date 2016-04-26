@@ -50,11 +50,14 @@
   height: 400px; 
 }
 
-#graph1BarDay #sliders {
+#sliders {
   min-width: 310px; 
   max-width: 800px;
-  margin: 0 auto;
+  margin-top: 550px;
+  margin-right: 10px;
 }
+
+
 
 /*.section.header {
   margin-top: 15px;
