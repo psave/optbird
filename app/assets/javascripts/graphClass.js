@@ -83,7 +83,6 @@ var graph = function (name, response) {
     this.dataToChartGraph2();
   }
 
-
   this.dataToChartGraph2 = function () {
 
     $("#" + this.name + " #graphContainer").highcharts({      
