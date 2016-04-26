@@ -12,8 +12,8 @@ function graph3(response) {
   var endDate = $("#graph3 #end_date").val();
 
   // overwriting start and end dates with hardcoded dates for the moment
-  startDate = new Date("2016-04-10T00:00:00");
-  endDate = new Date("2016-04-16T00:00:00");
+  // startDate = new Date("2016-04-10T00:00:00");
+  // endDate = new Date("2016-04-16T00:00:00");
 
   // loads graph for room in the room dropdown
   // pass "true" to reloadGraph if you want it to wait for a choice from a dropdown
@@ -26,14 +26,6 @@ function graph3(response) {
     })
     else{
       rmID = $("#graph3 .room_choice").val();
-      // hard coding start and end dates for the moment
-      // startDate = new Date("2016-04-10T00:00:00");
-      // console.log("startDate: " + startDate);      
-      // endDate = new Date("2016-04-16T00:00:00");
-      // console.log("endDate: " + endDate);
-      // var sampleDate = new Date(response[5050].s);
-      // console.log("some sample date: " + response[5050].s);
-      // console.log("the same sample date as a Date object: " + sampleDate);
       dataToArray(response, startDate, endDate);
     }
   }
@@ -89,6 +81,8 @@ function graph3(response) {
   // when document ready, loads graph of first room in first building
   // so the page doesn't load with an empty graph
   setBuilding(1);
+  startDate = new Date("2016-04-10T00:00:00");
+  endDate = new Date("2016-04-16T00:00:00");
   reloadGraph(false);
  
 
