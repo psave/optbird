@@ -51,6 +51,8 @@ gem 'dotenv-rails', :groups => [:development, :test]
 
 gem 'dropbox-sdk'
 
+gem 'jquery-ui-rails'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

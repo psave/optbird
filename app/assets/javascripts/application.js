@@ -1,5 +1,6 @@
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui/datepicker
 //= require highcharts
 //= require highstock/modules/exporting
 //= require_tree .
@@ -13,13 +14,16 @@ $(function(){
     contentType: 'application/json',
     success: function(response){
       graph1(response);
-      // graph2(response);
       graph2(response);
       graph3(response);
       // graph4(response);
       // graph5(response);
     }
   });
+
+  $("#start_date").datepicker();
+
+  $("#end_date").datepicker();
 
   $('.tabs ul').each(function(){
     // For each set of tabs, we want to keep track of

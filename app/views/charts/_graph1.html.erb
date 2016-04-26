@@ -1,11 +1,15 @@
-<h2> This is graph 1</h2>
  <section class="section">
     <div class="columns">
       <div class="column is-9">
         <div id="graph1" class="graphContainer" style="min-width: 310px; height: 400px; margin: 0 auto">
         </div>
+        <div id="graph1BarDay" class="graphContainer" style="min-width: 310px; height: 400px; margin: 0 auto">
+        </div>
+        
+        <div id="graph1BarTime" class="graphContainer" style="min-width: 310px; height: 400px; margin: 0 auto">
+        </div>
       </div>
-            
+    
       <div class="column graph_controls">
         <h5 class="title is-5">Graph Controls</h5>
         <label class="label">Building</label>
@@ -21,6 +25,30 @@
               <select class="room_choice" ><select value='1'></select></select>
             </span>
           </p>
+        </div>
+        <label class="label">Start Date</label>
+         <div class="content">
+           <input type="text" id="start_date">
+        </div>
+        <label class="label">End Date</label>
+        <div class="content">
+          <input type="text" id="end_date">
+        </div>
+        <div id="sliders">
+          <table>
+              <tr>
+                <td>Alpha Angle</td>
+                <td><input id="alpha" type="range" min="0" max="45" value="15"/> <span id="alpha-value" class="value"></span></td>
+              </tr>
+              <tr>
+                <td>Beta Angle</td>
+                <td><input id="beta" type="range" min="-45" max="45" value="15"/> <span id="beta-value" class="value"></span></td>
+              </tr>
+              <tr>
+                <td>Depth</td>
+                <td><input id="depth" type="range" min="20" max="100" value="50"/> <span id="depth-value" class="value"></span></td>
+              </tr>
+          </table>
         </div>
       </div>
 

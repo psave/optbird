@@ -10,13 +10,21 @@ function graph1(response) {
   $("#" + graph1.name + " .building_choice" ).change(function() {
     graph1.setBuilding($(this).val());
   });
-
   
   $("#" + graph1.name + " .room_choice" ).change(function() {   
-    console.log("ON CHANGE FIRED");
     graph1.reloadGraph();
   });
 
+  $('#sliders input').on('input change', function () {
+    graph1.graph1BarDay.options.chart.options3d[this.id] = this.value;
+    graph1.showValuesDaySlider()
+    graph1.graph1BarDay.redraw(false);
+    graph1.graph1BarTime.options.chart.options3d[this.id] = this.value;
+    graph1.showValuesDaySlider()
+    graph1.graph1BarTime.redraw(false);
+  });
+
 }
+
 
 

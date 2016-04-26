@@ -9,6 +9,7 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
+ *= require jquery-ui/datepicker
  *= require_tree .
  */
 
@@ -40,11 +41,26 @@
 
 
 #graph1 .graphContainer {
-    min-width: 300px;
-    max-width: 800px;
-    height: 400px;
-    margin: 1em auto;
+  min-width: 300px;
+  max-width: 800px;
+  height: 400px;
+  margin: 1em auto;
 }
+
+#graph1BarDay {
+  height: 400px; 
+}
+
+#sliders {
+  min-width: 310px; 
+  max-width: 800px;
+  margin-top: 550px;
+  margin-right: 10px;
+}
+
+.input.date {
+   width: 60%;
+ }
 
 /*.section.header {
   margin-top: 15px;
