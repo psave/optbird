@@ -10,6 +10,7 @@ var graph = function (name, response) {
 
   this.totals = {}; // USED ONLY BY GRAPH 1 HEAT GRID
   this.weekdays = {}; // USED ONLY BY GRAPH 1 DAY BAR
+  this.times = {}; // USED ONLY BY GRAPH 1 TIME BAR
   // 
   this.room_select = $("#" + this.name + " .room_choice");
 
@@ -22,7 +23,7 @@ var graph = function (name, response) {
     case "graph1":
       this.setBuilding(1);
       // this.separateByWeekdayGraph1();
-      // this.initializeGraph1Bar();
+      // this.initializeGraph1BarDay();
       // this.showValuesDaySlider();
       break;
     case "graph2":
@@ -39,8 +40,10 @@ var graph = function (name, response) {
     case "graph1":
       this.separateByDayTimeGraph1();
       this.separateByWeekdayGraph1();
+      this.separateByTimeGraph1();
       this.heatGridGraph1();
-      this.initializeGraph1Bar();
+      this.initializeGraph1BarDay();
+      this.initializeGraph1BarTime();
       break;
     case "graph2":
       this.dataToArrayGraph2(this.response);
@@ -255,7 +258,7 @@ var graph = function (name, response) {
     }
   }
 
-  this.initializeGraph1Bar = function () {
+  this.initializeGraph1BarDay = function () {
     this.graph1BarDay = new Highcharts.Chart({
       chart: {
         renderTo: 'graph1BarDay',
@@ -300,6 +303,71 @@ var graph = function (name, response) {
     $('#beta-value').html(this.graph1BarDay.options.chart.options3d.beta);
     $('#depth-value').html(this.graph1BarDay.options.chart.options3d.depth);
   }
+
+  ////////////////// For Graph 1 Tab Time Bar Graph
+
+  this.separateByTimeGraph1 = function (response) {
+    for (var i = 0; i < this.response.length; i++) {
+      if (this.response[i].r == this.room_select.val()) {
+        var day = new Date(this.response[i].s);
+        var time = day.getHours() - 8;
+        var key = "total"+time;
+        if (this.times[key] == null) {
+          this.times[key] = [this.response[i].n];
+        } else {
+          this.times[key].push(this.response[i].n);
+        }
+      }
+    }
+  }
+
+  this.initializeGraph1BarTime = function () {
+    this.graph1BarTime = new Highcharts.Chart({
+      chart: {
+        renderTo: 'graph1BarTime',
+        type: 'column',
+        options3d: {
+          enabled: true,
+          alpha: 15,
+          beta: 15,
+          depth: 50,
+          viewDistance: 25
+        }
+      },
+      title: {
+        text: 'Average Number of Occupants by Time'
+      },
+      plotOptions: {
+        column: {
+          depth: 25
+        }
+      },
+      xAxis: {
+        categories: ['8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm']
+      },
+      series: [{
+        name: 'Average Occupants',
+        borderWidth: 1,
+        data: [
+          this.avg(this.times["total0"]),
+          this.avg(this.times["total1"]),
+          this.avg(this.times["total2"]),
+          this.avg(this.times["total3"]),
+          this.avg(this.times["total4"]),
+          this.avg(this.times["total5"]),
+          this.avg(this.times["total6"]),
+          this.avg(this.times["total7"]),
+          this.avg(this.times["total8"]),
+          this.avg(this.times["total9"]),
+          this.avg(this.times["total10"]),
+          this.avg(this.times["total11"]),
+          this.avg(this.times["total12"]),
+          this.avg(this.times["total13"])
+        ]
+      }]
+    });
+  }
+
 
 
 }

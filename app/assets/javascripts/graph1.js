@@ -19,6 +19,9 @@ function graph1(response) {
     graph1.graph1BarDay.options.chart.options3d[this.id] = this.value;
     graph1.showValuesDaySlider()
     graph1.graph1BarDay.redraw(false);
+    graph1.graph1BarTime.options.chart.options3d[this.id] = this.value;
+    graph1.showValuesDaySlider()
+    graph1.graph1BarTime.redraw(false);
   });
 
 }
