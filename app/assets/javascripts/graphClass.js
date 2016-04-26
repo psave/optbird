@@ -179,7 +179,7 @@ var graph = function (name, response) {
       tooltip: {
           formatter: function () {
               return '<b>' + this.series.yAxis.categories[this.point.y] + '</b>' + ' at ' + '<b>' + this.series.xAxis.categories[this.point.x] + '</b><br>'
-                + '<b>' + this.point.value + '</b>' + ' average occupants';
+                + '<b>' + this.point.value + '</b>' + ' occupants on average';
           }
       },
 
