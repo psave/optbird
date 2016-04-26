@@ -15,9 +15,9 @@ $(function(){
     success: function(response){
       graph1(response);
       graph2(response);
-      graph3(response);
+      //graph3(response);
       // graph4(response);
-      // graph5(response);
+      graph5(response);
     }
   });
 
@@ -63,8 +63,6 @@ $(function(){
   });
 
 });
-
-
 
 
 
