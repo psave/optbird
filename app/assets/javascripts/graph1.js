@@ -13,7 +13,6 @@ function graph1(response) {
 
   
   $("#" + graph1.name + " .room_choice" ).change(function() {   
-    console.log("ON CHANGE FIRED");
     graph1.reloadGraph();
   });
 

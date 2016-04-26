@@ -11,7 +11,7 @@ var graph = function (name, response) {
   this.totals = {}; // USED ONLY BY GRAPH 1
   // 
   this.room_select = $("#" + this.name + " .room_choice");
-  this.room_select = $("#" + this.name + " .dayofweek");
+  this.dayofweek = $("#" + this.name + " .dayofweek");
 
 
   this.firstGraphLoad = function () {
@@ -34,9 +34,10 @@ var graph = function (name, response) {
 
   // TODO: Add new spectif functions for graphs here
   this.reloadGraph = function () {
+    console.debug("reloadGraph" + this.name);
     switch(this.name) {
     case "graph1":
-      this.separateByWeekdayGraph1();
+      this.separateByWeekdayGraph1(this.response);
       this.heatGridGraph1();
       break;
     case "graph2":
@@ -69,6 +70,7 @@ var graph = function (name, response) {
   }
 
   this.avg = function(array) {
+    console.debug("avg");
     var arr = array.reduce( (prev, curr) => parseInt(prev) + parseInt(curr) ) / array.length
     return Math.round(arr)
   }
@@ -166,7 +168,6 @@ var graph = function (name, response) {
   }
 
   this.separateByWeekdayGraph1 = function (response) {
-
     for (var i = 0; i < this.response.length; i++) {
       if (this.response[i].r == this.room_select.val()) {
         var day = new Date(this.response[i].s);
