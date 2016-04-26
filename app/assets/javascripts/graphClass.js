@@ -8,10 +8,14 @@ var graph = function (name, response) {
   this.response = response;
   this.series = {};
 
-  this.totals = {}; // USED ONLY BY GRAPH 1
+  this.totals = {}; // USED ONLY BY GRAPH 1 HEAT GRID
+  this.weekdays = {}; // USED ONLY BY GRAPH 1 DAY BAR
+  this.times = {}; // USED ONLY BY GRAPH 1 TIME BAR
   // 
   this.room_select = $("#" + this.name + " .room_choice");
   this.dayofweek = $("#" + this.name + " .dayofweek");
+
+  // this.graph1BarDay = null;
 
 
   this.firstGraphLoad = function () {
@@ -19,10 +23,13 @@ var graph = function (name, response) {
     switch(this.name) {
     case "graph1":
       this.setBuilding(1);
+      // this.separateByWeekdayGraph1();
+      // this.initializeGraph1BarDay();
+      // this.showValuesDaySlider();
       break;
     case "graph2":
       this.setBuilding(1);
-      this.reloadGraph();
+      // this.reloadGraph();
       break;
     case "graph5":
       this.setBuilding(1);
@@ -37,8 +44,12 @@ var graph = function (name, response) {
     console.debug("reloadGraph" + this.name);
     switch(this.name) {
     case "graph1":
-      this.separateByWeekdayGraph1(this.response);
+      this.separateByDayTimeGraph1();
+      this.separateByWeekdayGraph1();
+      this.separateByTimeGraph1();
       this.heatGridGraph1();
+      this.initializeGraph1BarDay();
+      this.initializeGraph1BarTime();
       break;
     case "graph2":
       this.dataToArrayGraph2(this.response);
@@ -48,10 +59,9 @@ var graph = function (name, response) {
       this.dataToArrayGraph5(this.response);
       break;
     } 
-    
   }
 
-  this.setBuilding = function (building_id){
+  this.setBuilding = function (building_id) {
     // on change 
     // data attribute building.id
     $.get( "/charts/rooms.json?id="+building_id, function( data ) {
@@ -69,47 +79,124 @@ var graph = function (name, response) {
 
   }
 
+
+  this.dataToArrayGraph2 =  function (response) {
+    if (!this.response) return;
+    
+    var x_axis = [];
+    var y_axis = [];
+    for (var i = 0; i < this.response.length; i++) {
+      // pick out only those with room_id r == rmID (rmID is room_select.val())
+      if (this.response[i].r == this.room_select.val()) {
+        // push their sample_time s and number_occupants n into x and y arrays
+        x_axis.push(this.response[i].s);
+        y_axis.push(parseInt(this.response[i].n));
+      }
+    }
+
+    this.series = {
+      // all sample_times s for room_id r=rmID (rmID is room_select.val())
+      x_axis: x_axis,
+      // all number_occupants s for room_id r=rmID (rmID is room_select.val())
+      y_axis: y_axis
+    };
+    // return series;
+    this.dataToChartGraph2();
+  }
+
+  this.dataToChartGraph2 = function () {
+
+    $("#" + this.name + " #graphContainer").highcharts({      
+      title: {
+        text: 'Occupancy over Time',
+        x: -20 //center
+      },
+      xAxis: {
+        type: 'datetime',
+        categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
+        tickInterval: 35
+      },
+      yAxis: {
+        title: {
+          text: 'Number of Occupants'
+        },
+        plotLines: [{
+          value: 0,
+          width: 1,
+          color: '#1F99D3'
+        }]
+      },
+      tooltip: {
+        valueSuffix: ''
+      },
+      legend: {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        floating: true,
+        borderWidth: 0
+      },
+      series: [{
+        name: 'Occupants',
+        data: this.series.y_axis,
+        tooltip: {
+          valueDecimals: 2
+        }
+      }]
+    });
+  }
+
+////////// For Graph 1 Tab Heat Grid 
+
+  this.separateByDayTimeGraph1 = function (response) {
+    for (var i = 0; i < this.response.length; i++) {
+      if (this.response[i].r == this.room_select.val()) {
+        var day = new Date(this.response[i].s);
+        var time = day.getHours() - 8;
+        var weekday = 6 - day.getDay();
+        var key = "total"+time+weekday;
+        if (this.totals[key] == null) {
+          this.totals[key] = [this.response[i].n];
+        } else {
+          this.totals[key].push(this.response[i].n);
+        }
+      }
+    }
+  }
+
   this.avg = function(array) {
     console.debug("avg");
     var arr = array.reduce( (prev, curr) => parseInt(prev) + parseInt(curr) ) / array.length
     return Math.round(arr)
   }
 
-
   this.heatGridGraph1 = function() {
-
     $('#graph1 .graphContainer').highcharts({
-
       chart: {
           type: 'heatmap',
           marginTop: 40,
           marginBottom: 80,
           plotBorderWidth: 1
       },
-
       title: {
-          text: 'Day-Hour Occupancy Grid'
+          text: 'Day-Hour Average Occupancy Grid'
       },
-
       xAxis: {
         // Corresponding indices on heatmap:
         // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
           categories: ['8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm']
       },
-
       yAxis: {
         // Corresponding indices on heatmap:
         // [0, 1, 2, 3, 4, 5, 6]
           categories: ['Saturday', 'Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday', 'Sunday'],
           title: null
       },
-
       colorAxis: {
           min: 0,
           minColor: '#FFFFFF',
           maxColor: Highcharts.getOptions().colors[0]
       },
-
       legend: {
           align: 'right',
           layout: 'vertical',
@@ -118,16 +205,14 @@ var graph = function (name, response) {
           y: 25,
           symbolHeight: 280
       },
-
       tooltip: {
           formatter: function () {
               return '<b>' + this.series.yAxis.categories[this.point.y] + '</b>' + ' at ' + '<b>' + this.series.xAxis.categories[this.point.x] + '</b><br>'
                 + '<b>' + this.point.value + '</b>' + ' occupants on average';
           }
       },
-
       series: [{
-          name: 'Number of Occupants',
+          name: 'Average Number of Occupants',
           borderWidth: 1,
           data: [
           // 8am
@@ -167,17 +252,81 @@ var graph = function (name, response) {
     });
   }
 
+  ///////////// For Graph 1 Tab Day Bar Graph
+
   this.separateByWeekdayGraph1 = function (response) {
     for (var i = 0; i < this.response.length; i++) {
       if (this.response[i].r == this.room_select.val()) {
         var day = new Date(this.response[i].s);
-        var time = day.getHours() - 8;
-        var day = 6 - day.getDay();
-        var key = "total"+time+day;
-        if (this.totals[key] == null) {
-          this.totals[key] = [this.response[i].n];
+        var weekday = 6 - day.getDay();
+        var key = "total"+weekday;
+        if (this.weekdays[key] == null) {
+          this.weekdays[key] = [this.response[i].n];
         } else {
-          this.totals[key].push(this.response[i].n);
+          this.weekdays[key].push(this.response[i].n);
+        }
+      }
+    }
+  }
+
+  this.initializeGraph1BarDay = function () {
+    this.graph1BarDay = new Highcharts.Chart({
+      chart: {
+        renderTo: 'graph1BarDay',
+        type: 'column',
+        options3d: {
+          enabled: true,
+          alpha: 15,
+          beta: 15,
+          depth: 50,
+          viewDistance: 25
+        }
+      },
+      title: {
+        text: 'Average Number of Occupants by Day'
+      },
+      plotOptions: {
+        column: {
+          depth: 25
+        }
+      },
+      xAxis: {
+        categories: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+      },
+      series: [{
+        name: 'Average Occupants',
+        borderWidth: 1,
+        data: [
+          this.avg(this.weekdays["total0"]),
+          this.avg(this.weekdays["total1"]),
+          this.avg(this.weekdays["total2"]),
+          this.avg(this.weekdays["total3"]),
+          this.avg(this.weekdays["total4"]),
+          this.avg(this.weekdays["total5"]),
+          this.avg(this.weekdays["total6"])
+        ]
+      }]
+    });
+  }
+  
+  this.showValuesDaySlider = function () {
+    $('#alpha-value').html(this.graph1BarDay.options.chart.options3d.alpha);
+    $('#beta-value').html(this.graph1BarDay.options.chart.options3d.beta);
+    $('#depth-value').html(this.graph1BarDay.options.chart.options3d.depth);
+  }
+
+  ////////////////// For Graph 1 Tab Time Bar Graph
+
+  this.separateByTimeGraph1 = function (response) {
+    for (var i = 0; i < this.response.length; i++) {
+      if (this.response[i].r == this.room_select.val()) {
+        var day = new Date(this.response[i].s);
+        var time = day.getHours() - 8;
+        var key = "total"+time;
+        if (this.times[key] == null) {
+          this.times[key] = [this.response[i].n];
+        } else {
+          this.times[key].push(this.response[i].n);
         }
       }
     }
@@ -372,4 +521,53 @@ var graph = function (name, response) {
       }]
     });
   }
+
+  this.initializeGraph1BarTime = function () {
+    this.graph1BarTime = new Highcharts.Chart({
+      chart: {
+        renderTo: 'graph1BarTime',
+        type: 'column',
+        options3d: {
+          enabled: true,
+          alpha: 15,
+          beta: 15,
+          depth: 50,
+          viewDistance: 25
+        }
+      },
+      title: {
+        text: 'Average Number of Occupants by Time'
+      },
+      plotOptions: {
+        column: {
+          depth: 25
+        }
+      },
+      xAxis: {
+        categories: ['8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm']
+      },
+      series: [{
+        name: 'Average Occupants',
+        borderWidth: 1,
+        data: [
+          this.avg(this.times["total0"]),
+          this.avg(this.times["total1"]),
+          this.avg(this.times["total2"]),
+          this.avg(this.times["total3"]),
+          this.avg(this.times["total4"]),
+          this.avg(this.times["total5"]),
+          this.avg(this.times["total6"]),
+          this.avg(this.times["total7"]),
+          this.avg(this.times["total8"]),
+          this.avg(this.times["total9"]),
+          this.avg(this.times["total10"]),
+          this.avg(this.times["total11"]),
+          this.avg(this.times["total12"]),
+          this.avg(this.times["total13"])
+        ]
+      }]
+    });
+  }
+
+
 }
