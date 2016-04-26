@@ -3,10 +3,10 @@ require_relative '../dropboxAPI'
 
 namespace :csv do
   desc "Import CSV Data course data"
-  task :courses => :environment do
+  task :dropboxc => :environment do
     dbu = DropboxUtility.new(ENV['DROPBOX_ACCESS_TOKEN'])
     dbu.changed_files(ENV['DROPBOX_COURSES_PATH']).each do |path|
-      CSV.parse(@new_courses_csv, headers: true) do |row|
+      CSV.parse(path, headers: true) do |row|
       
         unless row[9].nil? && row[20].nil?
 
