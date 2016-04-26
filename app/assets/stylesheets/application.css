@@ -9,6 +9,7 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
+ *= require jquery-ui/datepicker
  *= require_tree .
  */
 
@@ -19,6 +20,10 @@
 
 .container {
   max-width: 1200px;
+}
+
+.input.date {
+  width: 60%;
 }
 
 .navbar {

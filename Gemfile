@@ -42,14 +42,16 @@ group :doc do
   gem 'sdoc', require: false
 end
 
+# Use bulma as the CSS framework
 gem 'bulma'
 
 gem 'sidekiq'
 
-
 gem 'dotenv-rails', :groups => [:development, :test]
 
 gem 'dropbox-sdk'
+
+gem 'jquery-ui-rails'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

@@ -8,6 +8,12 @@ function graph3(response) {
   // make it so options can be set from menus
   var building = $("#graph3 .building_choice").val();
   var rmID = $("#graph3 .room_choice").val();
+  var startDate = $("#graph3 #start_date").val();
+  var endDate = $("#graph3 #end_date").val();
+
+  // overwriting start and end dates with hardcoded dates for the moment
+  startDate = new Date("2016-04-10T00:00:00");
+  endDate = new Date("2016-04-16T00:00:00");
 
   // loads graph for room in the room dropdown
   // pass "true" to reloadGraph if you want it to wait for a choice from a dropdown
@@ -20,7 +26,15 @@ function graph3(response) {
     })
     else{
       rmID = $("#graph3 .room_choice").val();
-      dataToArray(response);
+      // hard coding start and end dates for the moment
+      // startDate = new Date("2016-04-10T00:00:00");
+      // console.log("startDate: " + startDate);      
+      // endDate = new Date("2016-04-16T00:00:00");
+      // console.log("endDate: " + endDate);
+      // var sampleDate = new Date(response[5050].s);
+      // console.log("some sample date: " + response[5050].s);
+      // console.log("the same sample date as a Date object: " + sampleDate);
+      dataToArray(response, startDate, endDate);
     }
   }
 
@@ -80,7 +94,7 @@ function graph3(response) {
 
   // response contains the data from the query in realgraphs_controller
   // filter it here before passing it to highcharts
-  function dataToArray(response) {
+  function dataToArray(response, startDate, endDate) {
     if (!response) return;
     // a whole day in 5-minute increments
     var time_of_day = [];
@@ -94,7 +108,6 @@ function graph3(response) {
         }
       }
     }
-    // console.log(time_of_day);
 
     // a series for each weekday
     var sunday = [];
@@ -112,29 +125,16 @@ function graph3(response) {
         var sample_time = response[i].s;
         var number_occupants = parseInt(response[i].n);
         var datapoint = [sample_time, number_occupants];
-        // console.log(datapoint);
-        var a_day = new Date(sample_time);
-        var weekday = a_day.getDay();
-        var hour = a_day.getHours();
-        var minute = a_day.getMinutes();
+        var sample_time_as_Date_object = new Date(sample_time);
+        var weekday = sample_time_as_Date_object.getDay();
+        var hour = sample_time_as_Date_object.getHours();
+        var minute = sample_time_as_Date_object.getMinutes();
         if (minute < 10){
           minute = '0' + minute;
         }
         var time = hour + ":" + minute;
-        // console.log(time);
 
-        // // testing output
-        // var test_day = new Date(response[7080].s);
-        // var test_weekday = test_day.getDay();
-        // var test_hour = test_day.getHours();
-        // var test_minute = test_day.getMinutes();
-        // // console.log("test_day: " + test_day);
-        // // console.log("test_weekday: " + test_weekday);
-        // // console.log("test_hour: " + test_hour);
-        // // console.log("test_minute: " + test_minute);
-        // // console.log("date: " + a_day);
-        // // console.log("time: " + time);
-
+        // calculating average occupancy for a given time of day
         var occ_tracker = {sum: 0, counter: 0}
         for (var t = 0; t < time_of_day.length; t++){
           if (time == time_of_day[t]){
@@ -144,29 +144,36 @@ function graph3(response) {
         }
         var occ_avg = occ_tracker.sum / occ_tracker.counter;
         var datapoint_avg = [time, occ_avg];
-        // console.log(datapoint_avg);
 
-        // getDay() returns 0 for Sunday, 1 for Monday, 2 for Tuesday etc.
-        if (weekday === 0) {
-          sunday.push(datapoint_avg);
-        }
-        else if (weekday === 1){
-          monday.push(datapoint_avg);
-        }
-        else if (weekday === 2){
-          tuesday.push(datapoint_avg);
-        }
-        else if (weekday === 3){
-          wednesday.push(datapoint_avg);
-        }
-        else if (weekday === 4){
-          thursday.push(datapoint_avg);
-        }
-        else if (weekday === 5){
-          friday.push(datapoint_avg);
-        }
-        else if (weekday === 6){
-          saturday.push(datapoint_avg);
+        if (startDate <= sample_time_as_Date_object && sample_time_as_Date_object <= endDate) {
+        
+          // console.log("startDate: " + startDate);
+          // console.log("endDate: " + endDate);
+          // console.log("sample_time_as_Date_object: " + sample_time_as_Date_object);
+
+          // getDay() returns 0 for Sunday, 1 for Monday, 2 for Tuesday etc.
+          if (weekday === 0) {
+            sunday.push(datapoint_avg);
+          }
+          else if (weekday === 1){
+            monday.push(datapoint_avg);
+          }
+          else if (weekday === 2){
+            tuesday.push(datapoint_avg);
+          }
+          else if (weekday === 3){
+            wednesday.push(datapoint_avg);
+          }
+          else if (weekday === 4){
+            thursday.push(datapoint_avg);
+          }
+          else if (weekday === 5){
+            friday.push(datapoint_avg);
+          }
+          else if (weekday === 6){
+            saturday.push(datapoint_avg);
+          }
+
         }
       }
     }
@@ -186,13 +193,13 @@ function graph3(response) {
 
     $('#graph3 #graphContainer').highcharts({
       chart: {
-        borderColor: '#E7E7E7',
-        borderRadius: 3,
-        borderWidth: 1,
+        // borderColor: '#E7E7E7',
+        // borderRadius: 3,
+        // borderWidth: 1,
         type: 'line'
       },     
       title: {
-        text: 'Occupancy by Day of Week',
+        text: 'Average Occupancy Through The Day',
         x: -20 //center
       },
       xAxis: {
