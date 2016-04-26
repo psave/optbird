@@ -23,6 +23,10 @@ var graph = function (name, response) {
       this.setBuilding(1);
       this.reloadGraph();
       break;
+    case "graph5":
+      this.setBuilding(1);
+      this.reloadGraph();
+      break;
     }
 
   }
@@ -35,7 +39,10 @@ var graph = function (name, response) {
       this.heatGridGraph1();
       break;
     case "graph2":
-      this.dataToArrayGraph2(this.response);
+      this.roomCourseOverlayGraph2(this.response);
+      break;
+    case "graph5":
+      this.dataToArrayGraph5(this.response);
       break;
     } 
     
@@ -58,73 +65,6 @@ var graph = function (name, response) {
     });
 
   }
-
-  this.dataToArrayGraph2 =  function (response) {
-    if (!this.response) return;
-    
-    var x_axis = [];
-    var y_axis = [];
-    for (var i = 0; i < this.response.length; i++) {
-      // pick out only those with room_id r == rmID (rmID is room_select.val())
-      if (this.response[i].r == this.room_select.val()) {
-        // push their sample_time s and number_occupants n into x and y arrays
-        x_axis.push(this.response[i].s);
-        y_axis.push(parseInt(this.response[i].n));
-      }
-    }
-
-    this.series = {
-      // all sample_times s for room_id r=rmID (rmID is room_select.val())
-      x_axis: x_axis,
-      // all number_occupants s for room_id r=rmID (rmID is room_select.val())
-      y_axis: y_axis
-    };
-    // return series;
-    this.dataToChartGraph2();
-  }
-
-  this.dataToChartGraph2 = function () {
-
-    $("#" + this.name + " #graphContainer").highcharts({      
-      title: {
-        text: 'Occupancy over Time',
-        x: -20 //center
-      },
-      xAxis: {
-        type: 'datetime',
-        categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
-        tickInterval: 35
-      },
-      yAxis: {
-        title: {
-          text: 'Number of Occupants'
-        },
-        plotLines: [{
-          value: 0,
-          width: 1,
-          color: '#1F99D3'
-        }]
-      },
-      tooltip: {
-        valueSuffix: ''
-      },
-      legend: {
-        layout: 'vertical',
-        align: 'left',
-        verticalAlign: 'top',
-        floating: true,
-        borderWidth: 0
-      },
-      series: [{
-        name: 'Occupants',
-        data: this.series.y_axis,
-        tooltip: {
-          valueDecimals: 2
-        }
-      }]
-    });
-  }
-
 
   this.avg = function(array) {
     var arr = array.reduce( (prev, curr) => parseInt(prev) + parseInt(curr) ) / array.length
@@ -223,8 +163,6 @@ var graph = function (name, response) {
     });
   }
 
-
-
   this.separateByWeekdayGraph1 = function (response) {
 
     for (var i = 0; i < this.response.length; i++) {
@@ -240,5 +178,170 @@ var graph = function (name, response) {
         }
       }
     }
+  }
+
+  this.roomCourseOverlayGraph2 = function () {
+
+    var total = 194;
+    $('#graph2 .graphContainer').highcharts({
+        chart: {
+            zoomType: 'xy'
+        },
+        title: {
+            text: 'Occupant and Course Overlay'
+        },
+        subtitle: {
+            text: 'Henn Room 251 on Mondy, April 18th, 2016'
+        },
+        xAxis: [{
+            categories: ['8am', '9am', '10am'],
+            crosshair: true
+        }],
+        yAxis: [{ // Primary yAxis
+            labels: {
+                format: '{value}',
+                style: {
+                    color: Highcharts.getOptions().colors[2]
+                }
+            },
+            title: {
+                text: 'Number of Occupants',
+                style: {
+                    color: Highcharts.getOptions().colors[2]
+                }
+            },
+            opposite: true
+
+        }, { // Secondary yAxis
+            gridLineWidth: 0,
+            title: {
+                text: '% Occupied',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            labels: {
+                format: '{value} %',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            }
+
+        }],
+        tooltip: {
+            shared: true
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'left',
+            x: 80,
+            verticalAlign: 'top',
+            y: 55,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        },
+        series: [{
+            name: 'Courses',
+            type: 'spline',
+            yAxis: 1,
+            data: [Math.round(7/total*100), Math.round(71/total*100), Math.round(106/total*100)],
+            tooltip: {
+                valueSuffix: ''//can place something here to add to each value on the axis
+            }
+
+        }
+        // , {
+        //     name: 'Number of Occupants',
+        //     type: 'spline',
+        //     data: [7, 6, 9, 14, 18, 21, 25, 26, 23, 18, 13, 9],
+        //     marker: {
+        //         enabled: false
+        //     },
+        //     dashStyle: 'shortdot',
+        //     tooltip: {
+        //         valueSuffix: ''//can place something here to add to each value on the axis
+        //     }
+        // },  {
+        //     name: 'Max Occupancy',
+        //     type: 'spline',
+        //     data: [200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200],
+        //     marker: {
+        //         enabled: false
+        //     },
+        //     dashStyle: 'shortdot',
+        //     tooltip: {
+        //         valueSuffix: ''//can place something here to add to each value on the axis
+        //     }
+
+        // }
+        ]
+    });
+  };
+
+
+  this.dataToArrayGraph5 =  function (response) {
+    if (!this.response) return;
+    
+    var x_axis = [];
+    var y_axis = [];
+    for (var i = 0; i < this.response.length; i++) {
+      // pick out only those with room_id r == rmID (rmID is room_select.val())
+      if (this.response[i].r == this.room_select.val()) {
+        // push their sample_time s and number_occupants n into x and y arrays
+        x_axis.push(this.response[i].s);
+        y_axis.push(parseInt(this.response[i].n));
+      }
+    }
+
+    this.series = {
+      // all sample_times s for room_id r=rmID (rmID is room_select.val())
+      x_axis: x_axis,
+      // all number_occupants s for room_id r=rmID (rmID is room_select.val())
+      y_axis: y_axis
+    };
+    // return series;
+    this.dataToChartGraph5();
+  }
+
+  this.dataToChartGraph5 = function () {
+
+    $("#" + this.name + " #graphContainer").highcharts({      
+      title: {
+        text: 'Occupancy over Time',
+        x: -20 //center
+      },
+      xAxis: {
+        type: 'datetime',
+        categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
+        tickInterval: 35
+      },
+      yAxis: {
+        title: {
+          text: 'Number of Occupants'
+        },
+        plotLines: [{
+          value: 0,
+          width: 1,
+          color: '#1F99D3'
+        }]
+      },
+      tooltip: {
+        valueSuffix: ''
+      },
+      legend: {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        floating: true,
+        borderWidth: 0
+      },
+      series: [{
+        name: 'Occupants',
+        data: this.series.y_axis,
+        tooltip: {
+          valueDecimals: 2
+        }
+      }]
+    });
   }
 }
