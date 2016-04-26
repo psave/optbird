@@ -280,6 +280,8 @@ var graph = function (name, response) {
         categories: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
       },
       series: [{
+        name: 'Average Occupants',
+        borderWidth: 1,
         data: [
           this.avg(this.weekdays["total0"]),
           this.avg(this.weekdays["total1"]),
