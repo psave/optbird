@@ -1,31 +1,32 @@
 <div class="container is-fluid">
+  <!-- <section class="section header"> -->
+    <header>
+      <!-- Main container -->
+      <nav class="navbar">
+        <!-- Left side -->
+        <div class="navbar-left">
+          <div class="navbar-item">
+            <h3 class="title is-3">UBC Occupancy Analysis</h3>
+          </div>
 
-  <header>
-    <!-- Main container -->
-    <nav class="navbar">
-      <!-- Left side -->
-      <div class="navbar-left is-grouped">
-        <div class="navbar-item">
-          <h3 class="title is-3">UBC Occupancy Analysis</h3>
+          <div class="navbar-item tabs is-boxed has-text-centered">
+            <ul>
+              <li><a href="#graph1">Graph 1</a></li>
+              <li><a href="#graph2">Graph 2</a></li>
+              <li><a href="#graph3">Graph 3</a></li>
+              <li><a href="#graph4">Graph 4</a></li>
+            </ul>
+          </div>
         </div>
-        <div class="tabs is-boxed">
-          <ul>
-            <li><a href="#graph1">Graph 1</a></li>
-            <li><a href="#graph2">Graph 2</a></li>
-            <li><a href="#graph3">Graph 3</a></li>
-            <li><a href="#graph4">Graph 4</a></li>
-          </ul>
-        </div>
-      </div>
 
-      <!-- Right side -->
-      <div class="navbar-right">
-        <div>
-          <a class="button is-primary">Logout</a>
+        <!-- Right side -->
+        <div class="navbar-right">
+            <!-- <a class="navbar-item button is-primary">Logout</a> -->
+            <p class="navbar-item"><a class="button is-primary">Logout</a></p>
         </div>
-      </div>
-    </nav>
-  </header>
+      </nav>
+    </header>
+  <!-- </section> -->
 
   <!-- Tabs.  Add new tabs as necessary (here, and above in the UL, and then add partials and JS files).  -->
   <div id="graph1">
@@ -44,7 +45,7 @@
   </div>
 
 
-  <section class="section">
+  <!-- <section class="section">
     <div class="columns">
       <div class="column is-6">
         <p class="notification is-primary">
@@ -62,23 +63,6 @@
         </p>
       </div>
     </div>
-  </section>
+  </section> -->
 
 </div>
-
-
-
-<!-- <button id="button", remote: true>Display Chart</button>
-<div id="overview_line_chart">
- 
-</div>
-
-
-<div id="overview-highstock">
-</div> -->
-
-
-<!-- <h2>this is my series</h2>
-<div id="seriesdata">
-  <%= @series %>
-</div> -->
