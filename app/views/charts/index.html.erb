@@ -22,8 +22,7 @@
 
         <!-- Right side -->
         <div class="navbar-right">
-            <!-- <a class="navbar-item button is-primary">Logout</a> -->
-            <p class="navbar-item"><a class="button is-primary">Logout</a></p>
+          <p class="navbar-item"><%= button_to "Logout", session_path("current"), :class => "button is-primary", :method => :delete %></p>
         </div>
       </nav>
     </header>
