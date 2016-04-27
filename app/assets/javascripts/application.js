@@ -5,7 +5,11 @@
 //= require highstock/modules/exporting
 //= require_tree .
 
+
 $(function(){
+
+  $("#start_date").datepicker();
+  $("#end_date").datepicker();
 
   $.ajax({
     method: 'GET',
@@ -15,15 +19,15 @@ $(function(){
     success: function(response){
       graph1(response);
       graph2(response);
-      //graph3(response);
-      // graph4(response);
+      graph3(response);
+      graph4(response);
       graph5(response);
     }
   });
 
-  $("#start_date").datepicker();
 
-  $("#end_date").datepicker();
+
+
 
   $('.tabs ul').each(function(){
     // For each set of tabs, we want to keep track of
