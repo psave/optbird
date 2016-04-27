@@ -51,7 +51,7 @@ function graph3(response) {
         $('#graph3 .room_choice_container').remove();
       };
 
-      $("#graph3 .graph_controls").append(
+      $("#graph3 #graph3_building_dropdown").append(
         "<div class='room_choice_container'>" +
         "<label class='label'>Room</label>" +
         "<p class='control'>" +
@@ -245,6 +245,7 @@ function graph3(response) {
         },
         layout: 'vertical',
         verticalAlign: 'middle',
+        x: 9,
         y: -44
       },
       series: [{

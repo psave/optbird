@@ -16,10 +16,43 @@
  
 @import "bulma";
 
-/*simple way to add custom edits to bulma classes*/
+/* simple way to add custom edits to bulma and jquery-ui */
 
 .container {
   max-width: 1200px;
+}
+
+.dayofweek_container {
+  margin-top: 13px;
+}
+
+#graph1 .graphContainer {
+  min-width: 300px;
+  max-width: 800px;
+  height: 400px;
+  margin: 1em auto;
+}
+
+#graph1BarDay {
+  height: 400px; 
+}
+
+#graph1_date_pickers {
+  margin-top: 46px;
+}
+
+#graph3_date_pickers {
+  margin-top: 46px;
+}
+
+.hasDatepicker {
+  border: 1px solid #D3D6DB;
+  border-radius: 3px;
+  border-width: 1px;
+  border-color: #D3D6DB;
+  line-height: 24px;
+  height: 32px;
+  width: 100px;
 }
 
 .input.date {
@@ -33,6 +66,10 @@
   margin-left: 11px;
 }
 
+.navbar-item .title {
+  margin-right: 30px;
+}
+
 #overview_line_chart {
   width:560px; 
   height:300px;
@@ -43,32 +80,10 @@
   min-width: 310px;
 }
 
-
-#graph1 .graphContainer {
-  min-width: 300px;
-  max-width: 800px;
-  height: 400px;
-  margin: 1em auto;
-}
-
-#graph1BarDay {
-  height: 400px; 
-}
-
 #sliders {
   min-width: 310px; 
   max-width: 800px;
-  margin-top: 550px;
+  margin-top: 200px;
   margin-right: 10px;
+  margin-left: -33px;
 }
-
-.input.date {
-   width: 60%;
- }
-
-/*.section.header {
-  margin-top: 15px;
-  padding-top: 0px;
-  padding-bottom: 0px;
-}*/
-
