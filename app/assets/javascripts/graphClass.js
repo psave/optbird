@@ -284,7 +284,19 @@ var graph = function (name, response) {
   this.dataToArrayGraph2 =  function (response) {
     if (!this.response) return;
 
-
+    function time_of_day() {
+      var time_of_day = [];
+      for (var hour = 0; hour < 24; hour++){
+        for (var minute = 0; minute < 60; minute += 5 ){
+          var minuteString = String(minute);
+          if (minuteString.length == 1) {
+            minuteString = '0' + minuteString;
+          }
+          time_of_day.push(String(hour) + ":" + minuteString);
+        }
+      }
+      return time_of_day
+    }
     
     var x_axis = [];
     var y_axis = [];
@@ -300,6 +312,41 @@ var graph = function (name, response) {
         y_axis.push(parseInt(this.response[i].n));
       }
     }
+
+
+
+    var rmID = this.room_select.val()
+    var times_series = time_of_day();
+
+    var time_sets =
+      response
+      .filter(function(data){ return data.r == rmID})
+      .filter(function(data) { 
+        var sample_time = new Date(data.s);
+        return this.dayofweek.val() == sample_time.getDay() }.bind(this))
+      .reduce(function(memo, data){
+        var sample_time = new Date(data.s);
+        var number_occupants = parseInt(data.n);
+        // var weekday = sample_time.getDay();
+        var hour = sample_time.getHours();
+        var minute = sample_time.getMinutes();
+        var time = hour + ":" + minute;
+
+        if (!memo[time])
+        {
+          memo[time] = [number_occupants];
+        } else {
+          memo[time].push(number_occupants);
+        }
+
+        return memo
+      },{})
+
+      var averages = [];
+      for(key in time_sets) {
+        sum = time_sets[key].reduce(function(acc,num) {return acc + num},0);
+        averages.push(sum / time_sets[key].length);
+      }
 
     
     //run a transformation / filter on the data
@@ -344,9 +391,9 @@ var graph = function (name, response) {
 
     this.series = {
       // all sample_times s for room_id r=rmID (rmID is room_select.val())
-      x_axis: x_axis,
+      x_axis: times_series,
       // all number_occupants s for room_id r=rmID (rmID is room_select.val())
-      y_axis: y_axis
+      y_axis: averages
     };
     return this.series;
   }
@@ -408,9 +455,10 @@ var graph = function (name, response) {
             text: 'Henn Room 251 on Mondy, April 18th, 2016'
         },
         xAxis: [{
+            categories: this.series.x_axis,
             // categories: ['8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm'],
             // categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
-            categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
+            // categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
             // categories: this.series.x_axis.map(function(time){ return moment(time).tz(time, "MMM D[,] H:mm", "America/Los_Angeles")}),
             // categories: this.series.x_axis.map(function toTimeZone(time, "America/Los_Angeles"){ return moment(time).format("MMM D[,] H:mm")}),
             crosshair: true
