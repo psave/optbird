@@ -1,8 +1,8 @@
-function graph1(response) {
+function graph1(response_occupancy, response_courses) {
   /// MAIN 
 
   // Sets the name for the particular graph. This makes it easier to reuse the code.
-  graph1 = new graph("graph1", response);
+  graph1 = new graph("graph1", response_occupancy, response_courses);
 
   graph1.firstGraphLoad();
 
@@ -32,6 +32,14 @@ function graph1(response) {
   });
 
   $("#" + graph1.name + " .end_date" ).change(function () {
+    graph1.reloadGraph();
+  });
+
+  $('.number').click(function () {
+    graph1.reloadGraph();
+  });
+
+  $('.percent').click(function () {
     graph1.reloadGraph();
   });
 
