@@ -372,7 +372,29 @@ var graph = function (name, response) {
 
   this.roomCourseOverlayGraph2 = function () {
 
-    var total = 100;
+
+    // {
+    //     name: 'Anthropology 101',
+    //     type: 'spline',
+    //     data: [50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    //             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    //             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    //             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    //             20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 0],
+    //     marker: {
+    //         enabled: false
+    //     },
+    //     dashStyle: 'solid',
+    //     tooltip: {
+    //         valueSuffix: ''//can place something here to add to each value on the axis
+    //     }
+    // }
+
+    // var y_axis_series = [];
+
+
+
+    var MAX_OCCUPANTS = 50; // to set the max on the axis
     $('#graph2 .graphContainer').highcharts({
         chart: {
             zoomType: 'xy'
@@ -388,6 +410,7 @@ var graph = function (name, response) {
             crosshair: true
         }],
         yAxis: [{ // Primary yAxis
+            max: MAX_OCCUPANTS,
             labels: {
                 format: '{value}',
                 style: {
@@ -431,18 +454,11 @@ var graph = function (name, response) {
             floating: true,
             backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
         },
+        // series: y_axis_series,
         series: [{
-            name: 'Courses',
-            type: 'spline',
-            yAxis: 1,
-            data: [Math.round(7/total*100), Math.round(71/total*100), Math.round(54/total*100)],
-            tooltip: {
-                valueSuffix: ''//can place something here to add to each value on the axis
-            }
-
-        }, {
             name: 'Number of Occupants',
             type: 'spline',
+            yAxis: 0,
             data: this.series.y_axis,
             marker: {
                 enabled: false
@@ -451,14 +467,39 @@ var graph = function (name, response) {
             tooltip: {
                 valueSuffix: ''//can place something here to add to each value on the axis
             }
-        },  {
-            name: 'Max Occupancy',
+
+        }, {
+            name: 'Anthropology 101',
             type: 'spline',
-            data: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+            data: [50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                    20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 0],
             marker: {
                 enabled: false
             },
-            dashStyle: 'shortdot',
+            dashStyle: 'solid',
+            tooltip: {
+                valueSuffix: ''//can place something here to add to each value on the axis
+            }
+        },  {
+            name: 'English 101',
+            type: 'line',
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+                    20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20,
+                    20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 0],
+            yAxis: 0,
+            marker: {
+                enabled: false
+            },
+            dashStyle: 'solid',
             tooltip: {
                 valueSuffix: ''//can place something here to add to each value on the axis
             }
