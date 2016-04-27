@@ -2,6 +2,8 @@ require 'json'
 
 class ChartsController < ApplicationController
 
+  before_action :restrict_access
+
   def index
     @buildings = Building.all
     # @rooms = Room.all
