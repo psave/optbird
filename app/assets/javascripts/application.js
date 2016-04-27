@@ -5,7 +5,11 @@
 //= require highstock/modules/exporting
 //= require_tree .
 
+
 $(function(){
+
+  $("#start_date").datepicker();
+  $("#end_date").datepicker();
 
   $.ajax({
     method: 'GET',
@@ -13,25 +17,16 @@ $(function(){
     dataType: 'json',
     contentType: 'application/json',
     success: function(response){
-      graph1(response);
-      graph2(response);
+      // graph1(response);
+      // graph2(response);
       graph3(response);
       // graph4(response);
       // graph5(response);
     }
   });
 
-  // $(function() {
-  //   $("#start_date").datepicker();
-  // });
 
-  // $(function() {
-  //   $("#end_date").datepicker();
-  // });
 
-  $("#start_date").datepicker();
-
-  $("#end_date").datepicker();
 
 
   $('.tabs ul').each(function(){
