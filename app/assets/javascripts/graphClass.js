@@ -16,6 +16,8 @@ var graph = function (name, response_occupancy, response_courses) {
   this.room_select = $("#" + this.name + " .room_choice");
   this.dayofweek = $("#" + this.name + " .dayofweek");
 
+  this.num_percent_choice = $('#' + graph1.name + ' .num_percent_choice');
+
   var start_date_select = $("#" + this.name + " .start_date" ).datepicker();
   var end_date_select = $("#" + this.name + " .end_date").datepicker();
 
@@ -23,7 +25,6 @@ var graph = function (name, response_occupancy, response_courses) {
     switch(this.name) {
     case "graph1":
       this.setBuilding(1);
-      this.getCapacity(1);
       break;
     case "graph2":
       this.setBuilding(1);
@@ -44,31 +45,46 @@ var graph = function (name, response_occupancy, response_courses) {
         this.separateByDayTimeGraph1(this.response_occupancy);
         // this.separateByWeekdayGraph1(this.response_occupancy);
         // this.separateByTimeGraph1(this.response_occupancy);
-        this.heatGridGraph1();
-        // this.heatGridGraph1Percent
+        if (this.num_percent_choice.val() == "Number") {
+          this.heatGridGraph1();
+        }
+        else if (this.num_percent_choice.val() == "Percent") {
+          var capacity;
+          for (var i = 0; i < this.response_occupancy.length; i++) {
+            if (this.response_occupancy[i].r == this.room_select.val()) {
+              capacity = this.response_courses[i].capacity;
+              break;
+            }
+          }
+          this.heatGridGraph1Percent(capacity);
+        } 
         // this.initializeGraph1BarDay();
         // this.initializeGraph1BarTime();
         break;
     case "graph2":
-      this.dataToArrayGraph2(this.response);
-      this.roomCourseOverlayGraph2(this.response);
+      this.dataToArrayGraph2(this.response_occupancy);
+      this.roomCourseOverlayGraph2(this.response_occupancy);
+      break;
+    case "graph3":
+      break;
+    case "graph4":
       break;
     case "graph5":
-      this.dataToArrayGraph5(this.response);
+      this.dataToArrayGraph5(this.response_occupancy);
       break;
     } 
   }
 
-  this.reloadGraphPercent = function () {
-    switch(this.name) {
-      case "graph1":
-        this.separateByDayTimeGraph1(this.response_occupancy);
-        this.separateByWeekdayGraph1(this.response_occupancy);
-        this.separateByTimeGraph1(this.response_occupancy);
-        this.heatGridGraph1Percent();
-        break;
-    }
-  }
+  // this.reloadGraphPercent = function () {
+  //   switch(this.name) {
+  //     case "graph1":
+  //       this.separateByDayTimeGraph1(this.response_occupancy);
+  //       this.separateByWeekdayGraph1(this.response_occupancy);
+  //       this.separateByTimeGraph1(this.response_occupancy);
+  //       this.heatGridGraph1Percent();
+  //       break;
+  //   }
+  // }
 
   this.setBuilding = function (building_id) {
     // on change 
@@ -93,15 +109,15 @@ var graph = function (name, response_occupancy, response_courses) {
   // }
 
 ////////// For Graph 1 Tab Heat Grid 
-  var capacity = [];
+  // var capacity = [];
 
-  this.getCapacity = function (room_id) {
-    $.get("/charts/courses.json?room_id="+room_id, function (data) {
-      data.forEach(function (course) {
-        capacity.push(course);
-      });
-    });
-  }
+  // this.getCapacity = function (room_id) {
+  //   $.get("/charts/courses.json?room_id="+room_id, function (data) {
+  //     data.forEach(function (course) {
+  //       capacity.push(course);
+  //     });
+  //   });
+  // }
 
   this.separateByDayTimeGraph1 = function (response) {
     for (var i = 0; i < this.response_occupancy.length; i++) {
@@ -212,8 +228,11 @@ var graph = function (name, response_occupancy, response_courses) {
   }
 ////////////////////// For Graph 1 PERCENT OCCUPANCY Heat Grid
 
-this.heatGridGraph1Percent = function() {
+this.heatGridGraph1Percent = function(capacity) {
     $('#graph1 .graphContainer').highcharts({
+      colors: ["#f45b5b", "#8085e9", "#8d4654", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
+      "#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
+
       chart: {
           type: 'heatmap',
           marginTop: 40,
@@ -258,33 +277,33 @@ this.heatGridGraph1Percent = function() {
           borderWidth: 1,
           data: [
           // 8am
-            [0,0,this.avg(this.totals["total00"])],[0,1,this.avg(this.totals["total01"])],[0,2,this.avg(this.totals["total02"])],[0,3,this.avg(this.totals["total03"])],[0,4,this.avg(this.totals["total04"])],[0,5,this.avg(this.totals["total05"])],[0,6,this.avg(this.totals["total06"])],
+            [0,0,Math.round((this.avg(this.totals["total00"])/capacity)*100)],[0,1,Math.round((this.avg(this.totals["total01"])/capacity)*100)],[0,2,Math.round((this.avg(this.totals["total02"])/capacity)*100)],[0,3,Math.round((this.avg(this.totals["total03"])/capacity)*100)],[0,4,Math.round((this.avg(this.totals["total04"])/capacity)*100)],[0,5,Math.round((this.avg(this.totals["total05"])/capacity)*100)],[0,6,Math.round((this.avg(this.totals["total06"])/capacity)*100)],
           // 9am
-            [1,0,this.avg(this.totals["total10"])],[1,1,this.avg(this.totals["total11"])],[1,2,this.avg(this.totals["total12"])],[1,3,this.avg(this.totals["total13"])],[1,4,this.avg(this.totals["total14"])],[1,5,this.avg(this.totals["total15"])],[1,6,this.avg(this.totals["total16"])],
+            [1,0,Math.round((this.avg(this.totals["total10"])/capacity)*100)],[1,1,Math.round((this.avg(this.totals["total11"])/capacity)*100)],[1,2,Math.round((this.avg(this.totals["total12"])/capacity)*100)],[1,3,Math.round((this.avg(this.totals["total13"])/capacity)*100)],[1,4,Math.round((this.avg(this.totals["total14"])/capacity)*100)],[1,5,Math.round((this.avg(this.totals["total15"])/capacity)*100)],[1,6,Math.round((this.avg(this.totals["total16"])/capacity)*100)],
           // 10am
-            [2,0,this.avg(this.totals["total20"])],[2,1,this.avg(this.totals["total21"])],[2,2,this.avg(this.totals["total22"])],[2,3,this.avg(this.totals["total23"])],[2,4,this.avg(this.totals["total24"])],[2,5,this.avg(this.totals["total25"])],[2,6,this.avg(this.totals["total26"])],
+            [2,0,Math.round((this.avg(this.totals["total20"])/capacity)*100)],[2,1,Math.round((this.avg(this.totals["total21"])/capacity)*100)],[2,2,Math.round((this.avg(this.totals["total22"])/capacity)*100)],[2,3,Math.round((this.avg(this.totals["total23"])/capacity)*100)],[2,4,Math.round((this.avg(this.totals["total24"])/capacity)*100)],[2,5,Math.round((this.avg(this.totals["total25"])/capacity)*100)],[2,6,Math.round((this.avg(this.totals["total26"])/capacity)*100)],
           // 11am
-            [3,0,this.avg(this.totals["total30"])],[3,1,this.avg(this.totals["total31"])],[3,2,this.avg(this.totals["total32"])],[3,3,this.avg(this.totals["total33"])],[3,4,this.avg(this.totals["total34"])],[3,5,this.avg(this.totals["total35"])],[3,6,this.avg(this.totals["total36"])],
+            [3,0,Math.round((this.avg(this.totals["total30"])/capacity)*100)],[3,1,Math.round((this.avg(this.totals["total31"])/capacity)*100)],[3,2,Math.round((this.avg(this.totals["total32"])/capacity)*100)],[3,3,Math.round((this.avg(this.totals["total33"])/capacity)*100)],[3,4,Math.round((this.avg(this.totals["total34"])/capacity)*100)],[3,5,Math.round((this.avg(this.totals["total35"])/capacity)*100)],[3,6,Math.round((this.avg(this.totals["total36"])/capacity)*100)],
           // 12pm
-            [4,0,this.avg(this.totals["total40"])],[4,1,this.avg(this.totals["total41"])],[4,2,this.avg(this.totals["total42"])],[4,3,this.avg(this.totals["total43"])],[4,4,this.avg(this.totals["total44"])],[4,5,this.avg(this.totals["total45"])],[4,6,this.avg(this.totals["total46"])],
+            [4,0,Math.round((this.avg(this.totals["total40"])/capacity)*100)],[4,1,Math.round((this.avg(this.totals["total41"])/capacity)*100)],[4,2,Math.round((this.avg(this.totals["total42"])/capacity)*100)],[4,3,Math.round((this.avg(this.totals["total43"])/capacity)*100)],[4,4,Math.round((this.avg(this.totals["total44"])/capacity)*100)],[4,5,Math.round((this.avg(this.totals["total45"])/capacity)*100)],[4,6,Math.round((this.avg(this.totals["total46"])/capacity)*100)],
           // 1pm
-            [5,0,this.avg(this.totals["total50"])],[5,1,this.avg(this.totals["total51"])],[5,2,this.avg(this.totals["total52"])],[5,3,this.avg(this.totals["total53"])],[5,4,this.avg(this.totals["total54"])],[5,5,this.avg(this.totals["total55"])],[5,6,this.avg(this.totals["total56"])],
+            [5,0,Math.round((this.avg(this.totals["total50"])/capacity)*100)],[5,1,Math.round((this.avg(this.totals["total51"])/capacity)*100)],[5,2,Math.round((this.avg(this.totals["total52"])/capacity)*100)],[5,3,Math.round((this.avg(this.totals["total53"])/capacity)*100)],[5,4,Math.round((this.avg(this.totals["total54"])/capacity)*100)],[5,5,Math.round((this.avg(this.totals["total55"])/capacity)*100)],[5,6,Math.round((this.avg(this.totals["total56"])/capacity)*100)],
           // 2pm
-            [6,0,this.avg(this.totals["total60"])],[6,1,this.avg(this.totals["total61"])],[6,2,this.avg(this.totals["total62"])],[6,3,this.avg(this.totals["total63"])],[6,4,this.avg(this.totals["total64"])],[6,5,this.avg(this.totals["total65"])],[6,6,this.avg(this.totals["total66"])],
+            [6,0,Math.round((this.avg(this.totals["total60"])/capacity)*100)],[6,1,Math.round((this.avg(this.totals["total61"])/capacity)*100)],[6,2,Math.round((this.avg(this.totals["total62"])/capacity)*100)],[6,3,Math.round((this.avg(this.totals["total63"])/capacity)*100)],[6,4,Math.round((this.avg(this.totals["total64"])/capacity)*100)],[6,5,Math.round((this.avg(this.totals["total65"])/capacity)*100)],[6,6,Math.round((this.avg(this.totals["total66"])/capacity)*100)],
           // 3pm
-            [7,0,this.avg(this.totals["total70"])],[7,1,this.avg(this.totals["total71"])],[7,2,this.avg(this.totals["total72"])],[7,3,this.avg(this.totals["total73"])],[7,4,this.avg(this.totals["total74"])],[7,5,this.avg(this.totals["total75"])],[7,6,this.avg(this.totals["total76"])],
+            [7,0,Math.round((this.avg(this.totals["total70"])/capacity)*100)],[7,1,Math.round((this.avg(this.totals["total71"])/capacity)*100)],[7,2,Math.round((this.avg(this.totals["total72"])/capacity)*100)],[7,3,Math.round((this.avg(this.totals["total73"])/capacity)*100)],[7,4,Math.round((this.avg(this.totals["total74"])/capacity)*100)],[7,5,Math.round((this.avg(this.totals["total75"])/capacity)*100)],[7,6,Math.round((this.avg(this.totals["total76"])/capacity)*100)],
           // 4pm
-            [8,0,this.avg(this.totals["total80"])],[8,1,this.avg(this.totals["total81"])],[8,2,this.avg(this.totals["total82"])],[8,3,this.avg(this.totals["total83"])],[8,4,this.avg(this.totals["total84"])],[8,5,this.avg(this.totals["total85"])],[8,6,this.avg(this.totals["total86"])],
+            [8,0,Math.round((this.avg(this.totals["total80"])/capacity)*100)],[8,1,Math.round((this.avg(this.totals["total81"])/capacity)*100)],[8,2,Math.round((this.avg(this.totals["total82"])/capacity)*100)],[8,3,Math.round((this.avg(this.totals["total83"])/capacity)*100)],[8,4,Math.round((this.avg(this.totals["total84"])/capacity)*100)],[8,5,Math.round((this.avg(this.totals["total85"])/capacity)*100)],[8,6,Math.round((this.avg(this.totals["total86"])/capacity)*100)],
           // 5pm
-            [9,0,this.avg(this.totals["total90"])],[9,1,this.avg(this.totals["total91"])],[9,2,this.avg(this.totals["total92"])],[9,3,this.avg(this.totals["total93"])],[9,4,this.avg(this.totals["total94"])],[9,5,this.avg(this.totals["total95"])],[9,6,this.avg(this.totals["total96"])],
+            [9,0,Math.round((this.avg(this.totals["total90"])/capacity)*100)],[9,1,Math.round((this.avg(this.totals["total91"])/capacity)*100)],[9,2,Math.round((this.avg(this.totals["total92"])/capacity)*100)],[9,3,Math.round((this.avg(this.totals["total93"])/capacity)*100)],[9,4,Math.round((this.avg(this.totals["total94"])/capacity)*100)],[9,5,Math.round((this.avg(this.totals["total95"])/capacity)*100)],[9,6,Math.round((this.avg(this.totals["total96"])/capacity)*100)],
           // 6pm
-            [10,0,this.avg(this.totals["total100"])],[10,1,this.avg(this.totals["total101"])],[10,2,this.avg(this.totals["total102"])],[10,3,this.avg(this.totals["total103"])],[10,4,this.avg(this.totals["total104"])],[10,5,this.avg(this.totals["total105"])],[10,6,this.avg(this.totals["total106"])],
+            [10,0,Math.round((this.avg(this.totals["total100"])/capacity)*100)],[10,1,Math.round((this.avg(this.totals["total101"])/capacity)*100)],[10,2,Math.round((this.avg(this.totals["total102"])/capacity)*100)],[10,3,Math.round((this.avg(this.totals["total103"])/capacity)*100)],[10,4,Math.round((this.avg(this.totals["total104"])/capacity)*100)],[10,5,Math.round((this.avg(this.totals["total105"])/capacity)*100)],[10,6,Math.round((this.avg(this.totals["total106"])/capacity)*100)],
           // 7pm
-            [11,0,this.avg(this.totals["total110"])],[11,1,this.avg(this.totals["total111"])],[11,2,this.avg(this.totals["total112"])],[11,3,this.avg(this.totals["total113"])],[11,4,this.avg(this.totals["total114"])],[11,5,this.avg(this.totals["total115"])],[11,6,this.avg(this.totals["total116"])],
+            [11,0,Math.round((this.avg(this.totals["total110"])/capacity)*100)],[11,1,Math.round((this.avg(this.totals["total111"])/capacity)*100)],[11,2,Math.round((this.avg(this.totals["total112"])/capacity)*100)],[11,3,Math.round((this.avg(this.totals["total113"])/capacity)*100)],[11,4,Math.round((this.avg(this.totals["total114"])/capacity)*100)],[11,5,Math.round((this.avg(this.totals["total115"])/capacity)*100)],[11,6,Math.round((this.avg(this.totals["total116"])/capacity)*100)],
           // 8pm
-            [12,0,this.avg(this.totals["total120"])],[12,1,this.avg(this.totals["total121"])],[12,2,this.avg(this.totals["total122"])],[12,3,this.avg(this.totals["total123"])],[12,4,this.avg(this.totals["total124"])],[12,5,this.avg(this.totals["total125"])],[12,6,this.avg(this.totals["total126"])],
+            [12,0,Math.round((this.avg(this.totals["total120"])/capacity)*100)],[12,1,Math.round((this.avg(this.totals["total121"])/capacity)*100)],[12,2,Math.round((this.avg(this.totals["total122"])/capacity)*100)],[12,3,Math.round((this.avg(this.totals["total123"])/capacity)*100)],[12,4,Math.round((this.avg(this.totals["total124"])/capacity)*100)],[12,5,Math.round((this.avg(this.totals["total125"])/capacity)*100)],[12,6,Math.round((this.avg(this.totals["total126"])/capacity)*100)],
           // 9pm
-            [13,0,this.avg(this.totals["total130"])],[13,1,this.avg(this.totals["total131"])],[13,2,this.avg(this.totals["total132"])],[13,3,this.avg(this.totals["total133"])],[13,4,this.avg(this.totals["total134"])],[13,5,this.avg(this.totals["total135"])],[13,6,this.avg(this.totals["total136"])]
+            [13,0,Math.round((this.avg(this.totals["total130"])/capacity)*100)],[13,1,Math.round((this.avg(this.totals["total131"])/capacity)*100)],[13,2,Math.round((this.avg(this.totals["total132"])/capacity)*100)],[13,3,Math.round((this.avg(this.totals["total133"])/capacity)*100)],[13,4,Math.round((this.avg(this.totals["total134"])/capacity)*100)],[13,5,Math.round((this.avg(this.totals["total135"])/capacity)*100)],[13,6,Math.round((this.avg(this.totals["total136"])/capacity)*100)]
             ],
           dataLabels: {
               enabled: true,
@@ -421,7 +440,18 @@ this.heatGridGraph1Percent = function() {
       }
     }
 
+    /* The following "time_sets takes averages for each 5-minute time period for the room selected."
+    input 
+      [{ sampletime: "2016-04-05T08:00:00", number_people: 10 },
+      { sampletime: "2016-04-05T08:05:00", number_people: 10 },
+      { sampletime: "2016-04-12T08:00:00", number_people: 5 },
+      { sampletime: "2016-04-12T08:05:00", number_people: 10 }]
 
+    output
+     [{ sampletime: 08:00:00, number_people: 7.5},
+     { sampletime: 08:00:00, number_people: 10}]
+      
+    */
 
     var rmID = this.room_select.val()
     var times_series = time_of_day();
@@ -431,6 +461,7 @@ this.heatGridGraph1Percent = function() {
       .filter(function(data){ return data.r == rmID})
       .filter(function(data) { 
         var sample_time = new Date(data.s);
+        sample_time = new Date(sample_time.getTime() + sample_time.getTimezoneOffset() * 60 * 1000);
         return this.dayofweek.val() == sample_time.getDay() }.bind(this))
       .reduce(function(memo, data){
         var sample_time = new Date(data.s);
@@ -448,11 +479,11 @@ this.heatGridGraph1Percent = function() {
         }
 
         return memo
-      },{})
+      },{});
 
       var averages = [];
       for(key in time_sets) {
-        sum = time_sets[key].reduce(function(acc,num) {return acc + num},0);
+        var sum = time_sets[key].reduce(function(acc,num) {return parseInt(acc) + parseInt(num)},0);
         averages.push(sum / time_sets[key].length);
       }
 
@@ -496,6 +527,7 @@ this.heatGridGraph1Percent = function() {
       
     */
     // final_response = return_x_y_and_values(transformed_response)  // {x_axis: [], y_axis:[], line_1:[], line_2: []}
+
 
     this.series = {
       // all sample_times s for room_id r=rmID (rmID is room_select.val())

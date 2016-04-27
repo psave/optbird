@@ -13,13 +13,13 @@ function time_of_day(argument) {
   return time_of_day
 }
 
-function graph2(response) {
+function graph2(response_occupancy, response_courses) {
 
   ///  MAIN ///
 
   // Sets the name for the particular graph. This makes it easier to reuse the code.
   // It sets the data set for the graph
-  graph2 = new graph("graph2", response);
+  graph2 = new graph("graph2", response_occupancy, response_courses);
 
   graph2.firstGraphLoad();
 

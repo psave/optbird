@@ -19,7 +19,7 @@ $(function(){
     success: function(response){
       graph1(response["occupancy_data"], response["courses_data"]);
       graph2(response["occupancy_data"], response["courses_data"]);
-      graph3(response);
+      graph3(response["occupancy_data"]);
       // graph4(response);
       graph5(response);
     }

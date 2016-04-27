@@ -35,12 +35,8 @@ function graph1(response_occupancy, response_courses) {
     graph1.reloadGraph();
   });
 
-  // $('.number').click(function () {
-  //   graph1.reloadGraph();
-  // });
-
-  // $('.percent').click(function () {
-  //   graph1.reloadGraph();
-  // });
+  $('#' + graph1.name + ' .num_percent_choice').change(function () {
+    graph1.reloadGraph();
+  });
 
 }
