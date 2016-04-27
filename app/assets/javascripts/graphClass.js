@@ -352,7 +352,7 @@ var graph = function (name, response) {
         }
 
         return memo
-      },{})
+      },{});
 
       var averages = [];
       for(key in time_sets) {
