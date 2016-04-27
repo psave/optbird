@@ -63,17 +63,4 @@ $(function(){
   });
 
 });
-<<<<<<< HEAD
-=======
 
-
-
-
-
-
-
-
-
-
-
->>>>>>> 72afdc124c8dafcceb0d889a120bc7ed91c9a3ab
