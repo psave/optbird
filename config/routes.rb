@@ -5,7 +5,8 @@ Optbird::Application.routes.draw do
 
   resources :charts, only: [:index]
   get 'charts/rooms', defaults: { format: 'json' }
-
+  get 'charts/courses', defaults: {format: 'json'}
+  
   resources :data, only: [:index, :show]
 
   # The priority is based upon order of creation: first created -> highest priority.
