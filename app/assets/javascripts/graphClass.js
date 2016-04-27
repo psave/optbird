@@ -370,49 +370,6 @@ var graph = function (name, response) {
     return this.series;
   }
 
-
-  // this.dataToChartGraph2 = function () {
-
-  //   $("#" + this.name + " #graphContainer").highcharts({      
-  //     title: {
-  //       text: 'Occupancy over Time',
-  //       x: -20 //center
-  //     },
-  //     xAxis: {
-  //       type: 'datetime',
-  //       categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
-  //       tickInterval: 35
-  //     },
-  //     yAxis: {
-  //       title: {
-  //         text: 'Number of Occupants'
-  //       },
-  //       plotLines: [{
-  //         value: 0,
-  //         width: 1,
-  //         color: '#1F99D3'
-  //       }]
-  //     },
-  //     tooltip: {
-  //       valueSuffix: ''
-  //     },
-  //     legend: {
-  //       layout: 'vertical',
-  //       align: 'left',
-  //       verticalAlign: 'top',
-  //       floating: true,
-  //       borderWidth: 0
-  //     },
-  //     series: [{
-  //       name: 'Occupants',
-  //       data: this.series.y_axis,
-  //       tooltip: {
-  //         valueDecimals: 2
-  //       }
-  //     }]
-  //   });
-  // }
-
   this.roomCourseOverlayGraph2 = function () {
 
     var total = 100;
@@ -428,11 +385,6 @@ var graph = function (name, response) {
         },
         xAxis: [{
             categories: this.series.x_axis,
-            // categories: ['8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm'],
-            // categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
-            // categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
-            // categories: this.series.x_axis.map(function(time){ return moment(time).tz(time, "MMM D[,] H:mm", "America/Los_Angeles")}),
-            // categories: this.series.x_axis.map(function toTimeZone(time, "America/Los_Angeles"){ return moment(time).format("MMM D[,] H:mm")}),
             crosshair: true
         }],
         yAxis: [{ // Primary yAxis
