@@ -20,7 +20,13 @@ function graph2(response) {
     graph2.reloadGraph();
   });
 
+  $("#" + graph2.name + " .dayofweek" ).change(function() {
+    graph2.reloadGraph();
+  });
+
 }
+
+
 
 
 
