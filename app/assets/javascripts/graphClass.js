@@ -15,17 +15,13 @@ var graph = function (name, response) {
   this.room_select = $("#" + this.name + " .room_choice");
   this.dayofweek = $("#" + this.name + " .dayofweek");
 
-  // this.graph1BarDay = null;
-
+  var start_date_select = $("#" + this.name + " .start_date" ).datepicker();
+  var end_date_select = $("#" + this.name + " .end_date").datepicker();
 
   this.firstGraphLoad = function () {
-    
     switch(this.name) {
     case "graph1":
       this.setBuilding(1);
-      // this.separateByWeekdayGraph1();
-      // this.initializeGraph1BarDay();
-      // this.showValuesDaySlider();
       break;
     case "graph2":
       this.setBuilding(1);
@@ -36,21 +32,20 @@ var graph = function (name, response) {
       this.reloadGraph();
       break;
     }
-
   }
 
   // TODO: Add new spectif functions for graphs here
   this.reloadGraph = function () {
     console.debug("reloadGraph" + this.name);
     switch(this.name) {
-    case "graph1":
-      this.separateByDayTimeGraph1();
-      this.separateByWeekdayGraph1();
-      this.separateByTimeGraph1();
-      this.heatGridGraph1();
-      this.initializeGraph1BarDay();
-      this.initializeGraph1BarTime();
-      break;
+      case "graph1":
+        this.separateByDayTimeGraph1(this.response);
+        this.separateByWeekdayGraph1(this.response);
+        this.separateByTimeGraph1(this.response);
+        this.heatGridGraph1();
+        this.initializeGraph1BarDay();
+        this.initializeGraph1BarTime();
+        break;
     case "graph2":
       this.dataToArrayGraph2(this.response);
       this.roomCourseOverlayGraph2(this.response);
@@ -70,13 +65,11 @@ var graph = function (name, response) {
       data.forEach(function (room) {
         which_rooms += "<option value='" + room.id+ "'>"+ room.room +"</option>";
       });
-
       $("#" + _self.name + " .room_choice").html(which_rooms);
-
+      start_date_select.val("04/01/2016");
+      end_date_select.val("04/15/2016");
       _self.reloadGraph();
-      
     });
-
   }
 
   // See the following: http://stackoverflow.com/questions/10087819/convert-date-to-another-timezone-in-javascript
@@ -91,13 +84,18 @@ var graph = function (name, response) {
     for (var i = 0; i < this.response.length; i++) {
       if (this.response[i].r == this.room_select.val()) {
         var day = new Date(this.response[i].s);
-        var time = day.getHours() - 8;
-        var weekday = 6 - day.getDay();
-        var key = "total"+time+weekday;
-        if (this.totals[key] == null) {
-          this.totals[key] = [this.response[i].n];
-        } else {
-          this.totals[key].push(this.response[i].n);
+        day = new Date(day.getTime() + day.getTimezoneOffset() * 60 *1000)
+        var start = new Date(start_date_select.val());
+        var end = new Date(end_date_select.val());
+        if (day >= start && day <= end) {
+          var time = day.getHours() - 8;
+          var weekday = 6 - day.getDay();
+          var key = "total"+time+weekday;
+          if (this.totals[key] == null) {
+            this.totals[key] = [this.response[i].n];
+          } else {
+            this.totals[key].push(this.response[i].n);
+          }
         }
       }
     }
@@ -194,14 +192,19 @@ var graph = function (name, response) {
 
   this.separateByWeekdayGraph1 = function (response) {
     for (var i = 0; i < this.response.length; i++) {
-      if (this.response[i].r == this.room_select.val()) {
+      if (this.response[i].r == this.room_select.val()) {//&& (this.response[i].s > this.start_date_select.datepicker()) && (this.response[i].s < this.end_date_select.datepicker())) {
         var day = new Date(this.response[i].s);
-        var weekday = 6 - day.getDay();
-        var key = "total"+weekday;
-        if (this.weekdays[key] == null) {
-          this.weekdays[key] = [this.response[i].n];
-        } else {
-          this.weekdays[key].push(this.response[i].n);
+        day = new Date(day.getTime() + day.getTimezoneOffset() * 60 *1000);
+        var start = new Date(start_date_select.val());
+        var end = new Date(end_date_select.val());
+        if (day >= start && day <= end) {
+          var weekday = 6 - day.getDay();
+          var key = "total"+weekday;
+          if (this.weekdays[key] == null) {
+            this.weekdays[key] = [this.response[i].n];
+          } else {
+            this.weekdays[key].push(this.response[i].n);
+          }
         }
       }
     }
@@ -256,15 +259,21 @@ var graph = function (name, response) {
   ////////////////// For Graph 1 Tab Time Bar Graph
 
   this.separateByTimeGraph1 = function (response) {
+
     for (var i = 0; i < this.response.length; i++) {
-      if (this.response[i].r == this.room_select.val()) {
+      if (this.response[i].r == this.room_select.val()) {//&& (this.response[i].s > this.start_date_select.datepicker()) && (this.response[i].s < this.end_date_select.datepicker())) {
         var day = new Date(this.response[i].s);
-        var time = day.getHours() - 8;
-        var key = "total"+time;
-        if (this.times[key] == null) {
-          this.times[key] = [this.response[i].n];
-        } else {
-          this.times[key].push(this.response[i].n);
+        day = new Date(day.getTime() + day.getTimezoneOffset() * 60 *1000);
+        var start = new Date(start_date_select.val());
+        var end = new Date(end_date_select.val());
+        if (day >= start && day <= end) {
+          var time = day.getHours() - 8;
+          var key = "total"+time;
+          if (this.times[key] == null) {
+            this.times[key] = [this.response[i].n];
+          } else {
+            this.times[key].push(this.response[i].n);
+          }
         }
       }
     }

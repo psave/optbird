@@ -17,14 +17,22 @@ function graph1(response) {
 
   $('#sliders input').on('input change', function () {
     graph1.graph1BarDay.options.chart.options3d[this.id] = this.value;
-    graph1.showValuesDaySlider()
+    graph1.showValuesDaySlider();
     graph1.graph1BarDay.redraw(false);
     graph1.graph1BarTime.options.chart.options3d[this.id] = this.value;
-    graph1.showValuesDaySlider()
+    graph1.showValuesDaySlider();
     graph1.graph1BarTime.redraw(false);
   });
 
+  $("#" + graph1.name + " .start_date" ).datepicker({minDate: new Date("04/06/2016"), maxDate: new Date("04/18/2016")});
+  $("#" + graph1.name + " .end_date" ).datepicker({minDate: new Date("04/06/2016"), maxDate: new Date("04/18/2016")});
+
+  $("#" + graph1.name + " .start_date" ).change(function () {
+    graph1.reloadGraph();
+  });
+
+  $("#" + graph1.name + " .end_date" ).change(function () {
+    graph1.reloadGraph();
+  });
+
 }
-
-
-
