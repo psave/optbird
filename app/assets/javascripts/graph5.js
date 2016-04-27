@@ -11,7 +11,6 @@ function graph5(response) {
   $("#" + graph5.name + " .building_choice" ).change(function() {
     graph5.setBuilding($(this).val());
   });
-
   
   $("#" + graph5.name + " .room_choice" ).change(function() {
     graph5.reloadGraph();

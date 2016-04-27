@@ -15,8 +15,8 @@ var graph = function (name, response) {
   this.room_select = $("#" + this.name + " .room_choice");
   this.dayofweek = $("#" + this.name + " .dayofweek");
 
-  var start_date_select = $("#" + this.name + " .start_date" ).datepicker();
-  var end_date_select = $("#" + this.name + " .end_date").datepicker();
+  var start_date_select = $(".start_date" ).datepicker({minDate: new Date("04/01/2016"), maxDate: new Date("04/18/2016")});
+  var end_date_select = $(".end_date").datepicker({minDate: new Date("04/01/2016"), maxDate: new Date("04/18/2016")});
 
   this.firstGraphLoad = function () {
     switch(this.name) {
@@ -27,6 +27,8 @@ var graph = function (name, response) {
       this.setBuilding(1);
       // this.reloadGraph();
       break;
+    case "graph3":
+      this.setBuilding(1);
     case "graph5":
       this.setBuilding(1);
       this.reloadGraph();
@@ -46,13 +48,15 @@ var graph = function (name, response) {
         this.initializeGraph1BarDay();
         this.initializeGraph1BarTime();
         break;
-    case "graph2":
-      this.dataToArrayGraph2(this.response);
-      this.roomCourseOverlayGraph2(this.response);
-      break;
-    case "graph5":
-      this.dataToArrayGraph5(this.response);
-      break;
+      case "graph2":
+        this.dataToArrayGraph2(this.response);
+        this.roomCourseOverlayGraph2(this.response);
+        break;
+      case "graph3":
+        this.dataToArrayGraph3(this.response);
+      case "graph5":
+        this.dataToArrayGraph5(this.response);
+        break;
     } 
   }
 
@@ -67,7 +71,7 @@ var graph = function (name, response) {
       });
       $("#" + _self.name + " .room_choice").html(which_rooms);
       start_date_select.val("04/01/2016");
-      end_date_select.val("04/15/2016");
+      end_date_select.val("04/18/2016");
       _self.reloadGraph();
     });
   }
@@ -284,8 +288,6 @@ var graph = function (name, response) {
   this.dataToArrayGraph2 =  function (response) {
     if (!this.response) return;
 
-
-    
     var x_axis = [];
     var y_axis = [];
     for (var i = 0; i < this.response.length; i++) {
@@ -612,5 +614,193 @@ var graph = function (name, response) {
     });
   }
 
+/////////////// Graph 3 /////////
+  this.dataToArrayGraph3 = function (response) {
+
+    if (!response) return;
+    // a whole day in 5-minute increments
+    var time_of_day = [];
+    for (var hour = 0; hour < 24; hour++){
+      var hourString = String(hour);
+      for (var minute = 0; minute < 60; minute += 5 ){
+        var minuteString = String(minute);
+        if (minuteString.length == 1) {
+          minuteString = '0' + minuteString;
+        }
+        time_of_day.push(hourString + ":" + minuteString);
+      }
+    }
+    // console.log(time_of_day);
+
+    // a series for each weekday
+    var sunday = [];
+    var monday = [];
+    var tuesday = [];
+    var wednesday = [];
+    var thursday = [];
+    var friday = [];
+    var saturday = [];
+
+    for (var i = 0; i < response.length; i++) {
+      if (response[i].r == this.room_select.val()) {
+
+        var datapoint = [];
+        var day = new Date(this.response[i].s);
+        day = new Date(day.getTime() + day.getTimezoneOffset() * 60 * 1000);      
+        var number_occupants = parseInt(response[i].n);
+        var datapoint = [day, number_occupants];
+        var weekday = day.getDay();
+        var hour = day.getHours();
+        var minute = day.getMinutes();
+        // if (minute < 10){
+        //   minute = '0' + minute;
+        // }
+        var hourString = String(hour);
+        var minuteString = String(minute);
+        if (minuteString.length == 1) {
+          minuteString = '0' + minuteString;
+        }
+        var time = hourString + ":" + minuteString;
+
+        // calculating average occupancy for a given time of day
+
+        var occ_tracker = {sum: 0, counter: 0}
+        for (var t = 0; t < time_of_day.length; t++){
+          if (time == time_of_day[t]){
+            occ_tracker.sum += number_occupants;
+            occ_tracker.counter++;
+          }
+        }
+        var occ_avg
+        if (occ_tracker.counter === 0){
+          occ_avg = 0;
+        } else {
+          occ_avg = occ_tracker.sum / occ_tracker.counter;
+        }
+        var datapoint_avg = [time, occ_avg];
+
+        // if (startDate <= sample_time_as_Date_object && sample_time_as_Date_object <= endDate) {
+        
+          // console.log("startDate: " + startDate);
+          // console.log("endDate: " + endDate);
+          // console.log("sample_time_as_Date_object: " + sample_time_as_Date_object);
+
+          // getDay() returns 0 for Sunday, 1 for Monday, 2 for Tuesday etc.
+          if (weekday === 0) {
+            sunday.push(datapoint_avg);
+          }
+          else if (weekday === 1){
+            monday.push(datapoint_avg);
+          }
+          else if (weekday === 2){
+            tuesday.push(datapoint_avg);
+          }
+          else if (weekday === 3){
+            wednesday.push(datapoint_avg);
+          }
+          else if (weekday === 4){
+            thursday.push(datapoint_avg);
+          }
+          else if (weekday === 5){
+            friday.push(datapoint_avg);
+          }
+          else if (weekday === 6){
+            saturday.push(datapoint_avg);
+          }
+        // }
+      }
+    }
+
+    this.dataToChart(time_of_day, sunday, monday, tuesday, wednesday, thursday, friday, saturday);
+  }
+
+  this.dataToChart = function(time_of_day, sunday, monday, tuesday, wednesday, thursday, friday, saturday) {
+    
+    Highcharts.setOptions({
+      chart: {
+        style: {
+          fontFamily: 'Helvetica'
+        }
+      }
+    });
+
+    $('#graph3 #graphContainer').highcharts({
+      chart: {
+        // borderColor: '#E7E7E7',
+        // borderRadius: 3,
+        // borderWidth: 1,
+        type: 'line'
+      },     
+      title: {
+        text: 'Average Occupancy Through The Day',
+        x: -20 //center
+      },
+      xAxis: {
+        title: {
+          text: 'Time of Day'
+        },
+        type: 'datetime',
+        categories: time_of_day
+        // tickInterval: 2
+      },
+      yAxis: {
+        title: {
+          text: 'Number of Occupants'
+        },
+        plotLines: [{
+          value: 0,
+          width: 1,
+          color: '#1F99D3'
+        }]
+      },
+      tooltip: {
+        valueSuffix: ''
+      },
+      legend: {
+        align: 'right',
+        borderColor: '#E7E7E7',
+        borderRadius: 3,
+        borderWidth: 1,
+        itemMarginTop: 5,
+        itemMarginBottom: 5,
+        itemStyle: {
+          color: '#000000',
+          fontSize: '14px',
+          fontWeight: 'normal'
+        },
+        layout: 'vertical',
+        verticalAlign: 'middle',
+        y: -44
+      },
+      series: [{
+        name: 'Sunday',
+        data: sunday
+      }, {
+        name: 'Monday',
+        data: monday
+      }, {
+        name: 'Tuesday',
+        data: tuesday
+      }, {
+        name: 'Wednesday',
+        data: wednesday
+      }, {
+        name: 'Thursday',
+        data: thursday
+      }, {
+        name: 'Friday',
+        data: friday
+      }, {
+        name: 'Saturday',
+        data: saturday
+      }]
+      ,
+      navigation: {
+        buttonOptions: {
+          verticalAlign: 'bottom'
+        }
+      }
+    });
+  }
 
 }

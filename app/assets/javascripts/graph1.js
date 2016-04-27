@@ -24,8 +24,6 @@ function graph1(response) {
     graph1.graph1BarTime.redraw(false);
   });
 
-  $("#" + graph1.name + " .start_date" ).datepicker({minDate: new Date("04/06/2016"), maxDate: new Date("04/18/2016")});
-  $("#" + graph1.name + " .end_date" ).datepicker({minDate: new Date("04/06/2016"), maxDate: new Date("04/18/2016")});
 
   $("#" + graph1.name + " .start_date" ).change(function () {
     graph1.reloadGraph();

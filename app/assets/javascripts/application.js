@@ -8,9 +8,6 @@
 
 $(function(){
 
-  $("#start_date").datepicker();
-  $("#end_date").datepicker();
-
   $.ajax({
     method: 'GET',
     url: '/data/show',
