@@ -44,8 +44,8 @@ var graph = function (name, response_occupancy, response_courses) {
         this.separateByDayTimeGraph1(this.response_occupancy);
         // this.separateByWeekdayGraph1(this.response_occupancy);
         // this.separateByTimeGraph1(this.response_occupancy);
-        // this.heatGridGraph1();
-        this.heatGridGraph1Percent
+        this.heatGridGraph1();
+        // this.heatGridGraph1Percent
         // this.initializeGraph1BarDay();
         // this.initializeGraph1BarTime();
         break;
