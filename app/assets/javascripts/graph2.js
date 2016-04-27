@@ -5,6 +5,7 @@ function graph2(response) {
   ///  MAIN ///
 
   // Sets the name for the particular graph. This makes it easier to reuse the code.
+  // It sets the data set for the graph
   graph2 = new graph("graph2", response);
 
   graph2.firstGraphLoad();
@@ -20,7 +21,13 @@ function graph2(response) {
     graph2.reloadGraph();
   });
 
+  $("#" + graph2.name + " .dayofweek" ).change(function() {
+    graph2.reloadGraph();
+  });
+
 }
+
+
 
 
 

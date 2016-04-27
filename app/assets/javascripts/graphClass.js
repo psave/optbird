@@ -13,6 +13,7 @@ var graph = function (name, response) {
   this.times = {}; // USED ONLY BY GRAPH 1 TIME BAR
   // 
   this.room_select = $("#" + this.name + " .room_choice");
+  this.dayofweek = $("#" + this.name + " .dayofweek");
 
   var start_date_select = $("#" + this.name + " .start_date" ).datepicker();
   var end_date_select = $("#" + this.name + " .end_date").datepicker();
@@ -26,23 +27,32 @@ var graph = function (name, response) {
       this.setBuilding(1);
       // this.reloadGraph();
       break;
+    case "graph5":
+      this.setBuilding(1);
+      this.reloadGraph();
+      break;
     }
   }
 
   // TODO: Add new spectif functions for graphs here
   this.reloadGraph = function () {
+    console.debug("reloadGraph" + this.name);
     switch(this.name) {
       case "graph1":
         this.separateByDayTimeGraph1(this.response);
-        this.separateByWeekdayGraph1(response);
-        this.separateByTimeGraph1(response);
+        this.separateByWeekdayGraph1(this.response);
+        this.separateByTimeGraph1(this.response);
         this.heatGridGraph1();
         this.initializeGraph1BarDay();
         this.initializeGraph1BarTime();
         break;
-      case "graph2":
-        this.dataToArrayGraph2(this.response);
-        break;
+    case "graph2":
+      this.dataToArrayGraph2(this.response);
+      this.roomCourseOverlayGraph2(this.response);
+      break;
+    case "graph5":
+      this.dataToArrayGraph5(this.response);
+      break;
     } 
   }
 
@@ -62,71 +72,11 @@ var graph = function (name, response) {
     });
   }
 
-  this.dataToArrayGraph2 =  function (response) {
-    if (!this.response) return;
-    
-    var x_axis = [];
-    var y_axis = [];
-    for (var i = 0; i < this.response.length; i++) {
-      // pick out only those with room_id r == rmID (rmID is room_select.val())
-      if (this.response[i].r == this.room_select.val()) {
-        // push their sample_time s and number_occupants n into x and y arrays
-        x_axis.push(this.response[i].s);
-        y_axis.push(parseInt(this.response[i].n));
-      }
-    }
-
-    this.series = {
-      // all sample_times s for room_id r=rmID (rmID is room_select.val())
-      x_axis: x_axis,
-      // all number_occupants s for room_id r=rmID (rmID is room_select.val())
-      y_axis: y_axis
-    };
-    // return series;
-    this.dataToChartGraph2();
-  }
-
-  this.dataToChartGraph2 = function () {
-
-    $("#" + this.name + " #graphContainer").highcharts({      
-      title: {
-        text: 'Occupancy over Time',
-        x: -20 //center
-      },
-      xAxis: {
-        type: 'datetime',
-        categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
-        tickInterval: 35
-      },
-      yAxis: {
-        title: {
-          text: 'Number of Occupants'
-        },
-        plotLines: [{
-          value: 0,
-          width: 1,
-          color: '#1F99D3'
-        }]
-      },
-      tooltip: {
-        valueSuffix: ''
-      },
-      legend: {
-        layout: 'vertical',
-        align: 'left',
-        verticalAlign: 'top',
-        floating: true,
-        borderWidth: 0
-      },
-      series: [{
-        name: 'Occupants',
-        data: this.series.y_axis,
-        tooltip: {
-          valueDecimals: 2
-        }
-      }]
-    });
-  }
+  // See the following: http://stackoverflow.com/questions/10087819/convert-date-to-another-timezone-in-javascript
+  // function toTimeZone(time, zone) {
+  //   var format = 'YYYY/MM/DD HH:mm:ss ZZ';
+  //   return moment(time, format).tz(zone).format(format);
+  // }
 
 ////////// For Graph 1 Tab Heat Grid 
 
@@ -329,6 +279,292 @@ var graph = function (name, response) {
     }
   }
 
+  /////////////////////////////////////////////////////  Start of Graph 2 //////////////////////
+
+  this.dataToArrayGraph2 =  function (response) {
+    if (!this.response) return;
+
+
+    
+    var x_axis = [];
+    var y_axis = [];
+    for (var i = 0; i < this.response.length; i++) {
+      var date = new Date(this.response[i].s);
+      // Keeps the time as PST. Otherwise, the "new Date function converts the time to UTC"
+      date = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+      var day = 6 - date.getDay();
+      // pick out only those with room_id r == rmID (rmID is room_select.val())
+      if (this.response[i].r == this.room_select.val() && day == this.dayofweek.val()) {
+        // push their sample_time s and number_occupants n into x and y arrays
+        x_axis.push(this.response[i].s);
+        y_axis.push(parseInt(this.response[i].n));
+      }
+    }
+
+    
+    //run a transformation / filter on the data
+
+    // transformed_response = this.response
+
+    // transformed_response = filter_out_date_range(transformed_response)
+    // transformed_response = filter_out_by_day_of_week(transformed_response, 'Monday')  //if no day of weeek specified, basically do nothing
+    
+    // transformed_response = group_by_times(transformed_response)  //removes the dates, and keeps times only
+    /*
+    input 
+      [{ sampletime: "2016-04-05T08:00:00", number_people: 10 },
+      { sampletime: "2016-04-05T08:05:00", number_people: 10 },
+      { sampletime: "2016-04-12T08:00:00", number_people: 5 },
+      { sampletime: "2016-04-12T08:05:00", number_people: 10 }]
+
+    output
+     [{ sampletime: 08:00:00, number_people: 7.5},
+     { sampletime: 08:00:00, number_people: 10}]
+
+     group_by_times = function(original_data) {
+        find the day of week for the record day_of_week(sampletime)
+        look at last 10 digits of sample time 10_digits(sampletime)
+        [
+          {time_block: "08:00:00", number_people: [10, 5]}
+        ]
+
+        then i average
+        [
+          {time_block: "08:00:00", number_people: 7.5}
+        ]
+
+        look through all your sample times, categorize them based on the time digits
+        if they match something that is currently inside the caregories, add them to an array to be averaged
+        output them
+      return transformed_data
+     }
+      
+    */
+    // final_response = return_x_y_and_values(transformed_response)  // {x_axis: [], y_axis:[], line_1:[], line_2: []}
+
+    this.series = {
+      // all sample_times s for room_id r=rmID (rmID is room_select.val())
+      x_axis: x_axis,
+      // all number_occupants s for room_id r=rmID (rmID is room_select.val())
+      y_axis: y_axis
+    };
+    return this.series;
+  }
+
+
+  // this.dataToChartGraph2 = function () {
+
+  //   $("#" + this.name + " #graphContainer").highcharts({      
+  //     title: {
+  //       text: 'Occupancy over Time',
+  //       x: -20 //center
+  //     },
+  //     xAxis: {
+  //       type: 'datetime',
+  //       categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
+  //       tickInterval: 35
+  //     },
+  //     yAxis: {
+  //       title: {
+  //         text: 'Number of Occupants'
+  //       },
+  //       plotLines: [{
+  //         value: 0,
+  //         width: 1,
+  //         color: '#1F99D3'
+  //       }]
+  //     },
+  //     tooltip: {
+  //       valueSuffix: ''
+  //     },
+  //     legend: {
+  //       layout: 'vertical',
+  //       align: 'left',
+  //       verticalAlign: 'top',
+  //       floating: true,
+  //       borderWidth: 0
+  //     },
+  //     series: [{
+  //       name: 'Occupants',
+  //       data: this.series.y_axis,
+  //       tooltip: {
+  //         valueDecimals: 2
+  //       }
+  //     }]
+  //   });
+  // }
+
+  this.roomCourseOverlayGraph2 = function () {
+
+    var total = 100;
+    $('#graph2 .graphContainer').highcharts({
+        chart: {
+            zoomType: 'xy'
+        },
+        title: {
+            text: 'Occupant and Course Overlay'
+        },
+        subtitle: {
+            text: 'Henn Room 251 on Mondy, April 18th, 2016'
+        },
+        xAxis: [{
+            // categories: ['8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm'],
+            // categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
+            categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
+            // categories: this.series.x_axis.map(function(time){ return moment(time).tz(time, "MMM D[,] H:mm", "America/Los_Angeles")}),
+            // categories: this.series.x_axis.map(function toTimeZone(time, "America/Los_Angeles"){ return moment(time).format("MMM D[,] H:mm")}),
+            crosshair: true
+        }],
+        yAxis: [{ // Primary yAxis
+            labels: {
+                format: '{value}',
+                style: {
+                    color: Highcharts.getOptions().colors[2]
+                }
+            },
+            title: {
+                text: 'Number of Occupants',
+                style: {
+                    color: Highcharts.getOptions().colors[2]
+                }
+            },
+            opposite: true
+            // chart.yAxis[0].setExtremes(0,100);
+
+        }, { // Secondary yAxis
+            gridLineWidth: 0,
+            title: {
+                text: '% Occupied',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            labels: {
+                format: '{value} %',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            }
+
+        }],
+        tooltip: {
+            shared: true
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'left',
+            x: 80,
+            verticalAlign: 'top',
+            y: 55,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        },
+        series: [{
+            name: 'Courses',
+            type: 'spline',
+            yAxis: 1,
+            data: [Math.round(7/total*100), Math.round(71/total*100), Math.round(54/total*100)],
+            tooltip: {
+                valueSuffix: ''//can place something here to add to each value on the axis
+            }
+
+        }, {
+            name: 'Number of Occupants',
+            type: 'spline',
+            data: this.series.y_axis,
+            marker: {
+                enabled: false
+            },
+            dashStyle: 'shortdot',
+            tooltip: {
+                valueSuffix: ''//can place something here to add to each value on the axis
+            }
+        },  {
+            name: 'Max Occupancy',
+            type: 'spline',
+            data: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+            marker: {
+                enabled: false
+            },
+            dashStyle: 'shortdot',
+            tooltip: {
+                valueSuffix: ''//can place something here to add to each value on the axis
+            }
+
+        }
+        ]
+    });
+  };
+
+  //////////////////////////////////////////////////// End of Graph 2 ///////////////////
+
+  this.dataToArrayGraph5 =  function (response) {
+    if (!this.response) return;
+    
+    var x_axis = [];
+    var y_axis = [];
+    for (var i = 0; i < this.response.length; i++) {
+      // pick out only those with room_id r == rmID (rmID is room_select.val())
+      if (this.response[i].r == this.room_select.val()) {
+        // push their sample_time s and number_occupants n into x and y arrays
+        x_axis.push(this.response[i].s);
+        y_axis.push(parseInt(this.response[i].n));
+      }
+    }
+
+    this.series = {
+      // all sample_times s for room_id r=rmID (rmID is room_select.val())
+      x_axis: x_axis,
+      // all number_occupants s for room_id r=rmID (rmID is room_select.val())
+      y_axis: y_axis
+    };
+    // return series;
+    this.dataToChartGraph5();
+  }
+
+
+  this.dataToChartGraph5 = function () {
+
+    $("#" + this.name + " #graphContainer").highcharts({      
+      title: {
+        text: 'Occupancy over Time',
+        x: -20 //center
+      },
+      xAxis: {
+        type: 'datetime',
+        categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
+        tickInterval: 35
+      },
+      yAxis: {
+        title: {
+          text: 'Number of Occupants'
+        },
+        plotLines: [{
+          value: 0,
+          width: 1,
+          color: '#1F99D3'
+        }]
+      },
+      tooltip: {
+        valueSuffix: ''
+      },
+      legend: {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        floating: true,
+        borderWidth: 0
+      },
+      series: [{
+        name: 'Occupants',
+        data: this.series.y_axis,
+        tooltip: {
+          valueDecimals: 2
+        }
+      }]
+    });
+  }
+
   this.initializeGraph1BarTime = function () {
     this.graph1BarTime = new Highcharts.Chart({
       chart: {
@@ -375,7 +611,6 @@ var graph = function (name, response) {
       }]
     });
   }
-
 
 
 }

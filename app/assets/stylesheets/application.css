@@ -22,6 +22,10 @@
   max-width: 1200px;
 }
 
+.input.date {
+  width: 60%;
+}
+
 .navbar {
   margin-top: 15px;
   margin-right: 11px;
