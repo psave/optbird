@@ -1,47 +1,74 @@
-<h2> This is graph 2</h2>
-  <section class="section">
-    <div class="columns">
-      <div class="column is-9">
-        <div id="graphContainer" style="min-width: 310px; height: 400px; margin: 0 auto">
-        </div>
+<section class="section">
+  <div class="columns">
+    <div class="column is-9">
+      <div class="graphContainer" style="min-width: 310px; height: 400px; margin: 0 auto">
       </div>
-
-      <div class="column graph_controls">
-        <h5 class="title is-5">Graph Controls</h5>
-        <label class="label">Building</label>
-          <p class="control">
-            <span class="select">
-              <select class="building_choice">
-                <option value="1">ANGU</option>
-                <option value="2">CEME</option>
-                <option value="3">DMP</option>
-              </select>
-            </span>
-          </p>
-<!--         <label class="label">Room</label>
-          <p class="control">
-            <span class="select">
-              <select class="room_choice">
-                <option value="1">0516-IBLC-02-0101</option>
-                <option value="2">0403-CIRS-02-0203</option>
-                <option value="3">0403-CIRS-02-0202</option>
-                <option value="4">0516-IBLC-01-0182</option>
-                <option value="5">0277-AERL-04-0403</option>
-              </select>
-            </span>
-          </p>
-        <label class="label">Timescale</label>
-          <p class="control">
-            <span class="select">
-              <select>
-                <option>Day</option>
-                <option>Week</option>
-                <option>Semester</option>
-                <option>All Time</option>
-              </select>
-            </span>
-          </p> -->
-      </div>
-
     </div>
-  </section>
+
+    <div class="column graph_controls">
+      <h5 class="title is-5">Graph Controls</h5>
+      <label class="label">Building</label>
+      <p class="control">
+        <span class="select">
+         <%= select_tag "building_choice", options_from_collection_for_select(@buildings, 'id', 'building_name'), class: "building_choice" %>
+        </span>
+      </p>
+      <div class='room_choice_container'>
+        <label class="label">Room</label>
+        <p class="control">
+          <span class="select">
+            <select class="room_choice" ></select>
+          </span>
+        </p>
+      </div>
+      <div class='dayofweek_container'>
+        <label class="label">Day of the Week</label>
+        <p class="control">
+          <span class="select">
+            <select class="dayofweek" >
+              <option value="0">Monday</option>
+              <option value="1">Tuesday</option>
+              <option value="2">Wednesday</option>
+              <option value="3">Thursday</option>
+              <option value="4">Friday</option>
+              <option value="5">Saturday</option>
+              <option value="6">Sunday</option>
+            </select>
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>% Occupied</th>
+      <th># People</th>
+      <th># Business Hours<sup>1</sup></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Overall Average Occupancy</td>
+      <td>50%</td>
+      <td>50</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td>Average Occupacy During Course Hours</td>
+      <td>60%</td>
+      <td>60</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td>Average Occupancy Outide Course Hours</td>
+      <td>40%</td>
+      <td>40</td>
+      <td>N/A</td>
+    </tr>
+  </tbody>
+</table>
+<p><sup>1</sup>Business Hours are between 8am-10pm Monday-Friday.
+</p>

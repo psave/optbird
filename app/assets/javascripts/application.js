@@ -1,10 +1,15 @@
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui/datepicker
 //= require highcharts
 //= require highstock/modules/exporting
 //= require_tree .
 
+
 $(function(){
+
+  $("#start_date").datepicker();
+  $("#end_date").datepicker();
 
   $.ajax({
     method: 'GET',
@@ -12,11 +17,11 @@ $(function(){
     dataType: 'json',
     contentType: 'application/json',
     success: function(response){
-      // graph1(response);
-      // graph2(response);
-      // graph3(response);
+      graph1(response);
+      graph2(response);
+      graph3(response);
       graph4(response);
-      // graph5(response);
+      graph5(response);
     }
   });
 
@@ -58,3 +63,17 @@ $(function(){
   });
 
 });
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> 72afdc124c8dafcceb0d889a120bc7ed91c9a3ab
