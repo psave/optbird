@@ -17,14 +17,24 @@ function graph1(response) {
 
   $('#sliders input').on('input change', function () {
     graph1.graph1BarDay.options.chart.options3d[this.id] = this.value;
-    graph1.showValuesDaySlider()
+    graph1.showValuesDaySlider();
     graph1.graph1BarDay.redraw(false);
     graph1.graph1BarTime.options.chart.options3d[this.id] = this.value;
-    graph1.showValuesDaySlider()
+    graph1.showValuesDaySlider();
     graph1.graph1BarTime.redraw(false);
   });
 
+  $("#" + graph1.name + " .start_date" ).datepicker();
+  $("#" + graph1.name + " .end_date" ).datepicker();
+
+  $("#" + graph1.name + " .start_date" ).change(function () {
+    // graph1.setDate($(this).val(), $("#" + graph1.name + " .end_date"));
+    graph1.reloadGraph();
+  });
+
+  $("#" + graph1.name + " .end_date" ).change(function () {
+    // graph1.setDate($("#" + graph1.name + " .start_date"), $(this).val());
+    graph1.reloadGraph();
+  });
+
 }
-
-
-

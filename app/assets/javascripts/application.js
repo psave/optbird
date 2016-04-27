@@ -21,10 +21,6 @@ $(function(){
     }
   });
 
-  $("#start_date").datepicker();
-
-  $("#end_date").datepicker();
-
   $('.tabs ul').each(function(){
     // For each set of tabs, we want to keep track of
     // which tab is active and its associated content
