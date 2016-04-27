@@ -270,8 +270,12 @@ var graph = function (name, response) {
     }
   }
 
+  /////////////////////////////////////////////////////  Start of Graph 2 //////////////////////
+
   this.dataToArrayGraph2 =  function (response) {
     if (!this.response) return;
+
+
     
     var x_axis = [];
     var y_axis = [];
@@ -288,6 +292,47 @@ var graph = function (name, response) {
       }
     }
 
+    
+    //run a transformation / filter on the data
+
+    // transformed_response = this.response
+
+    // transformed_response = filter_out_date_range(transformed_response)
+    // transformed_response = filter_out_by_day_of_week(transformed_response, 'Monday')  //if no day of weeek specified, basically do nothing
+    
+    // transformed_response = group_by_times(transformed_response)  //removes the dates, and keeps times only
+    /*
+    input 
+      [{ sampletime: "2016-04-05T08:00:00", number_people: 10 },
+      { sampletime: "2016-04-05T08:05:00", number_people: 10 },
+      { sampletime: "2016-04-12T08:00:00", number_people: 5 },
+      { sampletime: "2016-04-12T08:05:00", number_people: 10 }]
+
+    output
+     [{ sampletime: 08:00:00, number_people: 7.5},
+     { sampletime: 08:00:00, number_people: 10}]
+
+     group_by_times = function(original_data) {
+        find the day of week for the record day_of_week(sampletime)
+        look at last 10 digits of sample time 10_digits(sampletime)
+        [
+          {time_block: "08:00:00", number_people: [10, 5]}
+        ]
+
+        then i average
+        [
+          {time_block: "08:00:00", number_people: 7.5}
+        ]
+
+        look through all your sample times, categorize them based on the time digits
+        if they match something that is currently inside the caregories, add them to an array to be averaged
+        output them
+      return transformed_data
+     }
+      
+    */
+    // final_response = return_x_y_and_values(transformed_response)  // {x_axis: [], y_axis:[], line_1:[], line_2: []}
+
     this.series = {
       // all sample_times s for room_id r=rmID (rmID is room_select.val())
       x_axis: x_axis,
@@ -297,7 +342,7 @@ var graph = function (name, response) {
     return this.series;
   }
 
-  /////////////////////////////////////////////////////  Start of Graph 2 //////////////////////
+
   // this.dataToChartGraph2 = function () {
 
   //   $("#" + this.name + " #graphContainer").highcharts({      
