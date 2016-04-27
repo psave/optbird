@@ -17,16 +17,10 @@ var graph = function (name, response) {
   var start_date_select = $("#" + this.name + " .start_date" ).datepicker();
   var end_date_select = $("#" + this.name + " .end_date").datepicker();
 
-  // this.graph1BarDay = null;
-
-
   this.firstGraphLoad = function () {
     switch(this.name) {
     case "graph1":
       this.setBuilding(1);
-      // this.separateByWeekdayGraph1();
-      // this.initializeGraph1BarDay();
-      // this.showValuesDaySlider();
       break;
     case "graph2":
       this.setBuilding(1);
