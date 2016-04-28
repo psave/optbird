@@ -717,9 +717,15 @@ this.heatGridGraph1Percent = function(capacity) {
             align: 'left',
             x: 80,
             verticalAlign: 'top',
-            y: 55,
+            y: 0,
             floating: true,
-            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+            itemMarginTop: 1,
+            itemStyle: {
+              color: '#000000',
+              fontSize: '12px',
+              fontWeight: 'normal'
+            },
         },
         series: courses_enrollment_data,
     });

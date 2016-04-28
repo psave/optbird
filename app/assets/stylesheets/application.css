@@ -37,8 +37,16 @@
   height: 400px; 
 }
 
-#graph1_date_pickers {
-  margin-top: 46px;
+#graph1_start_date_picker {
+  margin-top: 12px;
+}
+
+#graph1_end_date_picker {
+  margin-top: 12px;
+}
+
+#number_or_percent {
+  margin-top: 12px;
 }
 
 #graph3_date_pickers {
