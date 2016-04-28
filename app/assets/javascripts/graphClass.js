@@ -273,7 +273,7 @@ this.heatGridGraph1Percent = function(capacity) {
       tooltip: {
           formatter: function () {
               return '<b>' + this.series.yAxis.categories[this.point.y] + '</b>' + ' at ' + '<b>' + this.series.xAxis.categories[this.point.x] + '</b><br>'
-                + '<b>' + this.point.value + '</b>' + ' percent occupancy on average';
+                + '<b>' + this.point.value + '</b>' + '% occupancy on average';
           }
       },
       series: [{
