@@ -1,32 +1,26 @@
-<h3 class="subtitle is-4">Please Log In</h3>
+<script src="/splashpage.js"></script>
 
-  <%= form_tag sessions_path do %>
-    <div>
-      <form class="login">
-        <%= label_tag :name, nil, class: 'label' %>
-        <%= text_field_tag :name, nil, class: 'input' %>
+<div id="splashpage">
 
-        <%= label_tag :password, nil, class: 'label' %>
-        <%= password_field_tag :password, nil, class: 'input' %>
+  <div id="login-form">
+    <h3 class="subtitle is-4" id="login-title">Please Log In</h3>
 
-        <p class="control">
-          <button class="button is-primary">Submit</button>
-        </p>
-      </form>
-    </div>
-  <% end %>
+    <%= form_tag sessions_path do %>
+      <div>
+        <form class="login">
+          <%= label_tag :name, nil, class: 'label content' %>
+          <%= text_field_tag :name, nil, class: 'input' %>
+          <br>
+          <%= label_tag :password, nil, class: 'label content' %>
+          <%= password_field_tag :password, nil, class: 'input' %>
+          <br>
+          <p class="control">
+            <button class="button is-primary">Submit</button>
+          </p>
+        </form>
+      </div>
+    <% end %>
 
+  </div>
 
-<!-- this is for the coverr.co video on the splash page -->
-<div class="homepage-hero-module">
-    <div class="video-container">
-        <div class="filter"></div>
-        <video autoplay loop class="fillWidth">
-            <source src="PATH_TO_MP4" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
-            <source src="PATH_TO_WEBM" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
-        </video>
-        <div class="poster hidden">
-            <img src="PATH_TO_JPEG" alt="">
-        </div>
-    </div>
 </div>

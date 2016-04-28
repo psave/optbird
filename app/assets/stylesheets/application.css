@@ -22,8 +22,35 @@
   max-width: 1200px;
 }
 
+#graph1 .graphContainer {
+  min-width: 300px;
+  max-width: 800px;
+  height: 400px;
+  margin: 1em auto;
+}
+
+#graph1BarDay {
+  height: 400px; 
+}
+
 .input.date {
   width: 60%;
+}
+
+.label.content {
+  color: #1FC8DB;
+}
+
+#login-form {
+  color: #1FC8DB;
+  position: absolute;
+  margin-top: 30px;
+  margin-left: 30px;
+  width: 350px;
+}
+
+#login-title {
+  margin-bottom: 15px;
 }
 
 .navbar {
@@ -43,18 +70,6 @@
   min-width: 310px;
 }
 
-
-#graph1 .graphContainer {
-  min-width: 300px;
-  max-width: 800px;
-  height: 400px;
-  margin: 1em auto;
-}
-
-#graph1BarDay {
-  height: 400px; 
-}
-
 #sliders {
   min-width: 310px; 
   max-width: 800px;
@@ -62,51 +77,9 @@
   margin-right: 10px;
 }
 
-.input.date {
-   width: 60%;
- }
-
-
-/* this is for the coverr.co video on the splash page */
-.homepage-hero-module {
-    border-right: none;
-    border-left: none;
-    position: relative;
-}
-.no-video .video-container video,
-.touch .video-container video {
-    display: none;
-}
-.no-video .video-container .poster,
-.touch .video-container .poster {
-    display: block !important;
-}
-.video-container {
-    position: relative;
-    bottom: 0%;
-    left: 0%;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    background: #000;
-}
-.video-container .poster img {
-    width: 100%;
-    bottom: 0;
-    position: absolute;
-}
-.video-container .filter {
-    z-index: 100;
-    position: absolute;
-    background: rgba(0, 0, 0, 0.4);
-    width: 100%;
-}
-.video-container video {
-    position: absolute;
-    z-index: 0;
-    bottom: 0;
-}
-.video-container video.fillWidth {
-    width: 100%;
+#splashpage {
+  background-image: url("http://localhost:3000/UBC-SUB-blur.jpg");
+  height: 100vh;
+  background-size: cover;
 }
 
