@@ -3,7 +3,7 @@
 //////  TODO / WARNING :  Every select (like in a $('xyz') call) in this file should have '#graph3'
 //////                        added to the front, like $('#graph3 xyz')
 
-function graph3(response) {
+function graph3(response_occupancy) {
 
   // make it so options can be set from menus
   var building = $("#graph3 .building_choice").val();
@@ -22,12 +22,12 @@ function graph3(response) {
     if (wait_for_event){
       $("#graph3 .room_choice").change(function(){
         rmID = $("#graph3 .room_choice").val();
-        dataToArray(response, startDate, endDate);
+        dataToArray(response_occupancy, startDate, endDate);
       })
     }
     else{
       rmID = $("#graph3 .room_choice").val();
-      dataToArray(response, startDate, endDate);
+      dataToArray(response_occupancy, startDate, endDate);
     }
   }
 
@@ -87,11 +87,11 @@ function graph3(response) {
   reloadGraph(false);
  
 
-  // response contains the data from the query in realgraphs_controller
+  // response_occupancy contains the data from the query in realgraphs_controller
   // filter it here before passing it to highcharts
-  function dataToArray(response, startDate, endDate) {
+  function dataToArray(response_occupancy, startDate, endDate) {
 
-    if (!response) return;
+    if (!response_occupancy) return;
     // a whole day in 5-minute increments
     var time_of_day = [];
     for (var hour = 0; hour < 24; hour++){
@@ -115,12 +115,12 @@ function graph3(response) {
     var friday = [];
     var saturday = [];
 
-    for (var i = 0; i < response.length; i++) {
-      if (response[i].r == rmID) {
+    for (var i = 0; i < response_occupancy.length; i++) {
+      if (response_occupancy[i].r == rmID) {
 
         var datapoint = [];
-        var sample_time = response[i].s;
-        var number_occupants = parseInt(response[i].n);
+        var sample_time = response_occupancy[i].s;
+        var number_occupants = parseInt(response_occupancy[i].n);
         var datapoint = [sample_time, number_occupants];
         var sample_time_as_Date_object = new Date(sample_time);
         var weekday = sample_time_as_Date_object.getDay();
