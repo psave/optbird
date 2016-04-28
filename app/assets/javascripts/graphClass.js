@@ -253,7 +253,7 @@ var graph = function (name, response_occupancy, response_courses) {
 this.heatGridGraph1Percent = function(capacity) {
   // console.log("Firing heatGridGraph1Percent with capacity: " + capacity);
     $('#graph1 .graphContainer').highcharts({
-      colors: ["#f45b5b", "#8085e9", "#8d4654", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
+      colors: ["#83B9ED", "#8085e9", "#8d4654", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
       "#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
 
       chart: {
@@ -717,9 +717,15 @@ this.heatGridGraph1Percent = function(capacity) {
             align: 'left',
             x: 80,
             verticalAlign: 'top',
-            y: 55,
+            y: 0,
             floating: true,
-            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+            itemMarginTop: 1,
+            itemStyle: {
+              color: '#000000',
+              fontSize: '12px',
+              fontWeight: 'normal'
+            },
         },
         series: courses_enrollment_data,
     });

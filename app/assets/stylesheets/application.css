@@ -37,8 +37,16 @@
   height: 400px; 
 }
 
-#graph1_date_pickers {
-  margin-top: 46px;
+#graph1_start_date_picker {
+  margin-top: 12px;
+}
+
+#graph1_end_date_picker {
+  margin-top: 12px;
+}
+
+#number_or_percent {
+  margin-top: 12px;
 }
 
 #graph3_date_pickers {
@@ -69,13 +77,20 @@
 #login-form {
   color: #1FC8DB;
   position: absolute;
-  margin-top: 30px;
+  margin-top: 100px;
   margin-left: 33px;
   width: 350px;
 }
 
 #login-title {
   margin-bottom: 15px;
+}
+
+#site-title {
+  color: #1FC8DB;
+  position: absolute;
+  margin-top: 27px;
+  margin-left: 33px;
 }
 
 .navbar {
