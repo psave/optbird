@@ -2,7 +2,6 @@
 //= require jquery_ujs
 //= require jquery-ui/datepicker
 //= require highcharts
-//= require highstock/modules/exporting
 //= require_tree .
 
 
@@ -22,7 +21,7 @@ $(function(){
       graph1(response["occupancy_data"], response["courses_data"]);
       graph2(response["occupancy_data"], response["courses_data"]);
       graph3(response["occupancy_data"]);
-      graph4();
+      graph4(response["occupancy_data"], response["courses_data"]);
       graph5(response["occupancy_data"]);
     }
   });
