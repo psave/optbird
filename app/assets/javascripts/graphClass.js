@@ -611,10 +611,16 @@ this.heatGridGraph1Percent = function(capacity) {
       type: 'spline',
       yAxis: 0,
       data: this.series.y_axis,
-      marker: {
-          enabled: false
-      },
-      dashStyle: 'shortdot'}];
+      marker: {enabled: false},
+    },{
+      dashStyle: 'shortdot',
+      name: 'Empty Set',
+      type: 'spline',
+      yAxis: 1,
+      data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      marker: { enabled: false},
+      dashStyle: 'shortdot'
+    }];
 
     for (var i = 0; i < this.response_courses.length; i++) {
       var course = this.response_courses[i];
@@ -658,7 +664,7 @@ this.heatGridGraph1Percent = function(capacity) {
             text: 'Occupant and Course Overlay'
         },
         subtitle: {
-            text: 'Henn Room 251 on Monday, April 18th, 2016'
+            text: ""//'Henn Room 251 on Monday, April 18th, 2016'
         },
         xAxis: [{
             categories: this.series.x_axis,
@@ -669,13 +675,13 @@ this.heatGridGraph1Percent = function(capacity) {
             labels: {
                 format: '{value}',
                 style: {
-                    color: Highcharts.getOptions().colors[2]
+                    color: Highcharts.getOptions().colors[4]
                 }
             },
             title: {
                 text: 'Number of Occupants',
                 style: {
-                    color: Highcharts.getOptions().colors[2]
+                    color: Highcharts.getOptions().colors[4]
                 }
             },
             opposite: true
@@ -689,6 +695,7 @@ this.heatGridGraph1Percent = function(capacity) {
                     color: Highcharts.getOptions().colors[0]
                 }
             },
+            max: 100,
             labels: {
                 format: '{value} %',
                 style: {

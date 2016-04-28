@@ -2,7 +2,6 @@
 //= require jquery_ujs
 //= require jquery-ui/datepicker
 //= require highcharts
-//= require highstock/modules/exporting
 //= require_tree .
 
 
