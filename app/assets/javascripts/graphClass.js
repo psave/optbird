@@ -149,10 +149,10 @@ var graph = function (name, response_occupancy, response_courses) {
     }
   }
 
-  // TODO: ROLL THIS BACK BEFORE COMMIT
   this.avg = function(array) {
-    // var arr = array.reduce( (prev, curr) => parseInt(prev) + parseInt(curr) ) / array.length
-    return Math.round(100);
+    if (array == null) {return 0};
+    var arr = array.reduce( (prev, curr) => parseInt(prev) + parseInt(curr) ) / array.length
+    return Math.round(arr);
   }
 
   this.heatGridGraph1 = function() {
