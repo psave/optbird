@@ -26,7 +26,6 @@ var graph = function (name, response_occupancy, response_courses) {
   this.firstGraphLoad = function () {
     switch(this.name) {
     case "graph1":
-      this.totals = {};
       this.setBuilding(1);
       break;
     case "graph2":
@@ -45,6 +44,7 @@ var graph = function (name, response_occupancy, response_courses) {
     // console.debug("reloadGraph" + this.name);
     switch(this.name) {
       case "graph1":
+        this.totals = {};
         this.separateByDayTimeGraph1(this.response_occupancy);
         this.separateByWeekdayGraph1(this.response_occupancy);
         this.separateByTimeGraph1(this.response_occupancy);
@@ -105,7 +105,7 @@ var graph = function (name, response_occupancy, response_courses) {
       });
       $("#" + _self.name + " .room_choice").html(which_rooms);
       start_date_select.val("04/01/2016");
-      end_date_select.val("04/15/2016");
+      end_date_select.val("04/18/2016");
       _self.reloadGraph();
     });
   }
