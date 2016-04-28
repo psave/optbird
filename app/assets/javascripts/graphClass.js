@@ -76,9 +76,9 @@ var graph = function (name, response_occupancy, response_courses) {
       this.dataToArrayGraph2(this.response_occupancy);
       this.roomCourseOverlayGraph2(this.response_occupancy);
       break;
-    case "graph3":
-      this.dataToArray3(this.response_occupancy);
-      break;
+    // case "graph3":
+    //   this.dataToArray3(this.response_occupancy);
+    //   break;
     case "graph4":
       break;
     case "graph5":

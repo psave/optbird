@@ -1,42 +1,36 @@
+<h2> This is graph 3</h2>
+
 <div class="container is-fluid">
 
   <section class="section">
     <div class="columns">
 
       <div class="column is-10">
-        <div class="graphContainer" style="min-width: 310px; height: 400px; margin: 0 auto">
+        <div id="graphContainer" style="min-width: 310px; height: 400px; margin: 0 auto">
         </div>
       </div>
 
-    <div class="column graph_controls">
-      <h5 class="title is-5">Graph Controls</h5>
-      <label class="label">Building</label>
-      <p class="control">
-        <span class="select">
-         <%= select_tag "building_choice", options_from_collection_for_select(@buildings, 'id', 'building_name'), class: "building_choice" %>
-        </span>
-      </p>
-      <div class='room_choice_container'>
-        <label class="label">Room</label>
+      <div class="column graph_controls">
+        <h5 class="title is-5">Graph Controls</h5>
+        <label class="label">Start Date</label>
+        <div class="content">
+          <input type="text" id="start_date">
+        </div>
+        <label class="label">End Date</label>
+        <div class="content">
+          <input type="text" id="end_date">
+        </div>
+        <label class="label">Building</label>
         <p class="control">
           <span class="select">
-            <select class="room_choice" ><select value='1'></select></select>
+            <select class="building_choice">
+              <option value="1">ANGU</option>
+              <option value="2">CEME</option>
+              <option value="3">DMP</option>
+            </select>
           </span>
         </p>
       </div>
-
-<!--       <div id="graph3_start_date_picker">
-        <label class="label">Start Date</label>
-         <div class="content">
-           <input type="text" class="start_date">
-        </div>
-      </div>
-      <div id="graph3_end_date_picker">
-        <label class="label">End Date</label>
-        <div class="content">
-          <input type="text" class="end_date">
-        </div>
-      </div> -->
 
     </div>
   </section>
