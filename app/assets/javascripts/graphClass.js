@@ -18,10 +18,10 @@ var graph = function (name, response_occupancy, response_courses) {
 
   this.num_percent_choice = $('#' + graph1.name + ' .num_percent_choice');
 
-  var start_date_select = $("#" + this.name + " .start_date" ).datepicker();
-  var end_date_select = $("#" + this.name + " .end_date").datepicker();
-
   var days_week_in_courses = { 0: "U", 1: "M", 2: "T", 3: "W", 4: "R", 5: "F", 6: "S" }
+
+  var start_date_select = $(".start_date" ).datepicker({minDate: new Date("04/01/2016"), maxDate: new Date("04/18/2016")});
+  var end_date_select = $(".end_date").datepicker({minDate: new Date("04/01/2016"), maxDate: new Date("04/18/2016")});
 
   this.firstGraphLoad = function () {
     switch(this.name) {
