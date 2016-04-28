@@ -1,4 +1,5 @@
 require 'csv'
+require 'date'
 require_relative '../dropboxAPI'
 
 namespace :csv do
@@ -7,9 +8,8 @@ namespace :csv do
     dbu = DropboxUtility.new(ENV['DROPBOX_ACCESS_TOKEN'])
     dbu.changed_files(ENV['DROPBOX_COURSES_PATH']).each do |path|
       CSV.parse(path, headers: true) do |row|
-      
-        unless row[9].nil? && row[20].nil?
-
+        # && Date.parse(row[12]) > Date.parse("01/01/2016")
+        if !row[9].nil? && !row[20].nil? && !row[10].nil? && !row[11].nil? && !row[12].nil? && (Date.strptime(row[12],"%m/%d/%Y") > Date.parse("01/01/2016"))
           row[9].split("").each do |day|
             Course.create!({
               subject: row[0],
@@ -22,8 +22,8 @@ namespace :csv do
               sec_actv_no: row[7],
               sec_num_linked_actv: row[8],
               daysmet: day,
-              start_time: (DateTime.parse(row[10]).strftime("%H:%M") unless row[10].nil?),
-              end_time: (DateTime.parse(row[11]).strftime("%H:%M") unless row[11].nil?),
+              start_time: DateTime.parse(row[10]).strftime("%H:%M"),
+              end_time: DateTime.parse(row[11]).strftime("%H:%M"),
               start_date: row[12],
               end_date: row[13],
               sec_rel_tot: row[14],
