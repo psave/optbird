@@ -5,7 +5,7 @@
 
 function graph3(response_occupancy) {
 
-  graph3 = new graph("graph3", response);
+  graph3 = new graph("graph3", response_occupancy);
 
   graph3.firstGraphLoad();
 
@@ -16,6 +16,8 @@ function graph3(response_occupancy) {
   $("#" + graph3.name + " .room_choice" ).change(function() {
     graph3.reloadGraph();
   });
+
+}
   // make it so options can be set from menus
   // var building = $("#graph3 .building_choice").val();
   // var rmID = $("#graph3 .room_choice").val();

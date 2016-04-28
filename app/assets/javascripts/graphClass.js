@@ -9,9 +9,9 @@ var graph = function (name, response_occupancy, response_courses) {
   this.response_courses = response_courses;
   this.series = {};
 
-  this.totals = {}; // USED ONLY BY GRAPH 1 HEAT GRID
-  this.weekdays = {}; // USED ONLY BY GRAPH 1 DAY BAR
-  this.times = {}; // USED ONLY BY GRAPH 1 TIME BAR
+  // this.totals = {}; // USED ONLY BY GRAPH 1 HEAT GRID
+  // this.weekdays = {}; // USED ONLY BY GRAPH 1 DAY BAR
+  // this.times = {}; // USED ONLY BY GRAPH 1 TIME BAR
   // 
   this.room_select = $("#" + this.name + " .room_choice");
   this.dayofweek = $("#" + this.name + " .dayofweek");
@@ -29,6 +29,8 @@ var graph = function (name, response_occupancy, response_courses) {
     switch(this.name) {
     case "graph1":
       this.totals = {};
+      this.weekdays = {};
+      this.times = {};
       this.setBuilding(1);
       break;
     case "graph2":
@@ -912,7 +914,7 @@ this.heatGridGraph1Percent = function(capacity) {
 /////////////// Graph 3 /////////
   this.dataToArrayGraph3 = function (response) {
 
-    if (!response) return;
+    if (!response_occupancy) return;
     // a whole day in 5-minute increments
     var time_of_day = [];
     for (var hour = 0; hour < 24; hour++){
@@ -936,13 +938,13 @@ this.heatGridGraph1Percent = function(capacity) {
     var friday = [];
     var saturday = [];
 
-    for (var i = 0; i < response.length; i++) {
-      if (response[i].r == this.room_select.val()) {
+    for (var i = 0; i < response_occupancy.length; i++) {
+      if (response_occupancy[i].r == this.room_select.val()) {
 
         var datapoint = [];
-        var day = new Date(this.response[i].s);
+        var day = new Date(this.response_occupancy[i].s);
         day = new Date(day.getTime() + day.getTimezoneOffset() * 60 * 1000);      
-        var number_occupants = parseInt(response[i].n);
+        var number_occupants = parseInt(response_occupancy[i].n);
         var datapoint = [day, number_occupants];
         var weekday = day.getDay();
         var hour = day.getHours();
