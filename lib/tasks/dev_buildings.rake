@@ -128,7 +128,7 @@ namespace :csv do
   desc "Import CSV Data occupant data"
   task :devbuildings => :environment do
 
-    csv_file_path = 'db/confidential/CEME-306-Level-1.csv'
+    csv_file_path = 'db/confidential/ANGU-023_Fourth.csv'
 
     buildings = []
 
