@@ -94,7 +94,7 @@ function graph3(response_occupancy) {
     if (!response_occupancy) return;
     // a whole day in 5-minute increments
     var time_of_day = [];
-    for (var hour = 0; hour < 24; hour++){
+    for (var hour = 0; hour < 24; hour++) {
       var hourString = String(hour);
       for (var minute = 0; minute < 60; minute += 5 ){
         var minuteString = String(minute);
@@ -123,6 +123,7 @@ function graph3(response_occupancy) {
         var number_occupants = parseInt(response_occupancy[i].n);
         var datapoint = [sample_time, number_occupants];
         var sample_time_as_Date_object = new Date(sample_time);
+        sample_time_as_Date_object = new Date(sample_time_as_Date_object.getTime() + sample_time_as_Date_object.getTimezoneOffset() * 60 *1000);
         var weekday = sample_time_as_Date_object.getDay();
         var hour = sample_time_as_Date_object.getHours();
         var minute = sample_time_as_Date_object.getMinutes();
@@ -178,9 +179,9 @@ function graph3(response_occupancy) {
           else if (weekday === 5){
             friday.push(datapoint_avg);
           }
-          else if (weekday === 6){
-            saturday.push(datapoint_avg);
-          }
+          // else if (weekday === 6){
+          //   saturday.push(datapoint_avg);
+          // }
 
         }
       }
