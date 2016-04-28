@@ -61,13 +61,16 @@
 
 .label.content {
   color: #1FC8DB;
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 3px;
+  font-size: larger;
 }
 
 #login-form {
   color: #1FC8DB;
   position: absolute;
   margin-top: 30px;
-  margin-left: 30px;
+  margin-left: 33px;
   width: 350px;
 }
 
