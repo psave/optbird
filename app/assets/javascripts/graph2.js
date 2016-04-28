@@ -38,6 +38,14 @@ function graph2(response_occupancy, response_courses) {
     graph2.reloadGraph();
   });
 
+  $("#" + graph2.name + " .start_date" ).change(function () {
+    graph2.reloadGraph();
+  });
+
+  $("#" + graph2.name + " .end_date" ).change(function () {
+    graph2.reloadGraph();
+  });
+
 }
 
 

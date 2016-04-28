@@ -94,16 +94,7 @@ var graph = function (name, response_occupancy, response_courses) {
     } 
   }
 
-  // this.reloadGraphPercent = function () {
-  //   switch(this.name) {
-  //     case "graph1":
-  //       this.separateByDayTimeGraph1(this.response_occupancy);
-  //       this.separateByWeekdayGraph1(this.response_occupancy);
-  //       this.separateByTimeGraph1(this.response_occupancy);
-  //       this.heatGridGraph1Percent();
-  //       break;
-  //   }
-  // }
+
 
   this.setBuilding = function (building_id) {
     // on change 
@@ -116,7 +107,7 @@ var graph = function (name, response_occupancy, response_courses) {
       });
       $("#" + _self.name + " .room_choice").html(which_rooms);
       start_date_select.val("04/01/2016");
-      end_date_select.val("04/18/2016");
+      end_date_select.val("04/8/2016");
       _self.reloadGraph();
     });
   }
@@ -128,15 +119,6 @@ var graph = function (name, response_occupancy, response_courses) {
   // }
 
 ////////// For Graph 1 Tab Heat Grid 
-  // var capacity = [];
-
-  // this.getCapacity = function (room_id) {
-  //   $.get("/charts/courses.json?room_id="+room_id, function (data) {
-  //     data.forEach(function (course) {
-  //       capacity.push(course);
-  //     });
-  //   });
-  // }
 
   this.separateByDayTimeGraph1 = function (response) {
     // console.log("Firing separateByTimeGraph1");
@@ -531,6 +513,7 @@ this.heatGridGraph1Percent = function(capacity) {
       var time_of_day = [];
       for (var hour = 0; hour < 24; hour++){
         for (var minute = 0; minute < 60; minute += 5 ){
+
           var minuteString = String(minute);
           if (minuteString.length == 1) {
             minuteString = '0' + minuteString;
@@ -635,9 +618,14 @@ this.heatGridGraph1Percent = function(capacity) {
         type: 'line',
         data: [],
       }
+      var selected_start = new Date(start_date_select.val());
+      var selected_end = new Date(end_date_select.val());
+      var start_date = new Date(course.start_date);
+      var end_date = new Date(course.end_date);
 
-      if (course.room_id == this.room_select.val() && course.start_time != null && course.end_time != null && this.response_courses[i].daysmet == days_week_in_courses[this.dayofweek.val()]) {
+      if (course.room_id == this.room_select.val() && course.start_time != null && course.end_time != null && this.response_courses[i].daysmet == days_week_in_courses[this.dayofweek.val()] && start_date <= selected_start && end_date >= selected_end) {
         
+
         if (parseInt(course.capacity) > max_occupants) {
           max_occupants = parseInt(course.capacity);
         }
