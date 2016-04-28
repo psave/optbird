@@ -13,6 +13,8 @@ Things you may want to cover:
 - To run the locally use: "bin/rails s -b 0.0.0.0"
 
 * Database creation
+1) Rake in the course information first, so that the occupancy infomation can obtain a room_id
+2) Rake in the occupancy information.
 
 * Database initialization
 

@@ -25,6 +25,8 @@ var graph = function (name, response_occupancy, response_courses) {
   // var start_date_select = $("#" + this.name + " .start_date" ).datepicker();
   // var end_date_select = $("#" + this.name + " .end_date").datepicker();
 
+  var days_week_in_courses = { 0: "U", 1: "M", 2: "T", 3: "W", 4: "R", 5: "F", 6: "S" }
+
   this.firstGraphLoad = function () {
     switch(this.name) {
     case "graph1":
@@ -157,8 +159,9 @@ var graph = function (name, response_occupancy, response_courses) {
   }
 
   this.avg = function(array) {
+    if (array == null) {return 0};
     var arr = array.reduce( (prev, curr) => parseInt(prev) + parseInt(curr) ) / array.length
-    return Math.round(arr)
+    return Math.round(arr);
   }
 
   this.heatGridGraph1 = function() {
@@ -530,7 +533,7 @@ this.heatGridGraph1Percent = function(capacity) {
           if (minuteString.length == 1) {
             minuteString = '0' + minuteString;
           }
-          time_of_day.push(String(hour) + ":" + minuteString);
+          time_of_day.push(("0" + String(hour)).slice(-2) + ":" + minuteString);
         }
       }
       return time_of_day
@@ -598,48 +601,6 @@ this.heatGridGraph1Percent = function(capacity) {
         averages.push(sum / time_sets[key].length);
       }
 
-    
-    //run a transformation / filter on the data
-
-    // transformed_response_occupancy = this.response
-
-    // transformed_response = filter_out_date_range(transformed_response)
-    // transformed_response = filter_out_by_day_of_week(transformed_response, 'Monday')  //if no day of weeek specified, basically do nothing
-    
-    // transformed_response = group_by_times(transformed_response)  //removes the dates, and keeps times only
-    /*
-    input 
-      [{ sampletime: "2016-04-05T08:00:00", number_people: 10 },
-      { sampletime: "2016-04-05T08:05:00", number_people: 10 },
-      { sampletime: "2016-04-12T08:00:00", number_people: 5 },
-      { sampletime: "2016-04-12T08:05:00", number_people: 10 }]
-
-    output
-     [{ sampletime: 08:00:00, number_people: 7.5},
-     { sampletime: 08:00:00, number_people: 10}]
-
-     group_by_times = function(original_data) {
-        find the day of week for the record day_of_week(sampletime)
-        look at last 10 digits of sample time 10_digits(sampletime)
-        [
-          {time_block: "08:00:00", number_people: [10, 5]}
-        ]
-
-        then i average
-        [
-          {time_block: "08:00:00", number_people: 7.5}
-        ]
-
-        look through all your sample times, categorize them based on the time digits
-        if they match something that is currently inside the caregories, add them to an array to be averaged
-        output them
-      return transformed_data
-     }
-      
-    */
-    // final_response = return_x_y_and_values(transformed_response)  // {x_axis: [], y_axis:[], line_1:[], line_2: []}
-
-
     this.series = {
       // all sample_times s for room_id r=rmID (rmID is room_select.val())
       x_axis: times_series,
@@ -649,52 +610,56 @@ this.heatGridGraph1Percent = function(capacity) {
     return this.series;
   }
 
-
-  // this.dataToChartGraph2 = function () {
-
-  //   $("#" + this.name + " #graphContainer").highcharts({      
-  //     title: {
-  //       text: 'Occupancy over Time',
-  //       x: -20 //center
-  //     },
-  //     xAxis: {
-  //       type: 'datetime',
-  //       categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
-  //       tickInterval: 35
-  //     },
-  //     yAxis: {
-  //       title: {
-  //         text: 'Number of Occupants'
-  //       },
-  //       plotLines: [{
-  //         value: 0,
-  //         width: 1,
-  //         color: '#1F99D3'
-  //       }]
-  //     },
-  //     tooltip: {
-  //       valueSuffix: ''
-  //     },
-  //     legend: {
-  //       layout: 'vertical',
-  //       align: 'left',
-  //       verticalAlign: 'top',
-  //       floating: true,
-  //       borderWidth: 0
-  //     },
-  //     series: [{
-  //       name: 'Occupants',
-  //       data: this.series.y_axis,
-  //       tooltip: {
-  //         valueDecimals: 2
-  //       }
-  //     }]
-  //   });
-  // }
-
   this.roomCourseOverlayGraph2 = function () {
+    var max_occupants = 25; // to set the max on the axis
 
-    var total = 100;
+    // Populate y_axis_series with courses enrollment data (sec_enr_tot)
+
+    // This arrays holds of all series in this format: {course_name: {name: course_record.short_title, type: 'line', data[]} }
+    var courses_enrollment_data = [{
+      name: 'Number of Occupants',
+      type: 'spline',
+      yAxis: 0,
+      data: this.series.y_axis,
+      marker: {
+          enabled: false
+      },
+      dashStyle: 'shortdot'}];
+
+    for (var i = 0; i < this.response_courses.length; i++) {
+      var course = this.response_courses[i];
+      var serie = {
+        name: course.short_title,
+        type: 'line',
+        data: [],
+      }
+
+      if (course.room_id == this.room_select.val() && course.start_time != null && course.end_time != null && this.response_courses[i].daysmet == days_week_in_courses[this.dayofweek.val()]) {
+        
+        if (parseInt(course.capacity) > max_occupants) {
+          max_occupants = parseInt(course.capacity);
+        }
+
+        var data = {};
+        
+
+        for (var j = 0; j < this.series.x_axis.length; j++) {
+          if (this.series.x_axis[j] >= course.start_time && this.series.x_axis[j] <= course.end_time) {
+            data[this.series.x_axis[j]] = parseInt(course.sec_enr_tot);
+          } else {
+            data[this.series.x_axis[j]] = 0;
+          }
+        }
+
+        // Convert back to array
+        for (var key in data) {
+          serie.data.push(data[key]);
+        }
+
+        courses_enrollment_data.push(serie);
+      }
+    }
+    
     $('#graph2 .graphContainer').highcharts({
         chart: {
             zoomType: 'xy'
@@ -707,14 +672,10 @@ this.heatGridGraph1Percent = function(capacity) {
         },
         xAxis: [{
             categories: this.series.x_axis,
-            // categories: ['8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm'],
-            // categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
-            // categories: this.series.x_axis.map(function(time){ return moment(time).format("MMM D[,] H:mm")}),
-            // categories: this.series.x_axis.map(function(time){ return moment(time).tz(time, "MMM D[,] H:mm", "America/Los_Angeles")}),
-            // categories: this.series.x_axis.map(function toTimeZone(time, "America/Los_Angeles"){ return moment(time).format("MMM D[,] H:mm")}),
             crosshair: true
         }],
         yAxis: [{ // Primary yAxis
+            max: max_occupants,
             labels: {
                 format: '{value}',
                 style: {
@@ -758,41 +719,9 @@ this.heatGridGraph1Percent = function(capacity) {
             floating: true,
             backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
         },
-        series: [{
-            name: 'Courses',
-            type: 'spline',
-            yAxis: 1,
-            data: [Math.round(7/total*100), Math.round(71/total*100), Math.round(54/total*100)],
-            tooltip: {
-                valueSuffix: ''//can place something here to add to each value on the axis
-            }
-
-        }, {
-            name: 'Number of Occupants',
-            type: 'spline',
-            data: this.series.y_axis,
-            marker: {
-                enabled: false
-            },
-            dashStyle: 'shortdot',
-            tooltip: {
-                valueSuffix: ''//can place something here to add to each value on the axis
-            }
-        },  {
-            name: 'Max Occupancy',
-            type: 'spline',
-            data: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-            marker: {
-                enabled: false
-            },
-            dashStyle: 'shortdot',
-            tooltip: {
-                valueSuffix: ''//can place something here to add to each value on the axis
-            }
-
-        }
-        ]
+        series: courses_enrollment_data,
     });
+    
   };
 
   //////////////////////////////////////////////////// End of Graph 2 ///////////////////
