@@ -24,6 +24,7 @@ var graph = function (name, response_occupancy, response_courses) {
   this.firstGraphLoad = function () {
     switch(this.name) {
     case "graph1":
+      this.totals = {};
       this.setBuilding(1);
       break;
     case "graph2":
@@ -39,27 +40,32 @@ var graph = function (name, response_occupancy, response_courses) {
 
   // TODO: Add new spectif functions for graphs here
   this.reloadGraph = function () {
-    console.debug("reloadGraph" + this.name);
+    // console.debug("reloadGraph" + this.name);
     switch(this.name) {
       case "graph1":
         this.separateByDayTimeGraph1(this.response_occupancy);
-        // this.separateByWeekdayGraph1(this.response_occupancy);
-        // this.separateByTimeGraph1(this.response_occupancy);
+        this.separateByWeekdayGraph1(this.response_occupancy);
+        this.separateByTimeGraph1(this.response_occupancy);
         if (this.num_percent_choice.val() == "Number") {
           this.heatGridGraph1();
+          this.initializeGraph1BarDay();
+          this.initializeGraph1BarTime();
+          this.showValuesDaySlider();
         }
         else if (this.num_percent_choice.val() == "Percent") {
-          var capacity;
-          for (var i = 0; i < this.response_occupancy.length; i++) {
-            if (this.response_occupancy[i].r == this.room_select.val()) {
+          var capacity = 100;
+          for (var i = 0; i < this.response_courses.length; i++) {
+            if (this.response_courses[i].room_id == this.room_select.val()) {
               capacity = this.response_courses[i].capacity;
+              // console.log("The capacity of " + this.room_select.val() + " or " + this.response_occupancy[i].r + " is " + capacity);
               break;
             }
           }
-          this.heatGridGraph1Percent(capacity);
+          this.heatGridGraph1Percent(parseInt(capacity));
+          this.initializeGraph1BarDayPercent(parseInt(capacity));
+          this.initializeGraph1BarTimePercent(parseInt(capacity));
+          this.showValuesDaySliderPercent();
         } 
-        // this.initializeGraph1BarDay();
-        // this.initializeGraph1BarTime();
         break;
     case "graph2":
       this.dataToArrayGraph2(this.response_occupancy);
@@ -120,13 +126,14 @@ var graph = function (name, response_occupancy, response_courses) {
   // }
 
   this.separateByDayTimeGraph1 = function (response) {
+    // console.log("Firing separateByTimeGraph1");
     for (var i = 0; i < this.response_occupancy.length; i++) {
       if (this.response_occupancy[i].r == this.room_select.val()) {
         var day = new Date(this.response_occupancy[i].s);
         day = new Date(day.getTime() + day.getTimezoneOffset() * 60 * 1000)
         var start = new Date(start_date_select.val());
         var end = new Date(end_date_select.val());
-        if (day >= start && day <= end) {
+        if ((day >= start) && (day <= end)) {
           var time = day.getHours() - 8;
           var weekday = 6 - day.getDay();
           var key = "total"+time+weekday;
@@ -146,6 +153,7 @@ var graph = function (name, response_occupancy, response_courses) {
   }
 
   this.heatGridGraph1 = function() {
+    console.log("heatGridGraph1!");
     $('#graph1 .graphContainer').highcharts({
       chart: {
         type: 'heatmap',
@@ -229,6 +237,7 @@ var graph = function (name, response_occupancy, response_courses) {
 ////////////////////// For Graph 1 PERCENT OCCUPANCY Heat Grid
 
 this.heatGridGraph1Percent = function(capacity) {
+  // console.log("Firing heatGridGraph1Percent with capacity: " + capacity);
     $('#graph1 .graphContainer').highcharts({
       colors: ["#f45b5b", "#8085e9", "#8d4654", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
       "#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
@@ -269,7 +278,7 @@ this.heatGridGraph1Percent = function(capacity) {
       tooltip: {
           formatter: function () {
               return '<b>' + this.series.yAxis.categories[this.point.y] + '</b>' + ' at ' + '<b>' + this.series.xAxis.categories[this.point.x] + '</b><br>'
-                + '<b>' + this.point.value + '</b>' + ' occupants on average';
+                + '<b>' + this.point.value + '</b>' + ' percent occupancy on average';
           }
       },
       series: [{
@@ -337,6 +346,46 @@ this.heatGridGraph1Percent = function(capacity) {
     }
   }
 
+  this.initializeGraph1BarDayPercent = function(capacity) {
+    this.graph1BarDayPercent = new Highcharts.Chart({
+      chart: {
+        renderTo: 'graph1BarDay',
+        type: 'column',
+        options3d: {
+          enabled: true,
+          alpha: 15,
+          beta: 15,
+          depth: 50,
+          viewDistance: 25
+        }
+      },
+      title: {
+        text: 'Average Percent Occupancy by Day'
+      },
+      plotOptions: {
+        column: {
+          depth: 25
+        }
+      },
+      xAxis: {
+        categories: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+      },
+      series: [{
+        name: 'Average Percent Occupancy',
+        borderWidth: 1,
+        data: [
+          Math.round((this.avg(this.weekdays["total0"])/capacity)*100),
+          Math.round((this.avg(this.weekdays["total1"])/capacity)*100),
+          Math.round((this.avg(this.weekdays["total2"])/capacity)*100),
+          Math.round((this.avg(this.weekdays["total3"])/capacity)*100),
+          Math.round((this.avg(this.weekdays["total4"])/capacity)*100),
+          Math.round((this.avg(this.weekdays["total5"])/capacity)*100),
+          Math.round((this.avg(this.weekdays["total6"])/capacity)*100)
+        ]
+      }]
+    });
+  }
+
   this.initializeGraph1BarDay = function () {
     this.graph1BarDay = new Highcharts.Chart({
       chart: {
@@ -383,10 +432,62 @@ this.heatGridGraph1Percent = function(capacity) {
     $('#depth-value').html(this.graph1BarDay.options.chart.options3d.depth);
   }
 
+  this.showValuesDaySliderPercent = function () {
+    $('#alpha-value').html(this.graph1BarDayPercent.options.chart.options3d.alpha);
+    $('#beta-value').html(this.graph1BarDayPercent.options.chart.options3d.beta);
+    $('#depth-value').html(this.graph1BarDayPercent.options.chart.options3d.depth);
+  }
+
   ////////////////// For Graph 1 Tab Time Bar Graph
 
-  this.separateByTimeGraph1 = function (response) {
+  this.initializeGraph1BarTimePercent = function (capacity) {
+    this.graph1BarTimePercent = new Highcharts.Chart({
+      chart: {
+        renderTo: 'graph1BarTime',
+        type: 'column',
+        options3d: {
+          enabled: true,
+          alpha: 15,
+          beta: 15,
+          depth: 50,
+          viewDistance: 25
+        }
+      },
+      title: {
+        text: 'Average Percent Occupancy by Time'
+      },
+      plotOptions: {
+        column: {
+          depth: 25
+        }
+      },
+      xAxis: {
+        categories: ['8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm']
+      },
+      series: [{
+        name: 'Average Percent Occupancy',
+        borderWidth: 1,
+        data: [
+          Math.round((this.avg(this.times["total0"])/capacity)*100),
+          Math.round((this.avg(this.times["total1"])/capacity)*100),
+          Math.round((this.avg(this.times["total2"])/capacity)*100),
+          Math.round((this.avg(this.times["total3"])/capacity)*100),
+          Math.round((this.avg(this.times["total4"])/capacity)*100),
+          Math.round((this.avg(this.times["total5"])/capacity)*100),
+          Math.round((this.avg(this.times["total6"])/capacity)*100),
+          Math.round((this.avg(this.times["total7"])/capacity)*100),
+          Math.round((this.avg(this.times["total8"])/capacity)*100),
+          Math.round((this.avg(this.times["total9"])/capacity)*100),
+          Math.round((this.avg(this.times["total10"])/capacity)*100),
+          Math.round((this.avg(this.times["total11"])/capacity)*100),
+          Math.round((this.avg(this.times["total12"])/capacity)*100),
+          Math.round((this.avg(this.times["total13"])/capacity)*100)
+        ]
+      }]
+    });
+  }
 
+  this.separateByTimeGraph1 = function (response) {
     for (var i = 0; i < this.response_occupancy.length; i++) {
       if (this.response_occupancy[i].r == this.room_select.val()) {
         var day = new Date(this.response_occupancy[i].s);
@@ -800,5 +901,5 @@ this.heatGridGraph1Percent = function(capacity) {
     });
   }
 
-
 }
+
