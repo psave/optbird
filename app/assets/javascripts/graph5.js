@@ -1,9 +1,9 @@
-function graph5(response) {
+function graph5(response_occupancy) {
 
   ///  MAIN ///
 
   // Sets the name for the particular graph. This makes it easier to reuse the code.
-  graph5 = new graph("graph5", response);
+  graph5 = new graph("graph5", response_occupancy);
 
   graph5.firstGraphLoad();
 
