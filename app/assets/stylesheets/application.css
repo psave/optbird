@@ -37,11 +37,10 @@
   height: 400px; 
 }
 
-#graph1_start_date_picker {
-  margin-top: 12px;
-}
-
-#graph1_end_date_picker {
+#graph1_start_date_picker,
+#graph1_end_date_picker,
+#graph3_start_date_picker,
+#graph3_end_date_picker {
   margin-top: 12px;
 }
 
