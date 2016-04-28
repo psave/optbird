@@ -114,6 +114,7 @@ module DropboxBuildings
         unless room.nil?
           # 4. Room found!! add room id to course so you can have course.room accessible
           course.update(room_id: room.id) 
+          # room.update(capacity: course.capacity)
         else
           # puts "#{course.room_code} not found!"
         end

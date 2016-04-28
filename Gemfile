@@ -53,6 +53,8 @@ gem 'dropbox-sdk'
 
 gem 'jquery-ui-rails'
 
+gem 'jquery-ui-themes'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

@@ -3,7 +3,7 @@
 //////  TODO / WARNING :  Every select (like in a $('xyz') call) in this file should have '#graph3'
 //////                        added to the front, like $('#graph3 xyz')
 
-function graph3(response) {
+function graph3(response_occupancy) {
 
   graph3 = new graph("graph3", response);
 
@@ -29,6 +29,7 @@ function graph3(response) {
   // loads graph for room in the room dropdown
   // pass "true" to reloadGraph if you want it to wait for a choice from a dropdown
   // pass "false" if you want it to load without waiting
+
   // function reloadGraph(wait_for_event){
   //   if (wait_for_event){
   //     $("#graph3 .room_choice").change(function(){
@@ -41,6 +42,7 @@ function graph3(response) {
   //     dataToArray(response, startDate, endDate);
   //   }
   // }
+
 
   // puts the given building's rooms in the room dropdown
   // function setBuilding(building){
@@ -62,6 +64,7 @@ function graph3(response) {
   //       $('#graph3 .room_choice_container').remove();
   //     };
 
+
   //     $("#graph3 .graph_controls").append(
   //       "<div class='room_choice_container'>" +
   //       "<label class='label'>Room</label>" +
@@ -72,6 +75,7 @@ function graph3(response) {
   //       "</select></span></p></div>"
   //     )
   // }
+
 
   // sets building based on change in building dropdown
   // and reloads graph
@@ -98,8 +102,9 @@ function graph3(response) {
   // reloadGraph(false);
  
 
-  // response contains the data from the query in realgraphs_controller
+  // response_occupancy contains the data from the query in realgraphs_controller
   // filter it here before passing it to highcharts
+
   // this.dataToArray = function (response) {
 
   //   if (!response) return;
@@ -117,6 +122,7 @@ function graph3(response) {
   //   }
   //   // console.log(time_of_day);
 
+
   //   // a series for each weekday
   //   var sunday = [];
   //   var monday = [];
@@ -125,6 +131,7 @@ function graph3(response) {
   //   var thursday = [];
   //   var friday = [];
   //   var saturday = [];
+
 
   //   for (var i = 0; i < response.length; i++) {
   //     if (response[i].r == rmID) {
@@ -146,6 +153,7 @@ function graph3(response) {
   //         minuteString = '0' + minuteString;
   //       }
   //       var time = hourString + ":" + minuteString;
+
 
   //       // calculating average occupancy for a given time of day
 
@@ -209,6 +217,7 @@ function graph3(response) {
   //       }
   //     }
   //   });
+
 
   //   $('#graph3 #graphContainer').highcharts({
   //     chart: {
@@ -289,4 +298,3 @@ function graph3(response) {
   //   });
   // }
 
-}

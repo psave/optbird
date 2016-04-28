@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
 
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to charts_path, notice: "Successfully logged in."
+      redirect_to charts_path
     else
       flash.now[:alert] = "Log in failed."
       render :new

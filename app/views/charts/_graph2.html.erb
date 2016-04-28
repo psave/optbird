@@ -6,6 +6,7 @@
     </div>
 
     <div class="column graph_controls">
+
       <h5 class="title is-5">Graph Controls</h5>
       <label class="label">Building</label>
       <p class="control">
@@ -13,6 +14,7 @@
          <%= select_tag "building_choice", options_from_collection_for_select(@buildings, 'id', 'building_name'), class: "building_choice" %>
         </span>
       </p>
+
       <div class='room_choice_container'>
         <label class="label">Room</label>
         <p class="control">
@@ -21,23 +23,26 @@
           </span>
         </p>
       </div>
+
       <div class='dayofweek_container'>
         <label class="label">Day of the Week</label>
         <p class="control">
           <span class="select">
             <select class="dayofweek" >
-              <option value="0">Monday</option>
-              <option value="1">Tuesday</option>
-              <option value="2">Wednesday</option>
-              <option value="3">Thursday</option>
-              <option value="4">Friday</option>
-              <option value="5">Saturday</option>
-              <option value="6">Sunday</option>
+              <option value="1">Monday</option>
+              <option value="2">Tuesday</option>
+              <option value="3">Wednesday</option>
+              <option value="4">Thursday</option>
+              <option value="5">Friday</option>
+              <option value="6">Saturday</option>
+              <option value="0">Sunday</option>
             </select>
           </span>
         </p>
       </div>
+
     </div>
+
   </div>
 </section>
 <table class="table">
@@ -63,12 +68,12 @@
       <td>N/A</td>
     </tr>
     <tr>
-      <td>Average Occupancy Outide Course Hours</td>
+      <td>Average Occupancy Outside Course Hours</td>
       <td>40%</td>
       <td>40</td>
       <td>N/A</td>
     </tr>
   </tbody>
 </table>
-<p><sup>1</sup>Business Hours are between 8am-10pm Monday-Friday.
-</p>
+<p>&nbsp;&nbsp;<sup>1</sup>Business Hours are between 8am-10pm Monday-Friday.
+</p><br>
