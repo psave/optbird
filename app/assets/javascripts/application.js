@@ -8,8 +8,10 @@
 
 $(function(){
 
-  $("#start_date").datepicker({minDate: new Date("04/06/2016"), maxDate: new Date("04/18/2016")});
-  $("#end_date").datepicker({minDate: new Date("04/06/2016"), maxDate: new Date("04/18/2016")});
+
+  // $("#start_date").datepicker({minDate: new Date("04/06/2016"), maxDate: new Date("04/18/2016")});
+  // $("#end_date").datepicker({minDate: new Date("04/06/2016"), maxDate: new Date("04/18/2016")});
+
 
   $.ajax({
     method: 'GET',
@@ -20,8 +22,8 @@ $(function(){
       graph1(response["occupancy_data"], response["courses_data"]);
       graph2(response["occupancy_data"], response["courses_data"]);
       graph3(response["occupancy_data"]);
-      // graph4(response);
-      graph5(response);
+      graph4();
+      graph5(response["occupancy_data"]);
     }
   });
 
