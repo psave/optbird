@@ -242,8 +242,7 @@ var graph = function (name, response_occupancy, response_courses) {
 this.heatGridGraph1Percent = function(capacity) {
   // console.log("Firing heatGridGraph1Percent with capacity: " + capacity);
     $('#graph1 .graphContainer').highcharts({
-      colors: ["#f45b5b", "#8085e9", "#8d4654", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
-      "#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
+      colors: ['#2ca25f'],
 
       chart: {
           type: 'heatmap',
@@ -268,7 +267,7 @@ this.heatGridGraph1Percent = function(capacity) {
       colorAxis: {
           min: 0,
           minColor: '#FFFFFF',
-          maxColor: Highcharts.getOptions().colors[0]
+          maxColor: '#2ca25f'
       },
       legend: {
           align: 'right',
@@ -376,6 +375,7 @@ this.heatGridGraph1Percent = function(capacity) {
       series: [{
         name: 'Average Percent Occupancy',
         borderWidth: 1,
+        color: "#2ca25f",
         data: [
           Math.round((this.avg(this.weekdays["total0"])/capacity)*100),
           Math.round((this.avg(this.weekdays["total1"])/capacity)*100),
@@ -470,6 +470,7 @@ this.heatGridGraph1Percent = function(capacity) {
       series: [{
         name: 'Average Percent Occupancy',
         borderWidth: 1,
+        color: "#2ca25f",
         data: [
           Math.round((this.avg(this.times["total0"])/capacity)*100),
           Math.round((this.avg(this.times["total1"])/capacity)*100),
