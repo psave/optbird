@@ -9,9 +9,9 @@ var graph = function (name, response_occupancy, response_courses) {
   this.response_courses = response_courses;
   this.series = {};
 
-  // this.totals = {}; // USED ONLY BY GRAPH 1 HEAT GRID
-  // this.weekdays = {}; // USED ONLY BY GRAPH 1 DAY BAR
-  // this.times = {}; // USED ONLY BY GRAPH 1 TIME BAR
+  this.totals = {}; // USED ONLY BY GRAPH 1 HEAT GRID
+  this.weekdays = {}; // USED ONLY BY GRAPH 1 DAY BAR
+  this.times = {}; // USED ONLY BY GRAPH 1 TIME BAR
   // 
   this.room_select = $("#" + this.name + " .room_choice");
   this.dayofweek = $("#" + this.name + " .dayofweek");
@@ -30,9 +30,6 @@ var graph = function (name, response_occupancy, response_courses) {
   this.firstGraphLoad = function () {
     switch(this.name) {
     case "graph1":
-      this.totals = {};
-      this.weekdays = {};
-      this.times = {};
       this.setBuilding(1);
       break;
     case "graph2":
@@ -41,6 +38,8 @@ var graph = function (name, response_occupancy, response_courses) {
       break;
     case "graph3":
       this.setBuilding(1);
+    // case "graph4":
+    //   this.graph4BarChart();
     case "graph5":
       this.setBuilding(1);
       this.reloadGraph();
@@ -53,6 +52,9 @@ var graph = function (name, response_occupancy, response_courses) {
     // console.debug("reloadGraph" + this.name);
     switch(this.name) {
       case "graph1":
+        this.totals = {};
+        this.weekdays = {};
+        this.times = {};
         this.separateByDayTimeGraph1(this.response_occupancy);
         this.separateByWeekdayGraph1(this.response_occupancy);
         this.separateByTimeGraph1(this.response_occupancy);
@@ -1028,6 +1030,7 @@ this.heatGridGraph1Percent = function(capacity) {
       }
     });
   }
+
 
 }
 
