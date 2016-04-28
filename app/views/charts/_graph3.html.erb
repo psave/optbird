@@ -1,5 +1,3 @@
-<h2> This is graph 3</h2>
-
 <div class="container is-fluid">
 
   <section class="section">
@@ -12,24 +10,30 @@
 
       <div class="column graph_controls">
         <h5 class="title is-5">Graph Controls</h5>
-        <label class="label">Start Date</label>
-        <div class="content">
-          <input type="text" id="start_date">
+        
+        <div id="graph3_building_dropdown">
+          <label class="label">Building</label>
+          <p class="control">
+            <span class="select">
+              <select class="building_choice">
+                <option value="1">ANGU</option>
+                <option value="2">CEME</option>
+                <option value="3">DMP</option>
+              </select>
+            </span>
+          </p>
         </div>
-        <label class="label">End Date</label>
-        <div class="content">
-          <input type="text" id="end_date">
+
+        <div id="graph3_date_pickers">
+          <label class="label">Start Date</label>
+          <div class="content">
+            <input type="text" id="start_date">
+          </div>
+          <label class="label">End Date</label>
+          <div class="content">
+            <input type="text" id="end_date">
+          </div>
         </div>
-        <label class="label">Building</label>
-        <p class="control">
-          <span class="select">
-            <select class="building_choice">
-              <option value="1">ANGU</option>
-              <option value="2">CEME</option>
-              <option value="3">DMP</option>
-            </select>
-          </span>
-        </p>
       </div>
 
     </div>
