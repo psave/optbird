@@ -34,7 +34,7 @@ var graph = function (name, response_occupancy, response_courses) {
       break;
     case "graph5":
       this.setBuilding(1);
-      this.reloadGraph();
+      //this.reloadGraph();
       break;
     }
   }
@@ -79,6 +79,7 @@ var graph = function (name, response_occupancy, response_courses) {
       break;
     case "graph5":
       this.dataToArrayGraph5(this.response_occupancy);
+      this.dataToChartGraph5(); // new_code
       break;
     } 
   }
@@ -733,7 +734,9 @@ this.heatGridGraph1Percent = function(capacity) {
       // pick out only those with room_id r == rmID (rmID is room_select.val())
       if (this.response_occupancy[i].r == this.room_select.val()) {
         // push their sample_time s and number_occupants n into x and y arrays
-        x_axis.push(this.response_occupancy[i].s);
+        var day = new Date(this.response_occupancy[i].s);
+        day = new Date(day.getTime() + day.getTimezoneOffset() * 60 * 1000) // new_code
+        x_axis.push(day) //(this.response_occupancy[i].s); new_code
         y_axis.push(parseInt(this.response_occupancy[i].n));
       }
     }
@@ -751,7 +754,7 @@ this.heatGridGraph1Percent = function(capacity) {
 
   this.dataToChartGraph5 = function () {
 
-    $("#" + this.name + " #graphContainer").highcharts({      
+    $("#" + this.name + " .graphContainer").highcharts({      // new_code *changed from #graphContainer
       title: {
         text: 'Occupancy over Time',
         x: -20 //center

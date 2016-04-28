@@ -20,7 +20,7 @@ $(function(){
       graph2(response["occupancy_data"], response["courses_data"]);
       graph3(response["occupancy_data"]);
       graph4(response["occupancy_data"]);
-      graph5(response);
+      graph5(response["occupancy_data"]);
     }
   });
 
