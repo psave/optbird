@@ -1,11 +1,12 @@
 
-var graph = function (name, response) {
+var graph = function (name, response_occupancy, response_courses) {
 
   // Assigning "this" as a variable for use inside the setBuilding $.get request. 
   var _self = this;
 
   this.name = name;
-  this.response = response;
+  this.response_occupancy = response_occupancy;
+  this.response_courses = response_courses;
   this.series = {};
 
   this.totals = {}; // USED ONLY BY GRAPH 1 HEAT GRID
@@ -14,6 +15,8 @@ var graph = function (name, response) {
   // 
   this.room_select = $("#" + this.name + " .room_choice");
   this.dayofweek = $("#" + this.name + " .dayofweek");
+
+  this.num_percent_choice = $('#' + graph1.name + ' .num_percent_choice');
 
   var start_date_select = $("#" + this.name + " .start_date" ).datepicker();
   var end_date_select = $("#" + this.name + " .end_date").datepicker();
@@ -39,22 +42,49 @@ var graph = function (name, response) {
     console.debug("reloadGraph" + this.name);
     switch(this.name) {
       case "graph1":
-        this.separateByDayTimeGraph1(this.response);
-        this.separateByWeekdayGraph1(this.response);
-        this.separateByTimeGraph1(this.response);
-        this.heatGridGraph1();
-        this.initializeGraph1BarDay();
-        this.initializeGraph1BarTime();
+        this.separateByDayTimeGraph1(this.response_occupancy);
+        // this.separateByWeekdayGraph1(this.response_occupancy);
+        // this.separateByTimeGraph1(this.response_occupancy);
+        if (this.num_percent_choice.val() == "Number") {
+          this.heatGridGraph1();
+        }
+        else if (this.num_percent_choice.val() == "Percent") {
+          var capacity;
+          for (var i = 0; i < this.response_occupancy.length; i++) {
+            if (this.response_occupancy[i].r == this.room_select.val()) {
+              capacity = this.response_courses[i].capacity;
+              break;
+            }
+          }
+          this.heatGridGraph1Percent(capacity);
+        } 
+        // this.initializeGraph1BarDay();
+        // this.initializeGraph1BarTime();
         break;
     case "graph2":
-      this.dataToArrayGraph2(this.response);
-      this.roomCourseOverlayGraph2(this.response);
+      this.dataToArrayGraph2(this.response_occupancy);
+      this.roomCourseOverlayGraph2(this.response_occupancy);
+      break;
+    case "graph3":
+      break;
+    case "graph4":
       break;
     case "graph5":
-      this.dataToArrayGraph5(this.response);
+      this.dataToArrayGraph5(this.response_occupancy);
       break;
     } 
   }
+
+  // this.reloadGraphPercent = function () {
+  //   switch(this.name) {
+  //     case "graph1":
+  //       this.separateByDayTimeGraph1(this.response_occupancy);
+  //       this.separateByWeekdayGraph1(this.response_occupancy);
+  //       this.separateByTimeGraph1(this.response_occupancy);
+  //       this.heatGridGraph1Percent();
+  //       break;
+  //   }
+  // }
 
   this.setBuilding = function (building_id) {
     // on change 
@@ -79,12 +109,21 @@ var graph = function (name, response) {
   // }
 
 ////////// For Graph 1 Tab Heat Grid 
+  // var capacity = [];
+
+  // this.getCapacity = function (room_id) {
+  //   $.get("/charts/courses.json?room_id="+room_id, function (data) {
+  //     data.forEach(function (course) {
+  //       capacity.push(course);
+  //     });
+  //   });
+  // }
 
   this.separateByDayTimeGraph1 = function (response) {
-    for (var i = 0; i < this.response.length; i++) {
-      if (this.response[i].r == this.room_select.val()) {
-        var day = new Date(this.response[i].s);
-        day = new Date(day.getTime() + day.getTimezoneOffset() * 60 *1000)
+    for (var i = 0; i < this.response_occupancy.length; i++) {
+      if (this.response_occupancy[i].r == this.room_select.val()) {
+        var day = new Date(this.response_occupancy[i].s);
+        day = new Date(day.getTime() + day.getTimezoneOffset() * 60 * 1000)
         var start = new Date(start_date_select.val());
         var end = new Date(end_date_select.val());
         if (day >= start && day <= end) {
@@ -92,9 +131,9 @@ var graph = function (name, response) {
           var weekday = 6 - day.getDay();
           var key = "total"+time+weekday;
           if (this.totals[key] == null) {
-            this.totals[key] = [this.response[i].n];
+            this.totals[key] = [this.response_occupancy[i].n];
           } else {
-            this.totals[key].push(this.response[i].n);
+            this.totals[key].push(this.response_occupancy[i].n);
           }
         }
       }
@@ -187,13 +226,101 @@ var graph = function (name, response) {
       }]
     });
   }
+////////////////////// For Graph 1 PERCENT OCCUPANCY Heat Grid
+
+this.heatGridGraph1Percent = function(capacity) {
+    $('#graph1 .graphContainer').highcharts({
+      colors: ["#f45b5b", "#8085e9", "#8d4654", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
+      "#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
+
+      chart: {
+          type: 'heatmap',
+          marginTop: 40,
+          marginBottom: 80,
+          plotBorderWidth: 1
+      },
+      title: {
+          text: 'Day-Hour Average Percent Occupancy Grid'
+      },
+      xAxis: {
+        // Corresponding indices on heatmap:
+        // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+          categories: ['8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm']
+      },
+      yAxis: {
+        // Corresponding indices on heatmap:
+        // [0, 1, 2, 3, 4, 5, 6]
+          categories: ['Saturday', 'Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday', 'Sunday'],
+          title: null
+      },
+      colorAxis: {
+          min: 0,
+          minColor: '#FFFFFF',
+          maxColor: Highcharts.getOptions().colors[0]
+      },
+      legend: {
+          align: 'right',
+          layout: 'vertical',
+          margin: 0,
+          verticalAlign: 'top',
+          y: 25,
+          symbolHeight: 280
+      },
+      tooltip: {
+          formatter: function () {
+              return '<b>' + this.series.yAxis.categories[this.point.y] + '</b>' + ' at ' + '<b>' + this.series.xAxis.categories[this.point.x] + '</b><br>'
+                + '<b>' + this.point.value + '</b>' + ' occupants on average';
+          }
+      },
+      series: [{
+          name: 'Average Percent Occupancy',
+          borderWidth: 1,
+          data: [
+          // 8am
+            [0,0,Math.round((this.avg(this.totals["total00"])/capacity)*100)],[0,1,Math.round((this.avg(this.totals["total01"])/capacity)*100)],[0,2,Math.round((this.avg(this.totals["total02"])/capacity)*100)],[0,3,Math.round((this.avg(this.totals["total03"])/capacity)*100)],[0,4,Math.round((this.avg(this.totals["total04"])/capacity)*100)],[0,5,Math.round((this.avg(this.totals["total05"])/capacity)*100)],[0,6,Math.round((this.avg(this.totals["total06"])/capacity)*100)],
+          // 9am
+            [1,0,Math.round((this.avg(this.totals["total10"])/capacity)*100)],[1,1,Math.round((this.avg(this.totals["total11"])/capacity)*100)],[1,2,Math.round((this.avg(this.totals["total12"])/capacity)*100)],[1,3,Math.round((this.avg(this.totals["total13"])/capacity)*100)],[1,4,Math.round((this.avg(this.totals["total14"])/capacity)*100)],[1,5,Math.round((this.avg(this.totals["total15"])/capacity)*100)],[1,6,Math.round((this.avg(this.totals["total16"])/capacity)*100)],
+          // 10am
+            [2,0,Math.round((this.avg(this.totals["total20"])/capacity)*100)],[2,1,Math.round((this.avg(this.totals["total21"])/capacity)*100)],[2,2,Math.round((this.avg(this.totals["total22"])/capacity)*100)],[2,3,Math.round((this.avg(this.totals["total23"])/capacity)*100)],[2,4,Math.round((this.avg(this.totals["total24"])/capacity)*100)],[2,5,Math.round((this.avg(this.totals["total25"])/capacity)*100)],[2,6,Math.round((this.avg(this.totals["total26"])/capacity)*100)],
+          // 11am
+            [3,0,Math.round((this.avg(this.totals["total30"])/capacity)*100)],[3,1,Math.round((this.avg(this.totals["total31"])/capacity)*100)],[3,2,Math.round((this.avg(this.totals["total32"])/capacity)*100)],[3,3,Math.round((this.avg(this.totals["total33"])/capacity)*100)],[3,4,Math.round((this.avg(this.totals["total34"])/capacity)*100)],[3,5,Math.round((this.avg(this.totals["total35"])/capacity)*100)],[3,6,Math.round((this.avg(this.totals["total36"])/capacity)*100)],
+          // 12pm
+            [4,0,Math.round((this.avg(this.totals["total40"])/capacity)*100)],[4,1,Math.round((this.avg(this.totals["total41"])/capacity)*100)],[4,2,Math.round((this.avg(this.totals["total42"])/capacity)*100)],[4,3,Math.round((this.avg(this.totals["total43"])/capacity)*100)],[4,4,Math.round((this.avg(this.totals["total44"])/capacity)*100)],[4,5,Math.round((this.avg(this.totals["total45"])/capacity)*100)],[4,6,Math.round((this.avg(this.totals["total46"])/capacity)*100)],
+          // 1pm
+            [5,0,Math.round((this.avg(this.totals["total50"])/capacity)*100)],[5,1,Math.round((this.avg(this.totals["total51"])/capacity)*100)],[5,2,Math.round((this.avg(this.totals["total52"])/capacity)*100)],[5,3,Math.round((this.avg(this.totals["total53"])/capacity)*100)],[5,4,Math.round((this.avg(this.totals["total54"])/capacity)*100)],[5,5,Math.round((this.avg(this.totals["total55"])/capacity)*100)],[5,6,Math.round((this.avg(this.totals["total56"])/capacity)*100)],
+          // 2pm
+            [6,0,Math.round((this.avg(this.totals["total60"])/capacity)*100)],[6,1,Math.round((this.avg(this.totals["total61"])/capacity)*100)],[6,2,Math.round((this.avg(this.totals["total62"])/capacity)*100)],[6,3,Math.round((this.avg(this.totals["total63"])/capacity)*100)],[6,4,Math.round((this.avg(this.totals["total64"])/capacity)*100)],[6,5,Math.round((this.avg(this.totals["total65"])/capacity)*100)],[6,6,Math.round((this.avg(this.totals["total66"])/capacity)*100)],
+          // 3pm
+            [7,0,Math.round((this.avg(this.totals["total70"])/capacity)*100)],[7,1,Math.round((this.avg(this.totals["total71"])/capacity)*100)],[7,2,Math.round((this.avg(this.totals["total72"])/capacity)*100)],[7,3,Math.round((this.avg(this.totals["total73"])/capacity)*100)],[7,4,Math.round((this.avg(this.totals["total74"])/capacity)*100)],[7,5,Math.round((this.avg(this.totals["total75"])/capacity)*100)],[7,6,Math.round((this.avg(this.totals["total76"])/capacity)*100)],
+          // 4pm
+            [8,0,Math.round((this.avg(this.totals["total80"])/capacity)*100)],[8,1,Math.round((this.avg(this.totals["total81"])/capacity)*100)],[8,2,Math.round((this.avg(this.totals["total82"])/capacity)*100)],[8,3,Math.round((this.avg(this.totals["total83"])/capacity)*100)],[8,4,Math.round((this.avg(this.totals["total84"])/capacity)*100)],[8,5,Math.round((this.avg(this.totals["total85"])/capacity)*100)],[8,6,Math.round((this.avg(this.totals["total86"])/capacity)*100)],
+          // 5pm
+            [9,0,Math.round((this.avg(this.totals["total90"])/capacity)*100)],[9,1,Math.round((this.avg(this.totals["total91"])/capacity)*100)],[9,2,Math.round((this.avg(this.totals["total92"])/capacity)*100)],[9,3,Math.round((this.avg(this.totals["total93"])/capacity)*100)],[9,4,Math.round((this.avg(this.totals["total94"])/capacity)*100)],[9,5,Math.round((this.avg(this.totals["total95"])/capacity)*100)],[9,6,Math.round((this.avg(this.totals["total96"])/capacity)*100)],
+          // 6pm
+            [10,0,Math.round((this.avg(this.totals["total100"])/capacity)*100)],[10,1,Math.round((this.avg(this.totals["total101"])/capacity)*100)],[10,2,Math.round((this.avg(this.totals["total102"])/capacity)*100)],[10,3,Math.round((this.avg(this.totals["total103"])/capacity)*100)],[10,4,Math.round((this.avg(this.totals["total104"])/capacity)*100)],[10,5,Math.round((this.avg(this.totals["total105"])/capacity)*100)],[10,6,Math.round((this.avg(this.totals["total106"])/capacity)*100)],
+          // 7pm
+            [11,0,Math.round((this.avg(this.totals["total110"])/capacity)*100)],[11,1,Math.round((this.avg(this.totals["total111"])/capacity)*100)],[11,2,Math.round((this.avg(this.totals["total112"])/capacity)*100)],[11,3,Math.round((this.avg(this.totals["total113"])/capacity)*100)],[11,4,Math.round((this.avg(this.totals["total114"])/capacity)*100)],[11,5,Math.round((this.avg(this.totals["total115"])/capacity)*100)],[11,6,Math.round((this.avg(this.totals["total116"])/capacity)*100)],
+          // 8pm
+            [12,0,Math.round((this.avg(this.totals["total120"])/capacity)*100)],[12,1,Math.round((this.avg(this.totals["total121"])/capacity)*100)],[12,2,Math.round((this.avg(this.totals["total122"])/capacity)*100)],[12,3,Math.round((this.avg(this.totals["total123"])/capacity)*100)],[12,4,Math.round((this.avg(this.totals["total124"])/capacity)*100)],[12,5,Math.round((this.avg(this.totals["total125"])/capacity)*100)],[12,6,Math.round((this.avg(this.totals["total126"])/capacity)*100)],
+          // 9pm
+            [13,0,Math.round((this.avg(this.totals["total130"])/capacity)*100)],[13,1,Math.round((this.avg(this.totals["total131"])/capacity)*100)],[13,2,Math.round((this.avg(this.totals["total132"])/capacity)*100)],[13,3,Math.round((this.avg(this.totals["total133"])/capacity)*100)],[13,4,Math.round((this.avg(this.totals["total134"])/capacity)*100)],[13,5,Math.round((this.avg(this.totals["total135"])/capacity)*100)],[13,6,Math.round((this.avg(this.totals["total136"])/capacity)*100)]
+            ],
+          dataLabels: {
+              enabled: true,
+              color: '#000000'
+          }
+      }]
+    });
+  }
+
+
 
   ///////////// For Graph 1 Tab Day Bar Graph
 
   this.separateByWeekdayGraph1 = function (response) {
-    for (var i = 0; i < this.response.length; i++) {
-      if (this.response[i].r == this.room_select.val()) {//&& (this.response[i].s > this.start_date_select.datepicker()) && (this.response[i].s < this.end_date_select.datepicker())) {
-        var day = new Date(this.response[i].s);
+    for (var i = 0; i < this.response_occupancy.length; i++) {
+      if (this.response_occupancy[i].r == this.room_select.val()) {
+        var day = new Date(this.response_occupancy[i].s);
         day = new Date(day.getTime() + day.getTimezoneOffset() * 60 *1000);
         var start = new Date(start_date_select.val());
         var end = new Date(end_date_select.val());
@@ -201,9 +328,9 @@ var graph = function (name, response) {
           var weekday = 6 - day.getDay();
           var key = "total"+weekday;
           if (this.weekdays[key] == null) {
-            this.weekdays[key] = [this.response[i].n];
+            this.weekdays[key] = [this.response_occupancy[i].n];
           } else {
-            this.weekdays[key].push(this.response[i].n);
+            this.weekdays[key].push(this.response_occupancy[i].n);
           }
         }
       }
@@ -260,9 +387,9 @@ var graph = function (name, response) {
 
   this.separateByTimeGraph1 = function (response) {
 
-    for (var i = 0; i < this.response.length; i++) {
-      if (this.response[i].r == this.room_select.val()) {//&& (this.response[i].s > this.start_date_select.datepicker()) && (this.response[i].s < this.end_date_select.datepicker())) {
-        var day = new Date(this.response[i].s);
+    for (var i = 0; i < this.response_occupancy.length; i++) {
+      if (this.response_occupancy[i].r == this.room_select.val()) {
+        var day = new Date(this.response_occupancy[i].s);
         day = new Date(day.getTime() + day.getTimezoneOffset() * 60 *1000);
         var start = new Date(start_date_select.val());
         var end = new Date(end_date_select.val());
@@ -270,9 +397,9 @@ var graph = function (name, response) {
           var time = day.getHours() - 8;
           var key = "total"+time;
           if (this.times[key] == null) {
-            this.times[key] = [this.response[i].n];
+            this.times[key] = [this.response_occupancy[i].n];
           } else {
-            this.times[key].push(this.response[i].n);
+            this.times[key].push(this.response_occupancy[i].n);
           }
         }
       }
@@ -282,7 +409,7 @@ var graph = function (name, response) {
   /////////////////////////////////////////////////////  Start of Graph 2 //////////////////////
 
   this.dataToArrayGraph2 =  function (response) {
-    if (!this.response) return;
+    if (!this.response_occupancy) return;
 
     function time_of_day() {
       var time_of_day = [];
@@ -300,29 +427,41 @@ var graph = function (name, response) {
     
     var x_axis = [];
     var y_axis = [];
-    for (var i = 0; i < this.response.length; i++) {
-      var date = new Date(this.response[i].s);
+    for (var i = 0; i < this.response_occupancy.length; i++) {
+      var date = new Date(this.response_occupancy[i].s);
       // Keeps the time as PST. Otherwise, the "new Date function converts the time to UTC"
       date = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
       var day = 6 - date.getDay();
       // pick out only those with room_id r == rmID (rmID is room_select.val())
-      if (this.response[i].r == this.room_select.val() && day == this.dayofweek.val()) {
+      if (this.response_occupancy[i].r == this.room_select.val() && day == this.dayofweek.val()) {
         // push their sample_time s and number_occupants n into x and y arrays
-        x_axis.push(this.response[i].s);
-        y_axis.push(parseInt(this.response[i].n));
+        x_axis.push(this.response_occupancy[i].s);
+        y_axis.push(parseInt(this.response_occupancy[i].n));
       }
     }
 
+    /* The following "time_sets takes averages for each 5-minute time period for the room selected."
+    input 
+      [{ sampletime: "2016-04-05T08:00:00", number_people: 10 },
+      { sampletime: "2016-04-05T08:05:00", number_people: 10 },
+      { sampletime: "2016-04-12T08:00:00", number_people: 5 },
+      { sampletime: "2016-04-12T08:05:00", number_people: 10 }]
 
+    output
+     [{ sampletime: 08:00:00, number_people: 7.5},
+     { sampletime: 08:00:00, number_people: 10}]
+      
+    */
 
     var rmID = this.room_select.val()
     var times_series = time_of_day();
 
     var time_sets =
-      response
+      response_occupancy
       .filter(function(data){ return data.r == rmID})
       .filter(function(data) { 
         var sample_time = new Date(data.s);
+        sample_time = new Date(sample_time.getTime() + sample_time.getTimezoneOffset() * 60 * 1000);
         return this.dayofweek.val() == sample_time.getDay() }.bind(this))
       .reduce(function(memo, data){
         var sample_time = new Date(data.s);
@@ -340,18 +479,18 @@ var graph = function (name, response) {
         }
 
         return memo
-      },{})
+      },{});
 
       var averages = [];
       for(key in time_sets) {
-        sum = time_sets[key].reduce(function(acc,num) {return acc + num},0);
+        var sum = time_sets[key].reduce(function(acc,num) {return parseInt(acc) + parseInt(num)},0);
         averages.push(sum / time_sets[key].length);
       }
 
     
     //run a transformation / filter on the data
 
-    // transformed_response = this.response
+    // transformed_response_occupancy = this.response
 
     // transformed_response = filter_out_date_range(transformed_response)
     // transformed_response = filter_out_by_day_of_week(transformed_response, 'Monday')  //if no day of weeek specified, basically do nothing
@@ -388,6 +527,7 @@ var graph = function (name, response) {
       
     */
     // final_response = return_x_y_and_values(transformed_response)  // {x_axis: [], y_axis:[], line_1:[], line_2: []}
+
 
     this.series = {
       // all sample_times s for room_id r=rmID (rmID is room_select.val())
@@ -547,16 +687,16 @@ var graph = function (name, response) {
   //////////////////////////////////////////////////// End of Graph 2 ///////////////////
 
   this.dataToArrayGraph5 =  function (response) {
-    if (!this.response) return;
+    if (!this.response_occupancy) return;
     
     var x_axis = [];
     var y_axis = [];
-    for (var i = 0; i < this.response.length; i++) {
+    for (var i = 0; i < this.response_occupancy.length; i++) {
       // pick out only those with room_id r == rmID (rmID is room_select.val())
-      if (this.response[i].r == this.room_select.val()) {
+      if (this.response_occupancy[i].r == this.room_select.val()) {
         // push their sample_time s and number_occupants n into x and y arrays
-        x_axis.push(this.response[i].s);
-        y_axis.push(parseInt(this.response[i].n));
+        x_axis.push(this.response_occupancy[i].s);
+        y_axis.push(parseInt(this.response_occupancy[i].n));
       }
     }
 

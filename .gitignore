@@ -24,3 +24,5 @@
 .DS_Store
 
 .env
+
+/db/seeds.rb
