@@ -1,4 +1,4 @@
-function graph4() {
+function graph4(response) {
 
   $('#graph4 #graphContainer').highcharts({
     chart: {
@@ -27,7 +27,7 @@ function graph4() {
         enabled: false
     },
     tooltip: {
-        pointFormat: 'Population in 2008: <b>{point.y:.1f} millions</b>'
+        pointFormat: 'Occupants in 2008: <b>{point.y:.1f} millions</b>'
     },
     series: [{
         name: 'Population',

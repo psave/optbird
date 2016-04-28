@@ -127,3 +127,6 @@
   background-size: cover;
 }
 
+.highcharts-button {
+  display: none;
+}
