@@ -52,6 +52,10 @@
   margin-top: 46px;
 }
 
+span {
+  display: none;
+}
+
 .hasDatepicker {
   border: 1px solid #D3D6DB;
   border-radius: 3px;

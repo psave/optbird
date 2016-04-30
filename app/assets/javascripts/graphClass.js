@@ -782,7 +782,8 @@ this.heatGridGraph1Percent = function(capacity) {
         align: 'left',
         verticalAlign: 'top',
         floating: true,
-        borderWidth: 0
+        borderWidth: 0,
+        x: 75
       },
       series: [{
         name: 'Occupants',
