@@ -7,8 +7,8 @@
 
 $(function(){
 
-  $("#start_date").datepicker({minDate: new Date("04/06/2016"), maxDate: new Date("04/18/2016")});
-  $("#end_date").datepicker({minDate: new Date("04/06/2016"), maxDate: new Date("04/18/2016")});
+  // $("#start_date").datepicker({minDate: new Date("04/06/2016"), maxDate: new Date("04/18/2016")});
+  // $("#end_date").datepicker({minDate: new Date("04/06/2016"), maxDate: new Date("04/18/2016")});
 
   $.ajax({
     method: 'GET',
